@@ -1,0 +1,1835 @@
+{
+  "slug": "ai-image-generation-and-design",
+  "version": 1,
+  "title": "AI Image Generation and Design",
+  "subtitle": "Prompt, edit and scale AI imagery for real campaigns — consistently, legally and with human design judgement",
+  "category": "design",
+  "level": "intermediate",
+  "estimatedMinutes": 171,
+  "description": "AI image models can turn a sentence into a photograph, illustration or product scene in seconds — but professional results need far more than a lucky prompt. This course teaches a repeatable, tool-neutral workflow used by creative teams in 2026: how image models work and how to choose one, how to write structured prompts, use style and reference images, and iterate efficiently.\n\nYou will learn editing techniques such as inpainting, outpainting and upscaling, how to keep characters, products and style consistent across a whole campaign, and how to combine AI output with photography, typography and brand systems in your design tools. Just as importantly, you will understand copyright and ownership questions, likeness and trademark risks, platform labelling and disclosure rules, bias, and how to work transparently with clients. The goal is AI as a powerful assistant inside a human-led design process.",
+  "outcomes": [
+    "Explain how image-generation models work and choose a suitable tool for a given brief",
+    "Write structured prompts covering subject, style, composition, lighting and constraints",
+    "Use reference images, inpainting, outpainting and upscaling to refine outputs",
+    "Keep characters, products and style consistent across a multi-asset campaign",
+    "Assess copyright, licensing, likeness and trademark risks before publishing AI imagery",
+    "Apply platform labelling and disclosure requirements for AI-generated or altered content",
+    "Design hybrid AI-plus-human workflows with quality control and client transparency"
+  ],
+  "skills": [
+    "AI image generation",
+    "Prompt engineering",
+    "Generative editing",
+    "Campaign design",
+    "AI ethics and compliance",
+    "Creative direction"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "AI Image Generation and Design Practitioner",
+    "description": "The holder can plan and produce campaign-ready AI imagery: writing structured prompts, using references, editing and upscaling outputs, keeping characters and style consistent, combining AI with human design, and managing copyright, likeness, disclosure and bias risks with transparent client practices.",
+    "criteria": "Completed all lessons and scored ≥ 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "how-image-models-work",
+      "title": "How AI image models work",
+      "summary": "Build an accurate mental model of image generators, their strengths and limits, and how to choose the right tool for a brief.",
+      "lessons": [
+        {
+          "slug": "inside-image-generators",
+          "title": "Inside image generators: a practical mental model",
+          "type": "video",
+          "durationMinutes": 7,
+          "body": "### Why a mental model matters\n\nYou do not need to understand the mathematics to use image models well, but a rough mental model explains why some prompts work, why hands and text used to fail so often, why results vary each time, and why models reproduce certain biases. It also helps you explain limitations to clients honestly.\n\n### The core idea: learning patterns from image–text pairs\n\nMost modern image generators are trained on very large collections of images paired with text descriptions. During training, the model learns statistical relationships between words and visual patterns — what \"golden hour\", \"35mm film\" or \"isometric illustration\" tend to look like.\n\nMany widely used systems are **diffusion models** (or related approaches). In simplified terms:\n\n1. During training, the model sees images progressively covered in random noise and learns to predict how to remove that noise, guided by the text description.\n2. At generation time, it starts from random noise and removes it step by step, steered by your prompt, until an image emerges.\n\nOther architectures exist, and many products now combine image generation with large language models that interpret your request, rewrite prompts behind the scenes, or allow conversational editing (\"make the jacket blue\"). Tools also increasingly accept **images as input** — references for style, character or composition.\n\n### What follows from this model\n\n| Behaviour you notice | Why it happens | What you do |\n|---|---|---|\n| Different result every time | Generation starts from random noise (a \"seed\") | Generate variations; fix the seed where the tool allows for controlled changes |\n| Common subjects look great, rare ones fail | The model has seen many examples of common things | Add references; describe unusual things concretely |\n| Default \"look\" (glossy, symmetrical, idealised) | Training data and tuning favour certain aesthetics | Specify style, imperfection, lighting and camera details |\n| Stereotyped people | Biases in training data | Specify diversity deliberately and review outputs |\n| Errors in text, hands, counts, logos | Fine structure and exact rules are hard | Use tools strong at text, fix in editing, or add text in a design tool |\n| Similarity to famous works | Patterns learned from training data | Avoid prompting for specific artists' or brands' work; check outputs |\n\nText rendering and anatomy have improved considerably in recent model generations, but you should still check every detail before publishing.\n\n### What models do not do\n\n- They do not \"know\" facts reliably. A model may draw a landmark, product or national dress inaccurately.\n- They do not understand your brand unless you provide references or use brand-aware features.\n- They do not guarantee originality. Outputs can occasionally resemble existing images, characters or logos.\n- They do not handle legal questions for you. Rights, consent and disclosure remain your responsibility.\n\n### Common generation modes\n\n- **Text-to-image:** a prompt produces new images.\n- **Image-to-image:** an input image guides structure or style.\n- **Reference-guided:** style, subject or character references steer outputs.\n- **Editing:** inpainting (change part of an image), outpainting (extend the canvas), generative fill, background replacement.\n- **Upscaling:** increase resolution and detail.\n- **Controls:** some tools let you guide pose, depth or edges (often called control or structure references).\n\n### Worked example: diagnosing a failed output\n\nA creator prompts: \"Pakistani bride, wedding, beautiful\". The result shows a generic costume mixing styles from several cultures, with jewellery that looks unrealistic.\n\nDiagnosis using the mental model:\n\n- The prompt is vague, so the model falls back on its most common associations.\n- Cultural detail is underspecified; the model blends patterns.\n- \"Beautiful\" adds little concrete information.\n\nImproved approach: describe specific, respectful details (garment type, colour, fabric, jewellery style, setting, lighting, camera), add a reference image of real bridal wear used with permission, and ask someone with cultural knowledge to review. Consider whether a real photoshoot would be more appropriate for such a personal cultural moment.\n\n### Common mistakes\n\n- Treating the model as a search engine for accurate facts.\n- Assuming the first output is the best the model can do.\n- Blaming the tool for bias without adjusting prompts or reviewing outputs.\n- Publishing without zooming in to check details.\n\n### Summary\n\nImage models learn patterns from image–text pairs and, in many cases, generate by progressively removing noise under the guidance of your prompt. This explains variability, default aesthetics, bias and detail errors — and points to the fixes: specific prompts, references, controlled iteration, editing and careful review.",
+          "video": {
+            "script": "Before you write your next prompt, it helps to know roughly what is happening inside an image generator. These models are trained on huge collections of images paired with text descriptions. Over time they learn statistical links between words and visual patterns: what golden hour light tends to look like, what an isometric illustration looks like, what a close-up portrait on a fifty millimetre lens looks like. Many popular generators are diffusion models. During training, they learn to remove noise from images, guided by a description. When you generate, the model starts from pure random noise and removes it step by step, steered by your prompt, until a picture appears. That simple idea explains a lot. Because every generation starts from different random noise, you get a different image each time. Because the model has seen many examples of common things and few of rare things, familiar subjects look great while unusual ones struggle. Because the training data contains stereotypes, outputs can reproduce them unless you specify otherwise. And because exact structure is hard, details like hands, text and logos need checking, even though newer models are much better at them. It also tells you what models don't do. They aren't reliable sources of facts. They don't know your brand unless you give them references. They don't guarantee originality, and they don't handle rights, consent or disclosure for you. So the professional approach is clear: write specific prompts, use references, iterate deliberately, edit what needs fixing, and review every image closely before it goes anywhere near a client or a feed.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Image models learn statistical links between text and visual patterns from large training sets.",
+            "Diffusion-style models generate by removing noise step by step, guided by the prompt.",
+            "Randomness, default aesthetics, bias and detail errors all follow from how models are trained.",
+            "Models do not guarantee accuracy, originality or legal safety — review is your job."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why does the same prompt usually produce different images each time?",
+              "options": [
+                "Images are pulled from a database",
+                "The model is broken",
+                "Generation starts from random noise, often controlled by a seed value",
+                "The platform changes the prompt at random"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Different random starting points produce different outputs; fixing the seed where available gives more control. Models do not retrieve stored images."
+            },
+            {
+              "question": "A model produces stereotyped depictions of a profession. What is the most appropriate response?",
+              "options": [
+                "Accept it as accurate",
+                "Specify diversity deliberately in prompts and review outputs for bias",
+                "Use more adjectives like 'beautiful'",
+                "Avoid depicting people forever"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Biases come from training data; deliberate specification and review help. Vague adjectives do not fix bias."
+            },
+            {
+              "question": "Which statement about AI image models is accurate?",
+              "options": [
+                "They reliably know factual details about landmarks and products",
+                "They understand your brand automatically",
+                "They can produce outputs that resemble existing works, so outputs must be checked",
+                "They guarantee legally original work"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Similarity to training data is possible, so review is required. Models are not reliable fact sources and do not know your brand without references."
+            }
+          ],
+          "activity": "Generate the same simple prompt five times in any image tool and note what varies. Then rewrite the prompt with specific subject, style, lighting and camera details and compare the consistency of results."
+        },
+        {
+          "slug": "choosing-an-image-tool",
+          "title": "Choosing the right image tool for the job",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### There is no single best tool\n\nThe AI image landscape changes quickly. New models launch, older ones improve, pricing and licence terms change, and features like reference images or text rendering move from rare to standard. Instead of memorising a leaderboard, evaluate tools against the needs of each brief.\n\nAt the time of writing, widely used options include standalone generators (for example Midjourney), image models built into general AI assistants (such as those from OpenAI and Google), image features in design suites (such as Adobe Firefly and Canva's AI tools), open-weight models that can be run locally or via services (such as the Stable Diffusion and FLUX families), and specialist tools focused on text rendering, product shots or upscaling. Treat any list as a snapshot.\n\n### Evaluation criteria\n\n| Criterion | Questions to ask |\n|---|---|\n| Output quality for your style | Does it do photorealism, illustration, 3D, or graphic styles well? |\n| Prompt adherence | Does it follow complex instructions (counts, positions, colours)? |\n| Text rendering | Can it produce legible words, or will you add text later? |\n| References and consistency | Style references, character/subject references, brand kits? |\n| Editing | Inpainting, outpainting, conversational edits, background removal? |\n| Resolution and upscaling | Native resolution, upscaler quality, aspect ratios supported |\n| Commercial terms | Can outputs be used commercially on your plan? Any indemnity? |\n| Data and privacy | Are your uploads and prompts used for training? Enterprise options? |\n| Safety and provenance | Content filters, content credentials (C2PA) or watermarks |\n| Workflow fit | Integrates with your design tools, API access, team features |\n| Cost | Subscription, credits per image, API pricing |\n\n### Commercial terms deserve special attention\n\nRead the current terms of service for any tool used in client or commercial work. Key points to check:\n\n- **Ownership/usage of outputs:** many providers say you may use outputs commercially, but terms vary by plan (free tiers may differ).\n- **Restrictions:** prohibited uses (for example, political content, impersonation, certain sensitive categories).\n- **Input rights:** you must have rights to any images you upload as references.\n- **Indemnity:** some providers offer intellectual-property indemnities for certain paid or enterprise plans, typically with conditions. This can matter for brand clients.\n- **Training on your data:** whether prompts and uploads may be used to improve models, and how to opt out.\n- **Visibility:** on some platforms, generations are public by default unless you use a private mode.\n\n### Privacy and confidentiality\n\nUploading unreleased product photos, client logos or customers' faces to a tool can expose confidential information or personal data. Use tools and settings appropriate to the sensitivity: private modes, enterprise plans with data controls, or local/open-weight models for highly confidential work. Personal data laws (such as the GDPR in the UK and EU, and data protection laws in the UAE, Saudi Arabia and elsewhere) may apply to images of identifiable people.\n\n### Building a small tool stack\n\nMost professionals use a combination rather than one tool:\n\n```\nExample tool stack (roles, not brands)\nIdeation & moodboards:   fast generator with strong aesthetics\nBrand/product work:      tool with reference images + commercial terms suited to clients\nText-heavy concepts:     model with reliable text rendering (or add text in design tool)\nEditing:                 design suite with generative fill/expand + manual retouching\nUpscaling:               dedicated upscaler or built-in high-res mode\nLayout & typography:     your normal design tool (Figma, Canva, Adobe, Affinity…)\n```\n\n### A tool-test protocol\n\nBefore adopting a tool for client work, run a standard test:\n\n1. Use the same five prompts across candidate tools: a product shot, a portrait, an illustration, a scene with text, and a complex composition.\n2. Score each output for quality, adherence, text and consistency.\n3. Test editing on one image.\n4. Read the terms and data policy; note plan requirements.\n5. Record costs per usable image (not per generation — many generations are discarded).\n\n### Worked example: a small agency choosing tools\n\nAn agency in Dubai produces social ads for restaurants and beauty brands.\n\n- Requirements: realistic food and product scenes, Arabic and English text (added in design tool), brand consistency, commercial safety, client confidentiality.\n- Decision: a design-suite generator with commercial-use terms for client-facing assets; a fast standalone generator for internal moodboards only; a dedicated upscaler; all typography done in their design tool; no client product photos uploaded to tools that train on user data.\n\n### Common mistakes\n\n- Choosing tools based on viral examples rather than your actual briefs.\n- Ignoring terms of service and plan differences.\n- Uploading confidential client material to public or training-enabled tools.\n- Measuring cost per generation instead of cost per usable image.\n\n### Summary\n\nEvaluate tools against the brief using quality, adherence, text, references, editing, resolution, terms, privacy, provenance, workflow and cost. Build a small stack, run a standard test before adoption, and re-check terms regularly because they change.",
+          "video": null,
+          "keyTakeaways": [
+            "The tool landscape changes fast — evaluate against briefs, not leaderboards.",
+            "Check commercial terms, input rights, indemnities and training-data policies before client use.",
+            "Protect confidential and personal data by choosing appropriate tools and settings.",
+            "Most professionals use a small stack of tools for ideation, generation, editing, upscaling and layout."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the most important check before using a generator for a paying client?",
+              "options": [
+                "Whether it has a dark mode",
+                "The number of styles in its gallery",
+                "Its current terms on commercial use, input rights and data handling for your plan",
+                "The tool's social media following"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Terms determine whether you can legally deliver the output and how client data is treated. Popularity and interface features are secondary."
+            },
+            {
+              "question": "A client shares unreleased product photos. What is the safest approach?",
+              "options": [
+                "Post them publicly to gather feedback",
+                "Upload them to any free public generator",
+                "Use tools or settings with appropriate privacy controls, such as private or enterprise modes, or local models",
+                "Ignore confidentiality — AI tools are private by default"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Confidential material needs tools whose data policies protect it. Some tools publish generations or train on uploads."
+            },
+            {
+              "question": "Why measure cost per usable image rather than per generation?",
+              "options": [
+                "It makes tools look cheaper",
+                "Because generations are free",
+                "Because providers only charge for usable images",
+                "Because many generations are discarded, so the true cost depends on how many attempts produce a usable result"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Iteration discards many outputs; per-usable-image cost reflects the real economics."
+            }
+          ],
+          "activity": "Run the five-prompt tool-test protocol on two tools you have access to. Score results, read each tool's current commercial and data terms, and write a one-paragraph recommendation."
+        },
+        {
+          "slug": "strengths-limits-and-when-not-to-use-ai",
+          "title": "Strengths, limits and when not to use AI imagery",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Knowing when to say no\n\nPart of professional judgement is knowing when AI imagery is the right choice — and when a photograph, illustration, stock image or simple graphic would serve the audience better. Using AI everywhere can save time but damage trust, especially when audiences expect authenticity.\n\n### Where AI imagery shines\n\n- **Ideation and moodboards:** exploring directions quickly before a shoot or illustration commission.\n- **Concept visualisation:** showing a client what a campaign could look like.\n- **Backgrounds and environments:** extending a set, creating abstract textures or scenic backdrops.\n- **Stylised illustration and fantasy:** scenes impossible or expensive to photograph.\n- **Variations and localisation:** adapting a visual to different seasons, settings or formats (with care).\n- **Editing:** removing distractions, extending canvases for new aspect ratios, replacing backgrounds.\n- **Low-budget content** where no real subject is being represented.\n\n### Where AI imagery is risky or inappropriate\n\n| Situation | Why it's risky | Better option |\n|---|---|---|\n| Showing real product results (skincare, fitness, food as sold) | Can mislead consumers; may breach advertising rules | Real photos of actual products and results |\n| Testimonials and \"customers\" | Fake people implying real endorsements is deceptive | Real customers with consent |\n| News, documentary, current events | Can spread misinformation | Real, verified photography |\n| Real people (celebrities, politicians, private individuals) | Likeness, defamation, deepfake laws, platform policies | Licensed photos, consent-based shoots |\n| Property, travel and hospitality listings | Misrepresenting what customers will get | Real photos of the property or location |\n| Cultural or religious depictions | Inaccuracy and disrespect risks | Work with community members and real photography |\n| Brand logos and trademarks | Trademark and similarity risks | Official assets |\n| Highly personal brands built on authenticity | Audience trust | Your own photos and video |\n\n### The authenticity test\n\nBefore using AI imagery, ask:\n\n1. **Would the audience reasonably believe this shows something real?** If yes, and it is not real, you risk misleading them.\n2. **Does the image make a claim** (about a product, result, place or person)?\n3. **Would the audience feel deceived** if they learned it was AI-generated?\n4. **Is there a legal or platform rule** requiring disclosure or prohibiting this use?\n\nIf any answer is concerning, use real imagery, clearly label the content, or rethink the concept.\n\n### Advertising and consumer protection\n\nConsumer-protection and advertising rules in many markets prohibit misleading ads regardless of how the image was made. For example, UK advertising codes require that ads not mislead, and the ASA has ruled against ads where images exaggerated product effects; the US FTC treats deceptive representations — including fake reviews and endorsements — as unlawful. Similar principles exist across the Gulf and South Asia. AI does not create an exemption: if an image exaggerates what a product does, it is a problem.\n\n### Practical hybrid approaches\n\nOften the best answer is **AI plus real assets**:\n\n- Real product photo, AI-generated background (clearly not claiming the product was photographed there, if that matters).\n- Real creator photo, AI-assisted cleanup or canvas extension.\n- AI-generated illustration for a concept, with real screenshots or data for claims.\n- AI moodboards that guide a real photoshoot.\n\n### Worked example: a skincare brand campaign\n\nThe brand wants a campaign showing \"glowing skin after 4 weeks\".\n\n- **Rejected:** AI-generated \"after\" faces — this would misrepresent results and could breach advertising rules.\n- **Chosen:** real customer photos with consent and representative results; AI used only to create abstract, clearly stylised background textures and to extend image canvases for vertical formats; claims supported by evidence.\n\n### Decision checklist\n\n```\n[ ] Does the image depict a real product, place, person or result?\n[ ] Could it mislead if viewers assume it is real?\n[ ] Are there platform or legal disclosure requirements?\n[ ] Would real photography or licensed stock serve better?\n[ ] Is a hybrid approach possible (real subject + AI support)?\n[ ] Who reviews for accuracy and cultural sensitivity?\n```\n\n### Common mistakes\n\n- Using AI \"customers\" in testimonial-style ads.\n- AI-generated property or food images that don't match reality.\n- Assuming disclosure fixes a misleading claim (it may not).\n- Using AI imagery for sensitive cultural or religious content without community input.\n\n### Summary\n\nUse AI where it adds creative value without misleading — ideation, stylised scenes, backgrounds and editing — and prefer real imagery where authenticity, product claims, real people or cultural accuracy matter. Apply the authenticity test and the decision checklist on every project.",
+          "video": null,
+          "keyTakeaways": [
+            "AI imagery excels at ideation, stylised scenes, backgrounds and editing.",
+            "Avoid AI imagery where it could misrepresent products, results, places or people.",
+            "Advertising and consumer-protection rules apply regardless of how an image was made.",
+            "Hybrid approaches often combine real subjects with AI-assisted backgrounds or edits."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which use of AI imagery is most likely to be misleading?",
+              "options": [
+                "AI-generated 'after' photos showing a skincare product's results",
+                "A moodboard for an upcoming photoshoot",
+                "A stylised fantasy illustration for a book cover",
+                "An abstract background texture"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Depicting product results that did not happen misrepresents efficacy. The other uses do not make factual claims."
+            },
+            {
+              "question": "A hotel wants AI-generated images of rooms that look more luxurious than the real rooms. What is the problem?",
+              "options": [
+                "Hotels are exempt from advertising rules",
+                "AI cannot render interiors",
+                "None, if the images are high quality",
+                "They misrepresent what customers will receive and may breach consumer-protection and advertising rules"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Listings must represent reality; exaggerated images mislead customers regardless of the tool used."
+            },
+            {
+              "question": "Does adding an 'AI-generated' label automatically make a misleading product claim acceptable?",
+              "options": [
+                "Yes, labelling removes all risk",
+                "No — a misleading claim can still mislead even when labelled",
+                "Only for small businesses",
+                "Only on weekends"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Disclosure helps transparency but does not cure a false or exaggerated claim about a product."
+            }
+          ],
+          "activity": "List five images you might create for a brand. For each, run the authenticity test and decision checklist, and decide whether to use AI, real photography, licensed stock, or a hybrid."
+        }
+      ]
+    },
+    {
+      "slug": "prompting-for-images",
+      "title": "Prompting for images",
+      "summary": "Write structured prompts, direct style with references responsibly, and iterate efficiently with a prompt log.",
+      "lessons": [
+        {
+          "slug": "prompt-anatomy",
+          "title": "Prompt anatomy: a structure that works",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### From wishes to directions\n\nA prompt like \"cool image of a coffee shop\" asks the model to guess everything. Professional prompts read like a creative director's brief to a photographer or illustrator: specific about subject, style, composition, lighting and mood, and clear about constraints.\n\n### The seven-part prompt structure\n\n| Part | What to specify | Example |\n|---|---|---|\n| 1. Subject | Who/what, with concrete details | \"a young woman in a mustard hijab reading on a tablet\" |\n| 2. Action / context | What's happening, where | \"sitting by a window in a small modern café\" |\n| 3. Style / medium | Photo, illustration, 3D, painting, graphic | \"editorial lifestyle photograph\" |\n| 4. Composition | Framing, angle, placement, negative space | \"medium shot, subject on left third, empty space on right for text\" |\n| 5. Lighting | Quality, direction, time of day | \"soft natural window light, late afternoon\" |\n| 6. Colour / mood | Palette, atmosphere | \"warm neutral tones, calm and focused mood\" |\n| 7. Technical / constraints | Camera, lens, aspect ratio, what to avoid | \"shallow depth of field, 4:5 aspect ratio, no text, no logos\" |\n\nPut together:\n\n```\nEditorial lifestyle photograph of a young woman in a mustard hijab\nreading on a tablet, sitting by a window in a small modern café.\nMedium shot, subject on the left third, clean empty space on the right\nfor a headline. Soft natural window light, late afternoon. Warm neutral\ntones, calm focused mood. Shallow depth of field. 4:5. No text, no logos.\n```\n\nDifferent tools interpret prompts differently. Some favour natural sentences; some respond to comma-separated keywords; some have dedicated parameters for aspect ratio, style strength or negative prompts. Learn your tool's syntax, but the underlying structure transfers.\n\n### Vocabulary that helps\n\n- **Shot types:** extreme close-up, close-up, medium shot, wide shot, overhead/flat lay, low angle, bird's-eye.\n- **Lens and camera language:** wide-angle, 50mm, macro, shallow depth of field, motion blur, film grain.\n- **Lighting:** soft box, rim light, backlit, golden hour, overcast, neon, high-key, low-key, chiaroscuro.\n- **Styles and media:** flat vector illustration, watercolour, isometric 3D, claymation, risograph print, editorial photo, product packshot.\n- **Mood words:** add them, but support them with concrete visual choices (\"serene\" + \"soft light, muted palette, open space\").\n\n### Negative prompting and constraints\n\nSome tools support negative prompts (what to exclude); others work better with positive phrasing. Common constraints:\n\n- \"No text, no watermark, no logos\" — reduces unwanted artefacts.\n- \"Plain background\" or \"seamless studio backdrop\" — for cut-outs.\n- \"Natural skin texture\" — reduces over-smoothed, plastic-looking skin.\n- Counts and positions: \"exactly three cups, arranged left to right\" (verify — counts can still fail).\n\n### Prompting for design use\n\nRemember the image is usually part of a layout. Prompt for:\n\n- **Space for text:** \"negative space in the top third\".\n- **Aspect ratio:** generate at the target ratio rather than cropping heavily.\n- **Brand colours:** describe them in words (\"deep teal and warm sand palette\") — hex codes may or may not be understood depending on the tool; references work better.\n- **Consistency hooks:** reuse the same style phrase across a campaign.\n\n### Worked example: from vague to directed\n\n- **V1:** \"fitness app ad image\" → generic gym with muscular model; no space for text; harsh lighting.\n- **V2:** \"Photo of a woman in her 40s doing a home workout on a yoga mat in a bright living room, early morning light, candid moment, smiling slightly, wide shot with space on the right for text, natural colours, 9:16, no logos\" → closer; one hand is distorted.\n- **V3:** V2 + \"hands relaxed at her sides\" + generate four variations → choose the best, fix minor details with inpainting.\n\n### Prompt template\n\n```\n[Style/medium] of [subject with details], [action/context/setting].\n[Shot type/angle], [composition incl. space for text].\n[Lighting]. [Palette/mood]. [Technical details].\n[Aspect ratio]. [Exclusions/constraints].\n```\n\n### Common mistakes\n\n- Stacking vague adjectives (\"beautiful, amazing, stunning, 8k, masterpiece\") instead of concrete direction.\n- Conflicting instructions (\"minimalist\" plus a long list of objects).\n- Forgetting composition, so the image cannot hold a headline.\n- Expecting exact counts, text or anatomy without checking.\n\n### Summary\n\nStructure prompts around subject, context, style, composition, lighting, mood and constraints; use precise photographic and artistic vocabulary; prompt for how the image will be used in the layout; and check details every time.",
+          "video": null,
+          "keyTakeaways": [
+            "Write prompts like a creative brief: subject, context, style, composition, lighting, mood, constraints.",
+            "Use concrete visual vocabulary rather than stacks of vague adjectives.",
+            "Prompt for layout needs such as negative space and aspect ratio.",
+            "Learn each tool's syntax, but the underlying structure transfers."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which prompt is most likely to produce a usable ad background with room for a headline?",
+              "options": [
+                "'Amazing stunning beautiful image 8k'",
+                "'Bakery'",
+                "'Wide shot of a sunlit bakery counter with fresh bread, soft morning light, warm palette, empty space in the top third for text, 4:5, no text'",
+                "'Make something cool'"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "It specifies subject, composition, lighting, palette, ratio and constraints including space for text. The others leave everything to chance."
+            },
+            {
+              "question": "Why generate at the target aspect ratio instead of cropping later?",
+              "options": [
+                "Cropping is not allowed",
+                "Aspect ratio affects colour",
+                "The composition is designed for that shape, avoiding heavy crops that cut subjects or reduce resolution",
+                "It is always cheaper"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Composition and resolution are preserved when generated at the right ratio."
+            },
+            {
+              "question": "What is the best way to express 'calm' in a prompt?",
+              "options": [
+                "Repeat 'calm' five times",
+                "Support the mood word with concrete choices such as soft light, muted palette and open space",
+                "Add '8k masterpiece'",
+                "Use only negative prompts"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Concrete visual choices guide the model more reliably than repeated adjectives."
+            }
+          ],
+          "activity": "Take a vague prompt you have used before and rewrite it with the seven-part structure and template. Generate both versions and compare how usable each is in a real layout."
+        },
+        {
+          "slug": "styles-and-references",
+          "title": "Styles, references and responsible style direction",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Style is where brands are won or lost\n\nTwo campaigns can show the same subject and feel completely different because of style: lighting, palette, texture, rendering technique, lens and composition. For brand work, style consistency matters more than any single stunning image.\n\n### Describing style in words\n\nBreak style into components rather than relying on one label:\n\n```\nStyle spec\nMedium:        editorial photograph / flat vector / 3D render / gouache\nEra/influence: 1970s print ads, Bauhaus posters, contemporary minimal\nLighting:      soft diffused daylight, hard flash, studio rim light\nPalette:       muted earth tones; teal + sand; high-contrast monochrome\nTexture:       film grain, paper texture, glossy plastic, matte clay\nDetail level:  simple shapes, highly detailed, painterly brushwork\nComposition:   centred, generous negative space, low angle\n```\n\nThis \"style spec\" becomes part of your campaign prompt library.\n\n### Reference images\n\nMany tools accept images to guide results. Common types:\n\n| Reference type | What it controls | Example use |\n|---|---|---|\n| Style reference | Colours, textures, rendering | Keep a campaign look consistent |\n| Subject/character reference | A person, mascot or product's appearance | Same mascot across ten posts |\n| Composition/structure reference | Layout, pose, depth, edges | Match a planned layout or pose |\n| Image prompt / remix | Overall resemblance | Variations of an existing concept |\n\nMost tools let you adjust **reference strength**. Too weak and the style drifts; too strong and outputs become near-copies with little variation.\n\n### Rights in references\n\nYou must have the right to use images you upload as references. Safe sources:\n\n- Your own photographs and artwork.\n- Assets owned by the client (with their permission).\n- Images you have licensed for that purpose (check the licence permits this use).\n- Your previously approved AI outputs for the campaign.\n\nUsing someone else's copyrighted artwork as a reference to produce closely similar work risks infringement and is ethically problematic, even if the tool technically allows it.\n\n### Artist names and \"in the style of\"\n\nPrompting \"in the style of [living artist]\" raises ethical and legal concerns:\n\n- Many artists object to their distinctive styles being replicated without consent or compensation.\n- Outputs that closely imitate specific works may infringe copyright; style in the abstract is generally not protected by copyright in many jurisdictions, but close imitation can cross into copying, passing off or unfair competition depending on the facts and the country.\n- Some platforms restrict or discourage prompts naming living artists.\n- For client work, it creates reputational risk.\n\nBetter practice: describe the **visual characteristics** you want (medium, era, palette, texture, composition) or commission the artist directly. Historic art movements (\"Art Deco poster style\", \"ukiyo-e inspired\") are generally safer as descriptors than individual living artists.\n\n### Brand and trademark cues\n\nAvoid prompting for other brands' logos, packaging or characters. Outputs can include recognisable trademarks or trade dress, which creates legal and platform-policy risk. Use generic descriptions and add your own brand assets in the design tool.\n\n### Creating an ownable style\n\nFor a brand or creator, develop a distinctive AI-assisted style that is **yours**:\n\n1. Start from your brand strategy and personality sliders.\n2. Build a style spec in words.\n3. Generate candidates and select a small set of approved \"hero\" images.\n4. Use those approved images as style references going forward.\n5. Document the prompt snippets, reference images and strength settings.\n6. Review periodically — model updates can shift results.\n\n### Worked example: an illustrated style for a finance education creator\n\n- Personality: calm, smart, approachable.\n- Style spec: flat vector illustration, soft rounded shapes, limited palette of navy, mint and warm sand, subtle paper grain, simple characters without facial detail, generous white space.\n- References: three approved illustrations from the first batch, used as style references at medium strength.\n- Result: consistent illustrations for carousel covers across months, without imitating any particular artist.\n\n### Common mistakes\n\n- Relying on a single style keyword that the model interprets inconsistently.\n- Uploading references you have no rights to.\n- Prompting with living artists' names for commercial work.\n- Setting reference strength so high that outputs are near-duplicates.\n\n### Summary\n\nDescribe style through components, use references you have rights to at an appropriate strength, avoid imitating living artists and other brands, and build an ownable, documented style from approved hero images.",
+          "video": null,
+          "keyTakeaways": [
+            "Break style into medium, influence, lighting, palette, texture, detail and composition.",
+            "Use style, subject and structure references — and tune their strength.",
+            "Only upload references you have rights to use.",
+            "Describe visual characteristics instead of naming living artists; avoid other brands' trademarks."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the most responsible way to achieve a desired illustration look for a commercial campaign?",
+              "options": [
+                "Upload the artist's portfolio as references without permission",
+                "Describe the visual characteristics (medium, palette, texture, composition) or commission the artist",
+                "Trace the artist's work",
+                "Prompt 'in the style of' a named living illustrator"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Describing characteristics or commissioning respects artists and reduces legal risk. The other options imitate or copy without consent."
+            },
+            {
+              "question": "Outputs look almost identical to the reference image with little variation. What should you adjust?",
+              "options": [
+                "Remove the prompt entirely",
+                "Change the aspect ratio",
+                "Increase reference strength",
+                "Lower the reference strength"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "High strength causes near-copies; lowering it allows variation while keeping the style."
+            },
+            {
+              "question": "Which reference image is safe to use for a client campaign?",
+              "options": [
+                "A competitor's ad found online",
+                "A random image from social media",
+                "The client's own product photos, with their permission",
+                "A famous film still"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "You need rights to references; client-owned assets with permission qualify. The others are likely copyrighted by others."
+            }
+          ],
+          "activity": "Write a style spec for a brand, generate a batch of images, select three hero images, and document the prompt snippet and reference strength that reproduce the look consistently."
+        },
+        {
+          "slug": "iteration-and-prompt-logs",
+          "title": "Iteration, variations and prompt logs",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Professional results come from iteration\n\nA single prompt rarely produces the final image. Professionals iterate deliberately: they change one thing at a time, keep what works, and record everything so results can be reproduced and explained to clients.\n\n### The iteration loop\n\n```\n1. Brief       → What is this image for? Format, placement, message.\n2. Draft prompt → Seven-part structure + style spec.\n3. Explore     → Generate a batch (e.g. 4–8 variations).\n4. Select      → Pick 1–2 closest to the brief.\n5. Diagnose    → What's wrong? Composition, lighting, detail, style?\n6. Adjust      → Change ONE main variable.\n7. Refine      → Variations, seed control, reference images.\n8. Edit        → Inpaint, outpaint, retouch, upscale.\n9. QA          → Details, rights, bias, brand fit.\n10. Log        → Save prompt, settings, references, final.\n```\n\n### Diagnose before you change\n\nWhen an image misses, identify the specific failure:\n\n| Problem | Likely fix |\n|---|---|\n| Wrong composition | Add shot type, angle, placement; use a structure reference |\n| Wrong style | Strengthen style spec or style reference |\n| Wrong mood | Adjust lighting and palette, not just mood words |\n| Extra/missing objects | Simplify the prompt; state counts; inpaint |\n| Faces/hands distorted | Regenerate variations, adjust pose description, inpaint |\n| Unwanted text/logos | Add constraint; remove via inpainting |\n| Too generic | Add specific details, textures, imperfections |\n\n### Seeds and variations\n\nMany tools expose a **seed** — the starting noise pattern. Keeping the same seed while changing one prompt element lets you see that element's effect more cleanly. Other tools offer \"vary subtle / vary strong\" or \"remix\" options instead. Use:\n\n- **Strong variations** during exploration.\n- **Subtle variations and fixed seeds** during refinement.\n\nNote that model updates can change results even with the same seed and prompt, so do not rely on seeds for long-term reproducibility — keep the final images and references.\n\n### Conversational editing\n\nAssistant-style tools let you refine by instruction (\"make the lighting warmer\", \"move the cup to the left\"). This is efficient but can drift: each edit may subtly change other details. Check the whole image after each step and keep the best versions.\n\n### The prompt log\n\nA prompt log turns trial and error into a reusable asset:\n\n```\nPrompt log entry\nProject / asset:     Café launch — IG 4:5 — hero image\nDate:                2026-03-14\nTool / model / mode: [tool] [model version] [private mode]\nPrompt:              [full text]\nNegative/constraints: [text]\nReferences:          style_ref_01.png (strength medium)\nSeed / settings:     [seed] [aspect ratio] [quality/steps]\nSelected output:     cafe_hero_v3_04.png\nEdits:               inpaint cup handle; outpaint top for text; upscale 2×\nRights/QA notes:     no people; no logos; reviewed by AB\n```\n\nBenefits:\n\n- Reproduce and extend a look for future posts.\n- Explain your process to clients (transparency builds trust).\n- Support any future questions about how an image was made — useful for disclosure, provenance and copyright discussions.\n- Train team members.\n\n### Managing time and cost\n\nIteration can become an endless slot machine. Set limits:\n\n- **Time box:** for example, 20 minutes of exploration before reassessing the brief.\n- **Batch budget:** a maximum number of generations per asset.\n- **Stop rule:** if the model cannot do it after structured attempts, switch approach (different tool, reference image, edit, photo, or illustration).\n\n### Worked example: a product scene\n\nBrief: 1:1 ad image of a reusable water bottle on a rock by a mountain stream, morning light, space for a headline.\n\n- Batch 1: nice scenes but the bottle design is inaccurate (the model does not know the product).\n- Diagnosis: product accuracy cannot come from text alone.\n- Approach change: generate the scene without the bottle, then composite the real product photo in the design tool, matching lighting and adding a shadow. (If the product is shown in a scene it was not photographed in, ensure the ad does not imply claims about the product that aren't true.)\n- Final: scene upscaled, real product composited, headline added in the brand font.\n\n### Common mistakes\n\n- Changing many variables at once.\n- Not saving prompts and settings.\n- Endless rerolling without diagnosing.\n- Trying to force a model to render an exact real product from text alone.\n\n### Summary\n\nIterate through a structured loop, diagnose before changing, use seeds and variations deliberately, keep a prompt log, set time and batch limits, and switch approach when prompting alone cannot deliver.",
+          "video": null,
+          "keyTakeaways": [
+            "Change one main variable at a time and diagnose failures before adjusting.",
+            "Use strong variations to explore and subtle variations or fixed seeds to refine.",
+            "Keep a prompt log with tool, model, prompt, references, settings, edits and QA notes.",
+            "Set time and batch limits, and switch approach when prompting alone fails."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Outputs keep showing an inaccurate version of a client's actual product. What is the best approach?",
+              "options": [
+                "Describe the product with more adjectives",
+                "Accept the inaccurate product",
+                "Generate the scene separately and composite the real product photo, or use a product reference feature",
+                "Keep rerolling the same prompt"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Exact products cannot be reliably reproduced from text; compositing or proper reference features preserve accuracy."
+            },
+            {
+              "question": "Why keep a prompt log?",
+              "options": [
+                "To avoid paying for tools",
+                "To increase resolution",
+                "It is required by all platforms",
+                "To reproduce looks, explain the process to clients and support provenance questions"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Logs create reusable knowledge and transparency; they are not a platform requirement."
+            },
+            {
+              "question": "What does fixing the seed while changing one prompt element help you do?",
+              "options": [
+                "Guarantee identical results forever",
+                "Reduce file size",
+                "Avoid copyright issues",
+                "See the effect of that element more clearly"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "A fixed seed isolates the change's effect, though model updates can still alter results."
+            }
+          ],
+          "activity": "Pick one asset brief and run the full iteration loop with a strict 20-minute time box, recording each step in a prompt log entry. Note which single change improved the image most."
+        }
+      ]
+    },
+    {
+      "slug": "editing-and-finishing",
+      "title": "Editing, upscaling and finishing",
+      "summary": "Use inpainting, outpainting and generative fill, upscale properly, and composite AI output with photography and typography.",
+      "lessons": [
+        {
+          "slug": "inpainting-and-outpainting",
+          "title": "Inpainting, outpainting and generative fill",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Editing is where AI images become usable\n\nMany AI images are 80% right: a great composition with a distorted hand, an odd object in the background, or the wrong aspect ratio. Rather than regenerating from scratch and losing what works, use targeted editing.\n\n### Key editing techniques\n\n| Technique | What it does | Typical use |\n|---|---|---|\n| Inpainting | Regenerates a selected (masked) area guided by a prompt | Fix hands, change clothing, remove objects, add details |\n| Outpainting / generative expand | Extends the canvas beyond the original edges | Convert 1:1 to 9:16, create space for text |\n| Generative fill | Fills a selection with generated content (in design suites) | Remove distractions, add elements, extend backgrounds |\n| Object removal | Removes selected items and fills naturally | Clean up photos and AI outputs |\n| Background replacement | Separates subject and generates a new background | Product scenes, portraits |\n| Conversational edits | Text instructions to modify an image | Quick changes like colour or lighting |\n\n### Inpainting step by step\n\n1. **Select the area** slightly larger than the problem, including a little surrounding context so the fill blends.\n2. **Write a local prompt** describing only what should appear in the masked area (\"relaxed open hand resting on the table\"), not the whole scene.\n3. **Generate several options** and choose the one that matches lighting, perspective and texture.\n4. **Check edges** for seams, colour shifts or texture mismatches.\n5. **Repeat in small steps** for multiple fixes rather than masking huge areas at once.\n\nTips:\n\n- For faces and hands, smaller masks usually preserve identity and style better.\n- If the fill keeps failing, simplify: change the pose description, or crop the problem out of frame.\n- Match grain and sharpness; generated patches can look smoother than surrounding areas.\n\n### Outpainting for new formats\n\nOutpainting is especially useful for social formats. A strong 1:1 image can be extended to 9:16 for stories, or to 16:9 for thumbnails, by generating additional content above/below or to the sides.\n\nBest practice:\n\n- Extend in stages (for example, add a portion at a time) rather than a huge expansion at once.\n- Describe what should appear in the new area (\"continuation of the sky with soft clouds\", \"more of the wooden table surface\").\n- Keep the subject within safe zones after expansion.\n- Check for repeated patterns, warped perspective or duplicated objects at the edges.\n\n### Editing real photographs\n\nGenerative editing is also used on real photos. This is powerful and needs care:\n\n- **Acceptable edits** usually include removing distractions, cleaning backgrounds, extending canvas for layout, and colour correction.\n- **Risky edits** include changing a person's body, face or skin in ways that misrepresent them; altering product appearance or results; adding people or events that did not happen in a documentary context.\n- **Consent:** editing images of real people — especially changing their appearance — should be done with their knowledge and consent.\n- **Disclosure:** some platforms require labels for realistic content that has been materially altered or synthetically generated; some advertising regulators have specific rules on filters and retouching in beauty advertising.\n\n### Content provenance\n\nSome tools attach **Content Credentials** (based on the C2PA standard) or invisible watermarks to generated or edited images, recording that AI was used. Platforms may read this metadata and apply labels automatically. Do not deliberately strip provenance data to hide AI use; this can breach platform policies and undermines trust.\n\n### Worked example: a restaurant promo\n\nA generated 1:1 image shows a beautiful table of dishes, but there is a fork with four prongs merging into a plate, a garbled menu card, and the client needs a 9:16 story version.\n\n1. Inpaint the fork area: \"a simple silver fork resting beside the plate\".\n2. Inpaint the menu card: \"a plain blank card\" (real menu text will be added in the design tool).\n3. Outpaint upward in two stages: \"warm restaurant ceiling with soft pendant lights, out of focus\".\n4. Check that dishes still represent real menu items accurately — if the image is used to advertise specific dishes, it should reflect what customers actually receive; for real menu items, real food photography is often more appropriate.\n\n### Editing checklist\n\n```\n[ ] Mask slightly larger than the problem, include context\n[ ] Local prompt describes only the masked area\n[ ] Multiple options generated; best match chosen\n[ ] Seams, lighting, perspective, grain checked at 100% zoom\n[ ] Outpainted areas free of duplicates and warping\n[ ] No misrepresentation of people, products or results\n[ ] Provenance metadata preserved; disclosure needs assessed\n```\n\n### Common mistakes\n\n- Masking huge areas and losing the original image's quality.\n- Writing the whole-scene prompt for a small inpaint.\n- Not zooming in to check seams.\n- Using generative edits to alter people's bodies or product results misleadingly.\n\n### Summary\n\nUse inpainting for targeted fixes, outpainting for new formats, and generative fill for clean-ups; work in small steps, check at full zoom, preserve provenance, and never use edits to mislead.",
+          "video": null,
+          "keyTakeaways": [
+            "Inpaint targeted areas with local prompts; work in small steps.",
+            "Outpaint in stages to adapt images to new formats and create text space.",
+            "Edits to real people and products must not misrepresent; get consent and consider disclosure.",
+            "Preserve Content Credentials and provenance data rather than stripping them."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "When inpainting a distorted hand, what should the local prompt describe?",
+              "options": [
+                "Nothing — leave it blank always",
+                "Only what should appear in the masked area, such as 'relaxed open hand resting on the table'",
+                "The brand's mission",
+                "The entire scene again"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Local prompts target the masked region; whole-scene prompts can confuse the fill."
+            },
+            {
+              "question": "What is the best way to convert a 1:1 image into a 9:16 story?",
+              "options": [
+                "Outpaint in stages, describing the new areas, and check safe zones",
+                "Stretch it vertically",
+                "Crop the sides until it fits",
+                "Add black bars"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Staged outpainting adds natural content without distortion; stretching distorts and cropping loses content."
+            },
+            {
+              "question": "Why should you avoid stripping Content Credentials from AI-edited images?",
+              "options": [
+                "They make files smaller",
+                "They improve colour",
+                "They are required for printing",
+                "They record provenance, support platform labelling and maintain trust"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Provenance data supports transparency and platform policies; removing it to hide AI use undermines trust."
+            }
+          ],
+          "activity": "Take an AI image with at least two flaws. Fix each with a separate small inpaint, then outpaint it to a second aspect ratio in stages, completing the editing checklist."
+        },
+        {
+          "slug": "upscaling-and-quality-control",
+          "title": "Upscaling, artefacts and quality control",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### From screen preview to production quality\n\nAn image that looks great as a small preview can fall apart at full size: soft details, strange textures, warped text, repeating patterns. Before any AI image is published or printed, it needs upscaling (if required) and a structured quality check.\n\n### Resolution basics for AI images\n\n- Many generators produce images around one to two megapixels natively (sizes vary by tool and settings), which is often enough for social posts but may be insufficient for large banners or print.\n- **Upscaling** increases pixel dimensions. Simple interpolation just enlarges pixels (blurry). AI upscalers predict and add plausible detail.\n- AI upscalers may **invent** details — textures on skin, fabric patterns, text-like squiggles. Always review at 100% after upscaling.\n\n### Choosing upscale settings\n\n| Output | Typical need | Approach |\n|---|---|---|\n| Social post / story | Around 1080 px on the short side (check current specs) | Native or 2× upscale |\n| Website hero | Larger, often 2000 px+ wide | 2× upscale, check compression |\n| Print (flyer, poster) | Around 300 PPI at final print size is a common guideline | Higher upscale; consider print tests |\n| Large format (banners, signage) | Lower PPI acceptable due to viewing distance | Ask the printer |\n\nSome upscalers offer \"creativity\" or \"detail\" sliders. Higher creativity can add attractive detail but also changes faces, text and products. Use low creativity for people and products, higher for backgrounds and textures.\n\n### Common AI artefacts to check\n\n```\nArtefact checklist (zoom to 100%+)\nAnatomy:    hands (finger count, joints), teeth, eyes (pupils, reflections), ears, limbs\nObjects:    merging items, impossible structures, floating parts, wrong counts\nText:       garbled letters, fake words, pseudo-logos, mirrored text\nPatterns:   repeated textures, cloned faces in crowds, tiling\nPhysics:    shadows inconsistent with light, reflections that don't match\nEdges:      halos around subjects, seams from inpainting\nCultural:   incorrect dress, symbols, scripts or architecture\nSkin:       over-smoothed \"plastic\" look, unnatural tones\nBrand:      off-palette colours, wrong product details\n```\n\n### Colour and file handling\n\n- Check the colour profile — export in **sRGB** for web and social.\n- Avoid repeated lossy compression; keep a lossless master (PNG or TIFF) and export delivery versions from it.\n- For print, work with your printer on colour conversion and proofing; vivid AI colours may be out of gamut for CMYK.\n\n### Human review roles\n\nQuality control benefits from fresh eyes:\n\n- **Maker check:** the creator runs the checklist.\n- **Peer check:** a second person reviews at full size (people often miss errors in their own images).\n- **Specialist check:** for cultural, medical, technical or product accuracy, a subject expert reviews.\n- **Client approval:** with notes on what was AI-generated or edited.\n\n### Retouching by hand\n\nAI edits are not always the best fix. Traditional retouching tools — clone, heal, dodge/burn, liquify (used ethically), colour grading — give precise control. Many professional workflows alternate: AI for heavy lifting, manual retouching for precision.\n\n### Worked example: poster-size print\n\nA creator wants an AI illustration printed as an A2 poster for an event stand.\n\n1. Native output is too small for A2 at high quality.\n2. Upscale in two steps with low creativity to preserve line quality; check for invented textures.\n3. Fix a few artefacts manually (a doubled line, a wobbly edge).\n4. Replace any text with real typography set in the design tool.\n5. Convert and proof with the printer; adjust colours that print dull.\n6. Final QA at 100% and a physical test print of a section.\n\n### Common mistakes\n\n- Publishing without zooming in.\n- Using high \"creativity\" upscales on faces, changing identity.\n- Relying on AI for text in final artwork.\n- Recompressing JPGs repeatedly.\n\n### A QA routine that scales\n\nWhen you produce many images each week, make QA a routine rather than an afterthought. Review in batches at a fixed time, always at 100% zoom on a large screen and then again on a phone at real size. Use the artefact checklist as a printed or pinned reference so nothing is skipped. Record recurring problems — for example, a model that often distorts jewellery — and add a specific prompt constraint or editing step to your style system so the issue is prevented rather than fixed repeatedly.\n\n### Summary\n\nKnow your output size, upscale appropriately with the right creativity setting, run a thorough artefact checklist at full zoom, keep lossless masters, and use peer and specialist reviews — combining AI fixes with manual retouching where precision matters.",
+          "video": null,
+          "keyTakeaways": [
+            "Native AI resolution often suits social but may not suit large or print outputs.",
+            "AI upscalers invent detail — use low creativity for faces and products and review at 100%.",
+            "Run a structured artefact checklist covering anatomy, text, patterns, physics, culture and brand.",
+            "Use peer and specialist reviews and combine AI fixes with manual retouching."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why use a low 'creativity' setting when upscaling a portrait?",
+              "options": [
+                "Low creativity adds more detail",
+                "It is faster",
+                "It changes the colour profile",
+                "High creativity can alter facial features and identity"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Creative upscaling invents detail, which can change a person's appearance."
+            },
+            {
+              "question": "Which is a sensible approach for final text in AI-generated artwork?",
+              "options": [
+                "Use mirrored text",
+                "Trust the model's text rendering without checking",
+                "Set real typography in a design tool (or carefully verify any generated text)",
+                "Leave garbled text for authenticity"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Design-tool typography guarantees accuracy and brand fonts; generated text must at least be verified."
+            },
+            {
+              "question": "Who should review an AI image depicting a traditional garment for a cultural festival campaign?",
+              "options": [
+                "Someone with relevant cultural knowledge, in addition to the maker and a peer",
+                "Nobody — the model knows",
+                "Only the printer",
+                "Only the upscaler"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Specialist review catches cultural inaccuracies that models often introduce."
+            }
+          ],
+          "activity": "Upscale one AI image to twice its size with two different creativity settings. Compare them at 100% using the artefact checklist and record which setting suits people, products and backgrounds."
+        },
+        {
+          "slug": "compositing-ai-with-design",
+          "title": "Compositing AI output with photography and typography",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### AI images are ingredients, not finished designs\n\nIn professional work, an AI image is rarely the final asset. It becomes one layer in a design: combined with real product photography, brand typography, logos, graphic devices and layout grids. Good compositing makes the result feel intentional and on-brand.\n\n### Common hybrid patterns\n\n| Pattern | How it works | Watch out for |\n|---|---|---|\n| Real product + AI scene | Cut out product photo; place in generated environment | Matching light direction, shadows, reflections, perspective |\n| Real person + AI background | Real portrait with generated backdrop | Edge quality around hair; honest context |\n| AI illustration + brand typography | Generated artwork; text set in brand fonts | Contrast and space for text |\n| AI texture/pattern + layout | Generated textures as backgrounds | Keep subtle so text stays legible |\n| AI concept + real reshoot | AI shows the idea; real shoot delivers final | Clear communication with photographers |\n\n### Matching light and perspective\n\nWhen combining elements, the eye notices inconsistencies instantly:\n\n1. **Light direction:** shadows and highlights on the product must match the scene's light source.\n2. **Colour temperature:** a cool daylight product in a warm sunset scene looks pasted on; colour-grade to match.\n3. **Perspective and horizon:** the camera angle of the product photo should match the scene (shooting product photos with the intended scene angle in mind helps).\n4. **Contact shadows:** objects need shadows where they touch surfaces.\n5. **Depth of field and grain:** match blur levels and add consistent grain/noise across layers.\n\nSome tools can generate scenes around a product image (product-aware generation) — useful, but still check that the product itself has not been altered.\n\n### Typography over AI imagery\n\n- **Plan space for text** in the prompt (\"negative space in the top third\").\n- **Set text in the design tool** using brand fonts and your type scale.\n- **Check contrast** against the actual area behind the text; add scrims or blocks if needed.\n- **Avoid AI-generated text** for final copy — it can be misspelled or render pseudo-letters, especially in Arabic, Urdu and other non-Latin scripts.\n\n### Building templates around AI imagery\n\nFor recurring content (weekly carousels, thumbnails), design templates with fixed zones:\n\n```\nTemplate: Weekly tip carousel cover (4:5)\nImage zone:   top 60%, AI illustration in approved style\nText zone:    bottom 40%, solid brand colour block\nHeadline:     brand font H1, max 7 words\nLogo/handle:  bottom-left, symbol version\nPrompt snippet: [approved style spec] + [topic subject], negative space top, 4:5\n```\n\nThe AI output then slots into a consistent structure every week.\n\n### File management for hybrid work\n\n- Keep layered working files (design tool files or PSD/TIFF with layers).\n- Name layers: \"AI_background_v3\", \"Product_photo_cutout\", \"Headline\".\n- Store the prompt log reference with the file.\n- Record which parts are AI-generated — needed for disclosure decisions and client transparency.\n\n### Disclosure considerations for composites\n\nA composite may include both real and AI elements. Consider:\n\n- Is the overall impression realistic enough that viewers might think the whole scene was photographed?\n- Does the AI element change the meaning (for example, placing a product in a location it has never been, suggesting a sponsorship or event that didn't happen)?\n- Do platform rules require an AI label for \"realistic altered or synthetic content\" in this case?\n\nWhen in doubt, label, and make sure no claim is misleading.\n\n### Worked example: a sneaker drop in Riyadh\n\n- Real product photos shot at three angles against grey.\n- AI-generated scene: an evening desert road with warm city lights in the distance, generated in 9:16 and 4:5 with negative space at the top.\n- Composite: product cut-out placed at the matching angle, colour graded warmer, contact shadow painted, subtle grain added.\n- Typography: Arabic and English headlines set in the brand's bilingual fonts, right-aligned Arabic, checked by a native reader.\n- Disclosure: the campaign is clearly stylised; the brand follows platform guidance on labelling realistic synthetic content.\n\n### Common mistakes\n\n- Mismatched lighting that makes composites look fake.\n- Using generated text in final designs.\n- Losing track of which elements were AI-generated.\n- Placing products in scenes that imply false claims.\n\n### Summary\n\nTreat AI output as a design ingredient: match light, colour, perspective and grain when compositing; set typography in your design tool; build templates with fixed zones; track AI elements in layered files; and assess disclosure for realistic composites.",
+          "video": null,
+          "keyTakeaways": [
+            "AI images are layers within a design, combined with real photos, typography and brand assets.",
+            "Composites must match light direction, colour temperature, perspective, shadows and grain.",
+            "Set final text in a design tool — AI text is unreliable, especially in non-Latin scripts.",
+            "Track which elements are AI-generated to support disclosure and client transparency."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A product photo looks 'pasted on' in an AI-generated sunset scene. What is the most likely cause?",
+              "options": [
+                "The file is PNG",
+                "The prompt was too long",
+                "The product's light direction and colour temperature do not match the scene",
+                "The aspect ratio is 4:5"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Mismatched lighting and colour are the most common compositing giveaways."
+            },
+            {
+              "question": "Why track which layers of a composite are AI-generated?",
+              "options": [
+                "To increase file size",
+                "To improve upscaling",
+                "Because design tools require it",
+                "To inform disclosure decisions and be transparent with clients"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Knowing what was generated supports labelling decisions and honest client communication."
+            },
+            {
+              "question": "For a bilingual Arabic–English ad, where should the headline text be created?",
+              "options": [
+                "In a screenshot",
+                "In the image generator's text rendering",
+                "By tracing AI letters",
+                "In the design tool using the brand's fonts, checked by a native reader"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Design-tool typography with native review ensures accuracy and brand consistency."
+            }
+          ],
+          "activity": "Create a composite that combines a real product or object photo with an AI-generated background. Match light, shadow and grain, add headline text in your design tool, and label every layer by source."
+        }
+      ]
+    },
+    {
+      "slug": "campaign-consistency",
+      "title": "Consistency across a campaign",
+      "summary": "Keep characters, products and style consistent across many assets using references, style systems and a production pipeline.",
+      "lessons": [
+        {
+          "slug": "consistent-characters-and-products",
+          "title": "Consistent characters, mascots and products",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### The consistency problem\n\nGenerating one great image is easy. Generating twenty images where the same mascot, model or product looks identical — same face, outfit, proportions, colours — is much harder, because each generation starts from new random noise. Campaigns, carousels, storyboards and brand mascots all depend on solving this.\n\n### Techniques from simplest to most advanced\n\n| Technique | How it works | Strength | Limits |\n|---|---|---|---|\n| Detailed descriptive anchor | Same precise description in every prompt | Easy | Drift in details |\n| Fixed seed + small prompt changes | Same starting noise | Helpful for close variations | Breaks with larger changes/model updates |\n| Character/subject reference | Upload approved image(s) of the character | Strong for faces/outfits | Tool-dependent quality |\n| Character sheet | Generate or draw a reference sheet (front, side, expressions) | Gives the model and team a canonical look | Needs curation |\n| Image-to-image from approved frames | Use an approved image as a base | Keeps composition/look | Can reduce variety |\n| Custom fine-tuning / adapters | Train a small model add-on on approved images (e.g. LoRA-style techniques) | Very consistent | Technical skill, rights to training images, platform support |\n| Compositing real product photos | Use real photos for the product | Perfect accuracy | Requires matching light |\n\n### The character bible\n\nFor mascots and recurring characters, document everything:\n\n```\nCharacter bible: \"Zara the Zebra\" (brand mascot)\nCanonical description: a friendly cartoon zebra with rounded features,\n  large expressive eyes, teal scarf, black-and-white stripes (5 across the body)\nProportions:  head ~1/3 of body height\nStyle:        flat vector, soft shading, brand palette\nExpressions:  happy, curious, surprised, thinking (reference images)\nPoses:        standing, waving, pointing, sitting\nDo:           teal scarf always; stripes consistent\nDon't:        realistic fur; extra accessories; other colours on scarf\nReference files: zara_front.png, zara_side.png, zara_expressions.png\n```\n\nConsider having an illustrator create the canonical mascot design by hand. A human-designed mascot is easier to protect as intellectual property and gives you a clean master to reference.\n\n### Real people and consistency\n\nCreating consistent AI versions of **real people** — yourself, a spokesperson, a model — requires explicit consent from that person, clear agreement on how their likeness will be used, and care about platform policies on synthetic media and impersonation. Many tools restrict generating likenesses of real people, especially public figures. For consistent synthetic \"people\" who do not exist, avoid presenting them as real customers, employees or reviewers.\n\n### Products: accuracy first\n\nFor products, accuracy usually matters more than creativity:\n\n- Use real product photography as the source of truth.\n- Use product-reference features only if outputs preserve logo, shape, colour and label exactly — check each image.\n- When in doubt, composite the real product into AI scenes.\n- Never alter a product's appearance in ways customers would find misleading.\n\n### Keeping settings stable\n\nModel updates change outputs. For a campaign:\n\n- Note the tool and model version in your prompt log.\n- Produce campaign assets within a defined period if possible.\n- Keep approved images as the master references — not just prompts.\n\n### Worked example: a children's education creator\n\nA creator uses a mascot owl in weekly carousels.\n\n1. An illustrator designs the owl by hand; copyright is assigned to the creator.\n2. A character sheet (front, side, six expressions) is created.\n3. The creator uses the sheet images as character references and a style reference at medium strength.\n4. Each weekly prompt uses the canonical description plus the scene.\n5. Outputs are checked against the bible (colours, proportions, accessories); small deviations fixed by inpainting.\n6. After six months, the approved outputs are curated as additional references.\n\n### Common mistakes\n\n- Expecting a text description alone to keep a character identical.\n- Using a real person's likeness without consent.\n- Letting product details drift (wrong logo, colour or label).\n- Relying on prompts only, without saving approved images as references.\n\n### Checking consistency efficiently\n\nConsistency checks are faster with side-by-side comparison. Place each new output next to the canonical reference images and compare a short list of features: face shape and proportions, colours of key clothing or product parts, distinctive marks (such as the mascot's scarf or the product's label), and style (line weight, shading, texture). A simple grid of all approved images for a campaign also reveals drift that is invisible when images are reviewed one at a time.\n\n### Summary\n\nCombine descriptive anchors, references, character sheets and — where appropriate — fine-tuning or compositing to keep subjects consistent; document a character bible; get consent for real likenesses; and treat real product photos as the source of truth.",
+          "video": null,
+          "keyTakeaways": [
+            "Each generation starts fresh, so consistency needs anchors, references or fine-tuning.",
+            "A character bible with reference images keeps mascots and characters on-model.",
+            "Real people's likenesses require explicit consent and respect for platform policies.",
+            "For products, real photography is the source of truth — check every output."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the most reliable way to keep a real product accurate across AI campaign images?",
+              "options": [
+                "Describe it in more detail each time",
+                "Use real product photos as the source, compositing them or verifying reference-based outputs carefully",
+                "Let the model improve the product",
+                "Use a fixed seed"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Real photos guarantee accuracy; references must be verified. Descriptions and seeds do not guarantee exact product details."
+            },
+            {
+              "question": "A brand wants AI-generated images of its founder for daily content. What must be in place?",
+              "options": [
+                "A new logo",
+                "A higher resolution tool",
+                "The founder's explicit consent and agreement on how the likeness will be used, plus compliance with platform rules",
+                "Nothing, it's their company"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Likeness use requires consent and policy compliance, even for insiders."
+            },
+            {
+              "question": "Why include reference images in a character bible, not just text?",
+              "options": [
+                "Images are smaller",
+                "It avoids licensing",
+                "Text is not allowed in bibles",
+                "Images define the canonical look precisely for both the model and the team"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Visual references remove ambiguity that text descriptions leave."
+            }
+          ],
+          "activity": "Create a character or product bible for a recurring subject, including a canonical description, do/don't rules and at least three reference images, then generate three scenes and check them against it."
+        },
+        {
+          "slug": "style-systems-and-prompt-libraries",
+          "title": "Style systems and campaign prompt libraries",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### From one-off prompts to a system\n\nWhen a brand uses AI imagery regularly, individual prompting becomes a bottleneck and a consistency risk. A **style system** — documented style specs, prompt snippets, references and rules — lets anyone on the team produce on-brand images quickly.\n\n### Components of an AI style system\n\n```\nAI style system\n1. Style specs      Medium, lighting, palette, texture, composition per image type\n2. Prompt snippets  Reusable text blocks: [STYLE_CORE], [LIGHTING], [CONSTRAINTS]\n3. Reference sets   Approved style refs, character refs, product photos\n4. Settings         Tool, model, aspect ratios, reference strengths, upscale settings\n5. Templates        Layout templates with image zones and type\n6. Do/don't gallery Approved and rejected examples with reasons\n7. QA checklist     Artefacts, brand fit, rights, bias, disclosure\n8. Change log       Updates when models or brand rules change\n```\n\n### Modular prompt snippets\n\nBreak prompts into reusable modules:\n\n```\n[STYLE_CORE]   = \"flat vector illustration, soft rounded shapes, subtle paper grain,\n                  limited palette of navy, mint and warm sand\"\n[LIGHT]        = \"soft even lighting, no harsh shadows\"\n[COMPOSITION]  = \"generous negative space in the top third for a headline\"\n[CONSTRAINTS]  = \"no text, no logos, no watermarks\"\n[PEOPLE]       = \"diverse, everyday people, simple faces without detailed features\"\n\nPrompt = [STYLE_CORE] + scene description + [PEOPLE] + [LIGHT] + [COMPOSITION] + [CONSTRAINTS] + aspect ratio\n```\n\nOnly the scene description changes per asset. Store snippets where the team can copy them — a shared document, a prompt manager, or a brand kit feature in your design tool.\n\n### Image types within one campaign\n\nA campaign often needs several image types, each with its own spec:\n\n| Image type | Spec focus |\n|---|---|\n| Hero visual | Highest quality, strong composition, space for headline |\n| Supporting scenes | Same style, simpler compositions |\n| Backgrounds/textures | Low detail, brand colours, subtle |\n| Icons/spot illustrations | Consistent line/shape language, transparent backgrounds |\n| Thumbnails | High contrast, bold focal point, readable at small size |\n\n### The do/don't gallery\n\nWords cannot capture everything. A visual gallery of approved and rejected outputs, each with a short reason (\"Rejected: too glossy, off-palette purple\"; \"Approved: correct grain and palette\"), is one of the fastest ways to align a team or a client.\n\n### Aligning AI style with brand guidelines\n\nThe AI style system should sit inside the brand guidelines, not beside them:\n\n- Use brand palette names and hex references.\n- Match the brand's photography or illustration style rules.\n- Apply brand accessibility standards (text contrast, inclusive depiction).\n- Follow brand rules on disclosure and where AI imagery is not allowed (for example, customer testimonials).\n\n### Managing model changes\n\nTools update models frequently. After an update:\n\n1. Re-run a small **benchmark set** of standard prompts.\n2. Compare with the approved gallery.\n3. Adjust snippets or reference strengths if the style has drifted.\n4. Record the change in the change log.\n\nPinning a specific model version, where the tool allows, can keep results stable during a campaign.\n\n### Worked example: an agency's system for a fintech client\n\n- Image types: hero illustrations, feature spot illustrations, social backgrounds.\n- Snippets: [STYLE_CORE], [PEOPLE] (inclusive depiction across ages, genders and backgrounds relevant to the client's markets in the UK, UAE and Pakistan), [CONSTRAINTS].\n- References: six approved hero images; icon set drawn by a human designer.\n- Rules: no AI imagery of \"customers\" in testimonials; financial claims never implied by images; all text added in design tool.\n- Benchmark: eight prompts re-run monthly and after model updates.\n\n### Common mistakes\n\n- Every team member writing prompts from scratch.\n- Style systems that exist only in one person's head.\n- No benchmark after model updates, causing silent drift.\n- An AI style that conflicts with the brand's existing photography or illustration rules.\n\n### Rolling a style system out to a team\n\nA style system only helps if people use it. Keep it in one shared location, name snippets clearly, and show a before-and-after example for each so new team members understand the effect. Run a short onboarding session in which each person generates three images with the snippets and compares them with the gallery. Collect questions in a shared document and update the system monthly. For freelancers and partners, share a lighter version that contains the snippets, references and rules they need without exposing confidential client material.\n\n### Summary\n\nBuild an AI style system with specs, modular snippets, references, settings, templates, a do/don't gallery, a QA checklist and a change log; align it with brand guidelines; and benchmark after model updates.",
+          "video": null,
+          "keyTakeaways": [
+            "A documented style system lets teams produce consistent, on-brand AI imagery quickly.",
+            "Modular prompt snippets keep style constant while only the scene changes.",
+            "A do/don't gallery with reasons aligns teams and clients faster than words alone.",
+            "Benchmark standard prompts after model updates and log changes."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the main benefit of modular prompt snippets?",
+              "options": [
+                "They keep style, lighting and constraints consistent while only the scene changes",
+                "They make prompts shorter than 10 words",
+                "They remove the need for QA",
+                "They guarantee copyright"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Snippets standardise the parts that define the brand look; QA and rights checks still apply."
+            },
+            {
+              "question": "After a tool updates its model, campaign images look slightly different. What should you do?",
+              "options": [
+                "Delete the style system",
+                "Change the brand palette",
+                "Re-run a benchmark set, compare with approved images, adjust snippets or references, and log the change",
+                "Ignore it"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Benchmarking catches drift and keeps the system reliable."
+            },
+            {
+              "question": "Where should an AI style system sit in relation to brand guidelines?",
+              "options": [
+                "Completely separate",
+                "Only in a designer's notes",
+                "Within the brand guidelines, consistent with existing photography, illustration, accessibility and disclosure rules",
+                "It should replace them"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Integration ensures AI imagery follows the same brand standards as all other assets."
+            }
+          ],
+          "activity": "Write four modular prompt snippets for a brand and assemble three prompts for different image types. Start a do/don't gallery with at least two approved and two rejected examples with reasons."
+        },
+        {
+          "slug": "production-pipeline",
+          "title": "A production pipeline from brief to delivery",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Scaling without chaos\n\nWhen AI imagery moves from occasional experiments to regular production — weekly content, ad variations, campaign launches — you need a pipeline: clear stages, owners, checkpoints and file conventions. This protects quality and makes the process repeatable.\n\n### The pipeline\n\n| Stage | Activities | Output | Owner |\n|---|---|---|---|\n| 1. Brief | Objective, audience, formats, message, constraints, where AI is/isn't allowed | Creative brief | Strategist/client lead |\n| 2. Concept | Moodboards, AI explorations, rough layouts | 2–3 concepts | Designer |\n| 3. Approval of direction | Client/stakeholder picks concept | Approved direction | Client |\n| 4. Generation | Using style system, references, prompt log | Candidate images | Designer |\n| 5. Selection | Shortlist against brief | Selected images | Designer + art director |\n| 6. Editing & compositing | Inpaint, outpaint, composite, retouch, upscale | Finished images | Designer/retoucher |\n| 7. Layout | Typography, logos, templates, formats | Final assets | Designer |\n| 8. QA & compliance | Artefacts, brand, rights, bias, claims, disclosure | QA sign-off | Reviewer |\n| 9. Delivery | Exports, naming, metadata, documentation | Delivered package | Designer/PM |\n| 10. Learn | Performance review, update system | Updated style system | Team |\n\nSmall teams may combine roles, but every stage still happens.\n\n### The brief: AI-specific questions\n\nAdd these to your standard creative brief:\n\n```\nAI-specific brief questions\n- Is AI imagery acceptable for this client/campaign? Any client policy?\n- Which elements must be real (products, people, places, results)?\n- Are there sensitive topics, cultural contexts or regulated claims?\n- Required disclosures (platforms, markets, client policy)?\n- Tool restrictions (data privacy, commercial terms, indemnity needs)?\n- Ownership expectations for final assets?\n```\n\n### Ad variations at scale\n\nAI makes it easy to produce many variations for testing. Keep it disciplined:\n\n- Vary one element at a time (background scene, model pose, colour of backdrop).\n- Keep brand elements fixed through templates.\n- Name files so test results can be traced back: campaign_placement_variable_version (e.g. launch_story_bg-desert_v2).\n- Retire underperforming concepts quickly; iterate winners.\n- Check that each variation is still compliant — variations can introduce new errors.\n\n### Delivery package\n\n```\nDelivery package\n/Final_exports     platform-ready files (named, sRGB, correct sizes)\n/Masters           layered working files\n/Source_images     AI outputs used, real photos used (with licences)\n/Documentation     prompt logs, references used, AI usage summary,\n                   disclosure recommendation, rights notes\n```\n\nAn **AI usage summary** — a short note of which assets used AI and how — helps clients with their own disclosure and governance obligations.\n\n### Measuring and learning\n\nAfter publication, review:\n\n- Performance metrics suited to the objective (engagement, click-through, conversions, watch time).\n- Qualitative feedback (comments noting \"AI look\" or confusion).\n- Production metrics: time and cost per final asset, number of revisions.\n- Update the style system, prompt snippets and gallery with what worked.\n\n### Worked example: monthly content for a UAE restaurant group\n\n- Brief each month includes which dishes must be real photography (all menu items) and where AI can be used (seasonal backgrounds, illustrated Ramadan and Eid graphics, abstract textures).\n- Generation uses the group's style system; seasonal snippets are added for Ramadan (lanterns, crescent motifs, warm evening light) reviewed by team members for cultural appropriateness.\n- QA checks that no generated food is presented as menu items and that Arabic text is set in the design tool.\n- Delivery includes an AI usage summary per asset.\n\n### Common mistakes\n\n- Skipping direction approval and generating hundreds of finals in the wrong style.\n- No QA stage for compliance and disclosure.\n- Losing track of which variation is which.\n- Not documenting AI use for clients.\n\n### Tools for managing the pipeline\n\nYou do not need specialist software to run this pipeline. A shared task board with a column for each stage, a naming convention, and a folder template are enough for most small teams. What matters is that each asset has an owner, a status and a place where its prompt log, references and approvals live. As volume grows, consider digital asset management tools that store metadata such as AI usage and licence information alongside each file, making audits and client questions much easier to answer.\n\n### Summary\n\nRun AI imagery through a staged pipeline with owners and checkpoints, add AI-specific questions to briefs, keep variation testing disciplined, deliver organised packages with an AI usage summary, and learn from results.",
+          "video": null,
+          "keyTakeaways": [
+            "A staged pipeline with owners and checkpoints keeps AI production reliable.",
+            "Add AI-specific questions to briefs: what must be real, disclosures, tool restrictions.",
+            "Test variations one element at a time with traceable file names.",
+            "Deliver an AI usage summary with prompt logs and rights notes."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which question belongs in an AI-specific brief?",
+              "options": [
+                "What is the office address?",
+                "Which elements must be real, such as products, people or results?",
+                "How many followers do competitors have?",
+                "What is the client's favourite song?"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Defining what must be real prevents misleading use of AI imagery."
+            },
+            {
+              "question": "Why include an AI usage summary in a delivery package?",
+              "options": [
+                "To increase the invoice",
+                "Because platforms read it automatically",
+                "To help the client understand which assets used AI and support their disclosure and governance",
+                "To replace QA"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "An AI usage summary tells the client which assets used AI and how, which supports their disclosure duties, governance and trust; it does not inflate fees or replace QA."
+            },
+            {
+              "question": "When producing ad variations with AI, what is best practice?",
+              "options": [
+                "Skip compliance checks for variations",
+                "Vary one element at a time, keep brand elements fixed, and name files traceably",
+                "Change every element in every variation",
+                "Use random file names"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Controlled variation and traceable naming make results interpretable and compliant."
+            }
+          ],
+          "activity": "Map your own AI image workflow onto the ten-stage pipeline, identify one missing stage, and create a delivery-package folder template with an AI usage summary document."
+        }
+      ]
+    },
+    {
+      "slug": "rights-likeness-and-disclosure",
+      "title": "Copyright, likeness and disclosure",
+      "summary": "Understand ownership and copyright questions, avoid likeness and trademark problems, and apply labelling and disclosure rules.",
+      "lessons": [
+        {
+          "slug": "copyright-and-ownership",
+          "title": "Copyright and ownership of AI images",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### An evolving legal landscape\n\nThe law around AI-generated images is developing quickly and differs between countries. This lesson gives principles and questions to ask — it is not legal advice. For significant commercial projects, consult a qualified lawyer in the relevant jurisdiction.\n\nThere are three distinct questions, and people often confuse them:\n\n1. **Can the AI output itself be protected by copyright, and who owns it?**\n2. **Might the output infringe someone else's rights?**\n3. **What do the tool's terms of service say about using outputs?**\n\n### Question 1: Is the output protected?\n\nCopyright systems traditionally protect works created by human authors.\n\n- **United States:** the US Copyright Office has stated that material generated purely by AI, without sufficient human creative control, is not protected by copyright; prompts alone are generally not considered enough. Human contributions — such as creative selection and arrangement, or substantial human modification of AI output — can be protected. US courts have upheld the human-authorship requirement. Registrations should disclose AI-generated material that is more than minimal.\n- **United Kingdom:** UK law contains a provision for \"computer-generated works\" with no human author, attributing authorship to the person who made the arrangements necessary for the work's creation, with a shorter term of protection. How this applies to modern generative AI is debated, and the government has consulted on reforms to AI and copyright — check the current position.\n- **European Union:** copyright generally requires the author's own intellectual creation, which implies human creative choices.\n- **Other jurisdictions** (including Pakistan, the UAE and Saudi Arabia) have their own copyright laws and are developing positions on AI; outcomes can differ, and guidance may be limited.\n\n**Practical implication:** a purely generated image may be hard to protect, so a competitor might be able to copy it. Work with more human creative input — composition, compositing, illustration, editing, typography, selection and arrangement — is more likely to have protectable elements.\n\n### Question 2: Could the output infringe?\n\nEven if you can use an output, it could still resemble protected material:\n\n- **Copyrighted characters and artworks** — prompts naming characters, films or artists can produce infringing outputs.\n- **Trademarks and trade dress** — logos, packaging and distinctive product designs.\n- **Training-data disputes** — lawsuits in several countries concern whether training on copyrighted works without permission is lawful. Outcomes vary and are ongoing; these mostly affect model providers, but they are one reason some businesses prefer tools trained on licensed or permitted data, or with indemnities.\n\nRisk-reduction practices:\n\n- Avoid prompts referencing specific copyrighted characters, brands or living artists.\n- Run a visual similarity check (such as a reverse image search) on important outputs.\n- Use tools with clear commercial terms and, for high-risk brand work, consider providers offering IP indemnities.\n- Keep your prompt log and references as a record of independent creation.\n\n### Question 3: Terms of service\n\nTool terms may:\n\n- Grant you rights to use outputs, sometimes only on paid plans.\n- Grant the provider a licence to your inputs or outputs (for example, for improving services).\n- Restrict certain uses (political content, sensitive categories, impersonation).\n- Require you to have rights to uploaded content.\n\nTerms change; review them periodically and keep a copy of the version in force when you created client work.\n\n### Contracts with clients\n\nBecause ownership may be uncertain, contracts should be explicit:\n\n```\nAI-related contract points (discuss with your lawyer)\n- Disclose that AI tools may be used and for what\n- Assign to the client whatever rights the creator holds in deliverables\n- State that purely AI-generated elements may have limited or no copyright protection\n- Warranties limited to what the creator can control (e.g. no knowing infringement)\n- Client-provided materials: client warrants it has rights\n- Which tools are allowed/prohibited (e.g. for confidentiality)\n- Responsibility for disclosure/labelling on publication\n```\n\n### Worked example: a logo request\n\nA client wants an AI-generated mascot as the core of their brand, to register as a trademark and protect against copying.\n\nAdvice: because a purely generated image may not attract copyright in some jurisdictions and may resemble existing works, have a human illustrator create or substantially redraw the final mascot (AI can inform early concepts), document the process, run similarity and trademark searches, and have rights assigned in writing.\n\n### Common mistakes\n\n- Assuming \"the tool says I own it\" means it is protected by copyright.\n- Assuming AI outputs cannot infringe.\n- Ignoring plan-specific terms.\n- Using AI-generated key brand assets without human authorship.\n\n### Summary\n\nSeparate protection, infringement and terms. Purely AI-generated material may lack copyright protection in some countries; human creative contribution strengthens protection; outputs can still infringe; terms vary by tool and plan; and contracts should address AI use explicitly.",
+          "video": null,
+          "keyTakeaways": [
+            "Separate three questions: is the output protected, could it infringe, and what do the terms allow?",
+            "In the US, purely AI-generated material is generally not protected; human creative contributions can be.",
+            "UK, EU and other jurisdictions differ and are evolving — check current rules.",
+            "Use human authorship for key brand assets and address AI use explicitly in contracts."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the US Copyright Office's general position on purely AI-generated images?",
+              "options": [
+                "They are not protected without sufficient human creative authorship; prompts alone are generally insufficient",
+                "They belong to the AI company",
+                "They are always protected and owned by the prompter",
+                "They are public domain everywhere in the world"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "US guidance requires human authorship; human selection, arrangement or modification can be protected. The position is not global."
+            },
+            {
+              "question": "A tool's terms say you 'own' outputs. Does that guarantee copyright protection?",
+              "options": [
+                "Only on free plans",
+                "No — terms govern your relationship with the provider, but copyright protection depends on the law",
+                "Yes, terms of service create copyright",
+                "Only in the EU"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Contracts cannot create copyright where the law does not recognise it; they allocate whatever rights exist."
+            },
+            {
+              "question": "Which practice reduces infringement risk for AI outputs?",
+              "options": [
+                "Avoiding prompts for specific copyrighted characters, brands or living artists, and checking outputs for similarity",
+                "Removing watermarks from outputs",
+                "Prompting with famous character names",
+                "Using the highest resolution"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Avoiding protected references and checking similarity reduces risk."
+            }
+          ],
+          "activity": "Review the current terms of service of one image tool you use. Summarise in five bullet points what they say about output use, input rights, training on your data, restrictions and indemnity."
+        },
+        {
+          "slug": "likeness-trademarks-and-harm",
+          "title": "Likeness, trademarks and harmful content",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### People, brands and harm\n\nBeyond copyright, AI imagery raises other legal and ethical risks: using real people's likenesses, misusing trademarks, and generating content that is deceptive, harmful or offensive. These risks can damage reputations and relationships fast — and some are criminal offences in certain countries.\n\n### Likeness and personality rights\n\nMany jurisdictions protect people against unauthorised commercial use of their name, image or likeness, through rights of publicity, personality rights, privacy law, data-protection law, passing off or defamation. Details differ widely, but the principle is consistent:\n\n- **Do not generate or use images of real, identifiable people** (celebrities, influencers, politicians, private individuals) in marketing without their consent.\n- **Implied endorsement** is a particular risk: showing a well-known person apparently using your product can mislead consumers and infringe their rights.\n- **Deepfakes and sexualised or humiliating imagery** of real people can be unlawful in many countries and violate every major platform's policies. Several jurisdictions have introduced specific offences for non-consensual intimate deepfakes.\n- **Private individuals** — customers, employees, members of the public — have privacy and data-protection rights over their images. Get consent before uploading their photos to AI tools or altering their likeness.\n\nIn Gulf countries, laws on privacy, defamation, cybercrime and public morals can be strict, and publishing images of people without consent — or content deemed offensive — can carry serious penalties. Pakistan's cybercrime law also covers certain misuse of images. Check local laws and err on the side of consent.\n\n### Consent done properly\n\nFor synthetic content of a real person (for example, a creator's AI avatar, or a spokesperson's likeness used in ads):\n\n```\nLikeness consent checklist\n[ ] Written consent from the person\n[ ] Clear scope: which uses, channels, markets, duration\n[ ] Right to review/approve outputs\n[ ] Payment/compensation terms where relevant\n[ ] How to withdraw consent and what happens to existing content\n[ ] Tool compliance: the tool permits this use and has consent processes\n[ ] Disclosure plan for synthetic content\n```\n\n### Trademarks and brand assets\n\n- Avoid generating other brands' logos, packaging or distinctive products, which can imply affiliation or infringe trademarks.\n- AI can accidentally generate pseudo-logos that resemble real brands — check backgrounds, clothing and products.\n- Don't create \"parody\" ads of competitors without legal advice; comparative advertising has strict rules.\n\n### Harmful, misleading and sensitive content\n\nMost tools have content policies, and platforms have community guidelines and ad policies. Beyond compliance, professional ethics require avoiding:\n\n- **Misinformation:** realistic images of events that did not happen, especially news, disasters, elections or conflicts.\n- **Fake evidence:** images presented as proof (fake screenshots, fake receipts, fake reviews).\n- **Stereotypes and demeaning depictions** of groups based on ethnicity, religion, gender, disability or other characteristics.\n- **Religious and cultural sensitivity:** depictions of religious figures, sacred texts or sites may be deeply offensive or unlawful in some markets.\n- **Children:** extreme care; many platforms prohibit certain depictions, and some content is illegal everywhere.\n\n### A risk triage for every AI image\n\n```\nLow risk:    Abstract textures, clearly stylised illustrations, landscapes, generic objects\nMedium risk: Realistic generic people, realistic scenes, product composites, cultural motifs\nHigh risk:   Real people, public figures, children, news/events, religious content,\n             health/finance claims, other brands' assets\n→ Medium: extra review. High: consent/legal review or don't proceed.\n```\n\n### Worked example: a trending celebrity edit\n\nA creator wants to post an AI image of a famous footballer wearing the creator's merch to ride a trending topic.\n\nAnalysis: identifiable real person, commercial context, implied endorsement, no consent → high risk under likeness laws, advertising rules and platform policies. Alternative: create a clearly original illustrated character, or reach out to the athlete's management for a paid partnership.\n\n### Common mistakes\n\n- \"It's just a joke/meme\" — commercial accounts face stricter scrutiny.\n- Using customers' photos in AI tools without consent.\n- Missing pseudo-logos in backgrounds.\n- Generating realistic images of events for engagement.\n\n### When something goes wrong\n\nMistakes happen, so plan your response. If you discover that a published image contains a real person's likeness without consent, another brand's logo, or a misleading or offensive element, remove or edit it promptly, inform the client, and document what happened and how it will be prevented. If someone complains, respond respectfully and quickly. Updating your style system, risk triage and review steps after each incident turns a mistake into a stronger process.\n\n### Summary\n\nNever use real people's likenesses without consent, avoid other brands' assets, don't create misleading or harmful imagery, respect cultural and religious sensitivities, and triage every image by risk level.",
+          "video": null,
+          "keyTakeaways": [
+            "Using real people's likenesses without consent risks legal claims and platform violations.",
+            "Get written, scoped consent for any synthetic use of a real person's likeness.",
+            "Avoid other brands' logos and check for accidental pseudo-logos.",
+            "Triage images by risk; high-risk content needs consent, legal review or a different approach."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A creator wants to post an AI image of a celebrity holding their product. What is the main risk?",
+              "options": [
+                "Unauthorised use of likeness and implied endorsement",
+                "The colours may be off-brand",
+                "Low image resolution",
+                "It will not go viral"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Implying endorsement by a real person without consent infringes rights and misleads consumers."
+            },
+            {
+              "question": "Which image is highest risk?",
+              "options": [
+                "A realistic image of a real politician at an event that never happened",
+                "A generic coffee cup",
+                "A stylised landscape illustration",
+                "An abstract gradient background"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Realistic fabricated events involving real public figures risk misinformation, defamation and policy violations."
+            },
+            {
+              "question": "What should a likeness consent agreement specify?",
+              "options": [
+                "Only the person's name",
+                "The person's favourite brands",
+                "Scope of use, channels, markets, duration, approval rights and withdrawal terms",
+                "The tool's colour settings"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Clear scope and control terms protect both parties."
+            }
+          ],
+          "activity": "Apply the risk triage to ten AI image ideas for a brand. For each medium- or high-risk idea, write what review, consent or alternative approach would be needed."
+        },
+        {
+          "slug": "labelling-and-disclosure",
+          "title": "Labelling, disclosure and provenance",
+          "type": "video",
+          "durationMinutes": 8,
+          "body": "### Why disclosure matters\n\nAudiences increasingly want to know when images are AI-generated or significantly altered, and regulators and platforms are responding. Clear disclosure protects trust, keeps you within platform rules, and in some jurisdictions is becoming a legal requirement for certain content.\n\n### Platform labelling (check current policies)\n\nMajor platforms have introduced AI labelling approaches. As of 2026, common patterns include:\n\n- **Creator disclosure tools:** platforms such as YouTube, TikTok, Instagram and Facebook provide ways for creators to indicate that content is AI-generated or materially altered, and require disclosure for realistic synthetic content that could mislead viewers.\n- **Automatic labels:** platforms may automatically label content when they detect industry-standard provenance signals (for example C2PA Content Credentials or invisible watermarks from AI tools).\n- **Ads:** ad platforms may require disclosure for AI-altered content in certain categories, especially political and social-issue ads.\n- **Penalties:** failure to disclose where required can lead to labels being added, content removal, reduced distribution or account penalties.\n\nPolicies change frequently — check each platform's current help centre before campaigns.\n\n### Regulatory developments\n\n- **European Union:** the AI Act includes transparency obligations. Providers of generative AI systems must ensure outputs are marked in a machine-readable way, and those who deploy AI to create deepfakes (realistic content depicting people, places or events that could falsely appear authentic) must disclose that the content is artificially generated or manipulated, with some exceptions and lighter rules for evidently artistic or satirical works. These transparency obligations apply from August 2026.\n- **Advertising regulators** (such as the UK's ASA/CAP and the US FTC) apply existing rules: ads must not mislead. If AI imagery could mislead consumers about a product or endorsement, disclosure alone may not be enough.\n- **Other jurisdictions** — including China, several US states and countries in the Middle East and South Asia — have introduced or are developing rules on labelling synthetic media or deepfakes. Always check the markets you target.\n\n### When to disclose: a practical framework\n\n| Content | Recommended approach |\n|---|---|\n| Realistic image of people, places or events that didn't happen | Disclose clearly (and consider whether to publish at all) |\n| Realistic product scene composite | Disclose if it could mislead; ensure product and claims are accurate |\n| Clearly stylised illustration or fantasy | Often not required by platforms, but voluntary transparency builds trust |\n| Minor edits (cleanup, colour correction, background extension) | Usually not required; follow platform guidance |\n| AI avatars or synthetic voices of real people | Disclose; ensure consent |\n| Political, social-issue or health content | Follow strict platform/ad rules; disclose |\n\nWhen in doubt, disclose.\n\n### How to disclose well\n\n- **Use the platform's built-in tool** where available.\n- **Add a clear caption note**, for example \"Image created with AI\" or \"AI-generated illustration\", near the start of the caption, not buried in hashtags.\n- **On-image labels** for ads or realistic content can be appropriate.\n- **Be specific** where useful: \"Background generated with AI; product photographed in studio.\"\n- **Keep provenance metadata** (Content Credentials) intact.\n\n### Disclosure and advertising disclosure together\n\nCreators often need two disclosures in the same post: a **paid partnership disclosure** (#ad, \"Paid partnership\") and an **AI disclosure**. Both must be clear. One does not replace the other.\n\n### Client and internal policies\n\nMany brands now have AI policies specifying when AI imagery is allowed, approval requirements and disclosure wording. Ask clients for theirs; if they have none, offer a simple one:\n\n```\nSimple AI imagery policy (starter)\n1. AI imagery allowed for: illustrations, backgrounds, concepts, edits\n2. Not allowed for: real customers/testimonials, product results, news-like content\n3. Real people only with written consent\n4. Disclosure: platform tools + caption note for realistic AI content\n5. Provenance metadata kept; prompt logs retained\n6. Review: all AI assets checked by a second person before publishing\n```\n\n### Worked example: a creator's sponsored post\n\nA creator promotes a travel booking app with a dreamy AI-generated image of a destination at sunset. The image is realistic.\n\nCorrect approach: paid partnership label and \"#ad\" at the start of the caption; the platform's AI label turned on; caption note \"Scene created with AI — real photos from my trip in the next slides\"; include real trip photos to avoid misleading followers about the destination.\n\n### Common mistakes\n\n- Hiding AI disclosure in hashtags.\n- Stripping provenance metadata.\n- Assuming stylised content never needs disclosure.\n- Using AI disclosure in place of #ad or vice versa.\n\n### Summary\n\nFollow platform labelling tools and policies, track regulations such as the EU AI Act's transparency rules, disclose realistic synthetic content clearly, keep provenance data, combine AI and advertising disclosures, and adopt a simple AI imagery policy.",
+          "video": {
+            "script": "Here's a simple rule for AI imagery in 2026: if people could reasonably believe it's real, and it isn't, tell them. Disclosure matters for three reasons. Trust, because audiences feel deceived when they discover undisclosed synthetic content. Platform rules, because the major platforms ask creators to label realistic AI-generated or materially altered content, and they may label it automatically when they detect provenance signals like Content Credentials. And law, because regulations are catching up. In the European Union, the AI Act's transparency rules, including disclosure of deepfakes, apply from August 2026, and other countries are introducing their own rules on synthetic media. So how do you disclose well? Use the platform's built-in AI label when it exists. Add a clear note near the start of your caption, like \"Image created with AI\" or \"Background generated with AI, product photographed in studio.\" For ads or very realistic content, an on-image label can help. And keep the provenance metadata that tools attach — don't strip it out. If you're a creator doing paid work, remember there are two separate disclosures: one for the paid partnership, one for AI. You may need both, and neither replaces the other. And here's the important caveat. Disclosure doesn't fix a misleading claim. If an AI image exaggerates what a product does, or shows a hotel room that doesn't exist, a label won't make it acceptable. Use real imagery for real claims. Finally, write it down. A simple AI imagery policy — what's allowed, what's not, how you disclose, and who reviews — keeps you and your clients consistent.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Platforms require or encourage labels for realistic AI-generated or altered content; policies change often.",
+            "The EU AI Act's transparency obligations, including deepfake disclosure, apply from August 2026.",
+            "Disclose clearly using platform tools and caption notes; keep provenance metadata.",
+            "AI disclosure and paid-partnership disclosure are separate; both may be needed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A creator's sponsored post uses a realistic AI-generated image. Which disclosures are needed?",
+              "options": [
+                "Only an AI label",
+                "Only #ad",
+                "Both a clear paid-partnership disclosure and an AI disclosure",
+                "Neither, if the image is beautiful"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Advertising and AI disclosures serve different purposes; one does not replace the other."
+            },
+            {
+              "question": "Under the EU AI Act, what must deployers who create deepfakes generally do?",
+              "options": [
+                "Nothing",
+                "Watermark all images in red",
+                "Disclose that the content is artificially generated or manipulated",
+                "Pay a licence fee to the EU"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The Act requires disclosure of deepfakes, with some adjustments for evidently artistic or satirical work."
+            },
+            {
+              "question": "Which is the best place for an AI disclosure in a caption?",
+              "options": [
+                "Clearly near the start, alongside the platform's AI label",
+                "Only in the bio",
+                "Buried among many hashtags at the end",
+                "In a comment reply"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Prominent, early disclosure is clear to viewers; hidden disclosure is ineffective."
+            }
+          ],
+          "activity": "Choose three AI images you have made or might publish. For each, decide whether disclosure is needed using the framework table, write the exact caption wording, and note any platform label you would switch on."
+        }
+      ]
+    },
+    {
+      "slug": "ai-and-human-workflows",
+      "title": "AI + human design workflows",
+      "summary": "Integrate AI into a human-led creative process, work transparently with clients, and manage bias, quality and effectiveness.",
+      "lessons": [
+        {
+          "slug": "where-ai-fits",
+          "title": "Where AI fits in the creative process",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### AI changes tasks, not the need for design judgement\n\nAI image tools compress some tasks from hours to minutes — exploration, background creation, retouching, format adaptation. They do not replace the core of design work: understanding the problem, making choices, crafting details, ensuring accuracy and taking responsibility. The most effective teams redesign their workflow around this reality.\n\n### Mapping AI to the design process\n\n| Stage | Human role | Where AI helps | Risk if AI leads |\n|---|---|---|---|\n| Understand the brief | Ask questions, define objectives | Summarise research, generate question lists | Solving the wrong problem |\n| Explore | Direct exploration, judge ideas | Rapid moodboards, many visual directions | Generic, trend-driven ideas |\n| Concept | Choose and articulate the idea | Visualise concepts quickly | Pretty images without a concept |\n| Develop | Craft layouts, typography, systems | Generate assets, backgrounds, variations | Inconsistency, off-brand details |\n| Refine | Detail, accuracy, brand fit | Inpainting, upscaling, cleanup | Artefacts, errors |\n| Review | Critique, compliance, ethics | Checklists, alt-text drafts (reviewed) | Missed legal or cultural problems |\n| Deliver & learn | Present, document, measure | Resizing, file prep | Poor documentation |\n\n### Three collaboration models\n\n1. **AI as sketchbook:** AI is used only for ideation and moodboards; final assets are photographed, illustrated or designed by humans. Lowest risk; common in brand identity and premium work.\n2. **AI as production assistant:** humans design the system and key assets; AI produces backgrounds, variations and edits within that system. Common for social content and ads.\n3. **AI as primary image source:** most imagery is generated, with human direction, editing and QA. Suitable for stylised content where accuracy and authenticity aren't central; requires strong governance.\n\nChoose the model per project based on authenticity needs, risk, budget and client policy.\n\n### Skills that matter more now\n\n- **Art direction:** describing and judging visual outcomes precisely.\n- **Taste and editing:** selecting the best outputs and knowing what to discard.\n- **Systems thinking:** building style systems, templates and pipelines.\n- **Craft:** typography, composition, retouching, compositing.\n- **Domain knowledge:** accuracy in products, culture, regulated industries.\n- **Ethics and compliance literacy:** rights, consent, disclosure.\n- **Communication:** explaining AI use and its limits to clients.\n\n### Time savings — and where they go\n\nAI can save significant time in some tasks, but review, editing and QA take time too, and poorly managed iteration can waste hours. Reinvest time savings in:\n\n- Better concepts and more directions explored.\n- More careful QA and accessibility checks.\n- Testing and learning (more ad variations, better measurement).\n- Human craft on the elements that matter most (hero images, typography).\n\n### Worked example: a two-person creator studio\n\nThe studio produces weekly content for three clients.\n\n- **Before AI:** stock photos plus manual design; limited variety.\n- **After redesign:** AI moodboards for monthly planning (sketchbook); AI backgrounds and illustration within approved style systems (production assistant); real photography for products and people; a 30-minute weekly QA session.\n- **Outcome measured:** faster turnaround on routine posts, more concept options for clients, and fewer stock-photo clichés — with no AI used where authenticity mattered.\n\n### Common mistakes\n\n- Letting AI outputs define the concept instead of the brief.\n- Using the same collaboration model for every project.\n- Counting generation time but ignoring review time.\n- Cutting human craft on the most visible assets.\n\n### Designing your own workflow\n\nStart small. Pick one repetitive task — for example creating backgrounds for weekly posts or extending images for vertical formats — and introduce AI there with a clear quality standard. Measure how long the task took before and after, including review time, and note any quality issues. Once the change is stable, move to the next task. This incremental approach keeps quality high, helps clients and teammates build confidence, and prevents the chaos of changing every part of the workflow at once.\n\n### Keeping people at the centre\n\nAI tools should support the people doing the work, not deskill them. Continue investing in drawing, photography, typography and composition skills, because they are what allow you to judge and improve AI outputs. Teams that keep strong craft skills can switch tools easily when the landscape changes; teams that rely entirely on one generator are exposed when its terms, pricing or quality shift.\n\n### Summary\n\nMap AI to specific stages of the design process, choose a collaboration model per project, strengthen art direction, taste, systems and compliance skills, and reinvest time savings in concept quality and QA.",
+          "video": null,
+          "keyTakeaways": [
+            "AI speeds up tasks but humans remain responsible for problem definition, choices, craft and accountability.",
+            "Choose a collaboration model per project: sketchbook, production assistant or primary source.",
+            "Art direction, editing, systems thinking and compliance literacy grow in importance.",
+            "Reinvest time savings in better concepts, QA and testing."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which collaboration model suits a premium brand identity project with high authenticity needs?",
+              "options": [
+                "AI as sketchbook for ideation, with human-created final assets",
+                "Random generation",
+                "No human review",
+                "AI as primary image source"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Low-risk ideation use preserves human authorship and authenticity in key assets."
+            },
+            {
+              "question": "What is the biggest risk when AI outputs drive the concept?",
+              "options": [
+                "Files become too large",
+                "Colours become too dull",
+                "Attractive images that don't solve the brief's problem",
+                "Clients pay less"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Without brief-led direction, output may look good but miss objectives."
+            },
+            {
+              "question": "Which skill becomes more important as AI handles more production?",
+              "options": [
+                "Typing speed",
+                "Art direction and editorial judgement",
+                "Manual image resizing",
+                "Memorising tool menus"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Directing and judging outputs is central when generation is cheap."
+            }
+          ],
+          "activity": "Map one of your recent projects onto the process table. Mark where AI helped or could help, which collaboration model fits, and where human craft must stay."
+        },
+        {
+          "slug": "working-with-clients",
+          "title": "Working with clients: transparency, contracts and pricing",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Trust is the product\n\nClients hire designers for results and for trust. Undisclosed AI use can damage relationships when discovered — especially if it causes legal, quality or reputational problems. Transparent AI practices can become a selling point: faster exploration, more options, and a professional approach to risk.\n\n### Transparency practices\n\n- **State your AI policy** on your website or in proposals: which tools you may use, for what, and your safeguards.\n- **Ask about the client's policy** before starting — some organisations prohibit or restrict generative AI.\n- **Flag AI use per deliverable** in the delivery package (the AI usage summary).\n- **Be honest about limitations** — ownership uncertainty, need for real product photos, review time.\n\n### Contract clauses to discuss (with legal advice)\n\n```\nAI in client contracts — topics to cover\n1. Permission: client agrees AI tools may be used (or specifies restrictions)\n2. Tools and data: no upload of confidential materials to tools without appropriate data controls\n3. Ownership: assignment of creator's rights in deliverables; note that purely\n   AI-generated elements may have limited copyright protection\n4. Warranties: designer warrants no knowing infringement and compliance with tool terms;\n   client warrants rights in materials it supplies\n5. Likeness: no real person's likeness without documented consent\n6. Disclosure: who is responsible for labelling at publication\n7. Revisions: how many rounds; what counts as a new request\n8. Liability: reasonable limits\n```\n\n### Pricing AI-assisted work\n\nAI changes production time but not necessarily the value delivered. Common approaches:\n\n| Model | How it works | Considerations |\n|---|---|---|\n| Value/project-based | Price the outcome (campaign, asset set) | Captures value; efficiency benefits you |\n| Package pricing | Fixed bundles (e.g. 20 social assets/month) | Predictable; define revision limits |\n| Hourly | Time-based | AI speed reduces income unless rates rise |\n| Usage/licensing | Price reflects usage scope (channels, markets, duration) | Common in advertising and illustration |\n| Tool costs | Pass-through or included | Be clear about subscriptions/credits for large volumes |\n\nAvoid underpricing by equating \"AI made it fast\" with \"it has little value\". Clients pay for concept, direction, quality, consistency and risk management. Equally, don't charge as though producing everything by hand when you are not — honesty about process protects trust.\n\n### Managing expectations\n\nClients who have played with image tools may expect instant perfection. Explain:\n\n- Generation is fast; **direction, editing and QA** take time.\n- Exact products, logos, text and real people require real assets or careful work.\n- Some requests are risky (celebrity likenesses, fake testimonials) and you won't do them.\n- Revision rounds are defined.\n\n### Presenting AI-assisted work\n\n- Present concepts with the **idea and rationale**, not just images.\n- Show the **system** (style spec, references, templates) for ongoing work.\n- Note what is AI-generated, what is photographed, what is human-illustrated.\n- Provide options, but curated — not 200 raw generations.\n\n### Worked example: onboarding a new retail client\n\nA freelance designer in Lahore signs a UK-based fashion retailer.\n\n1. Discovery call: asks for the client's AI policy — they allow AI for backgrounds and concepts, not for models or products.\n2. Proposal: includes the designer's AI statement and a package price for monthly assets, with usage scope for social and web in the UK.\n3. Contract: covers AI permission scope, confidentiality (no product samples uploaded to training-enabled tools), rights assignment, disclosure responsibility (client publishes and labels).\n4. Delivery: AI usage summary per asset; real product photography from the client's shoot composited into AI-generated seasonal backgrounds.\n\n### Common mistakes\n\n- Hiding AI use from clients.\n- Pricing purely by hours when AI speeds production.\n- No contract terms on confidentiality and AI tools.\n- Accepting risky requests to keep a client happy.\n\n### Handling client concerns\n\nSome clients are enthusiastic about AI; others are worried about quality, legal risk or how their audience will react. Listen first, then address concerns with specifics: show your AI policy, explain which parts of the work remain human-made, describe your review and disclosure process, and offer to avoid AI entirely for sensitive deliverables. Giving clients control over where AI is used usually builds more trust than trying to persuade them that AI is always the best option.\n\n### Summary\n\nBe transparent about AI use, align with client policies, cover AI topics in contracts with legal advice, price on value and usage rather than generation time, manage expectations, and present curated work with clear rationale and documentation.",
+          "video": null,
+          "keyTakeaways": [
+            "Transparent AI practices build trust and can differentiate your service.",
+            "Ask for the client's AI policy and document AI use per deliverable.",
+            "Contracts should cover permission, confidentiality, ownership, warranties, likeness and disclosure.",
+            "Price on value, packages or usage — not only on generation time."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What should you do before using AI tools on a new client project?",
+              "options": [
+                "Upload all their files to a public tool",
+                "Promise perfect results instantly",
+                "Ask whether the client has an AI policy and agree permitted uses",
+                "Nothing — AI use is private"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Client policies may restrict AI; agreeing scope avoids conflict."
+            },
+            {
+              "question": "Why can hourly pricing be problematic for AI-assisted work?",
+              "options": [
+                "Hourly pricing is illegal",
+                "Clients refuse hourly rates",
+                "Efficiency gains reduce income even though the value delivered may be the same or higher",
+                "AI tools charge hourly"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Value-based, package or usage pricing reflects outcomes rather than time."
+            },
+            {
+              "question": "A client asks for fake customer photos for testimonials. What is the professional response?",
+              "options": [
+                "Use a celebrity instead",
+                "Create them quickly",
+                "Decline and propose real customer photos with consent or a different creative approach",
+                "Create them but add a tiny label"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Fake testimonials are deceptive and breach advertising rules; real customers or alternative creative are appropriate."
+            }
+          ],
+          "activity": "Write a short AI statement for your proposals (100–150 words) and a checklist of AI-related contract points you will discuss with your lawyer or template provider."
+        },
+        {
+          "slug": "bias-quality-and-effectiveness",
+          "title": "Bias, inclusion, quality and effectiveness",
+          "type": "article",
+          "durationMinutes": 7,
+          "body": "### Responsible output is part of quality\n\nAn AI image can be technically flawless and still fail: stereotyping people, excluding audiences, misrepresenting cultures, or simply not performing. Professional AI image work treats inclusion and effectiveness as quality criteria, not extras.\n\n### Understanding bias in image models\n\nModels learn from their training data, which reflects historical and online patterns. Common biases include:\n\n- **Occupational stereotypes:** certain professions depicted mostly with one gender or ethnicity.\n- **Beauty norms:** narrow, idealised body types, skin tones and features; skin lightening effects.\n- **Cultural flattening:** mixing or misrepresenting clothing, architecture and customs; \"generic\" versions of regions.\n- **Default whiteness or Western settings** when prompts don't specify.\n- **Age and disability underrepresentation.**\n\nTools may apply mitigations, sometimes inconsistently. You remain responsible for the final output.\n\n### Inclusive prompting and review\n\n```\nInclusion checklist\n[ ] Does the cast reflect the real audience (age, gender, ethnicity, body type, disability)?\n[ ] Are people depicted with dignity, not as stereotypes?\n[ ] Are skin tones natural and not lightened or over-smoothed?\n[ ] Is cultural dress, architecture and script accurate for the specific context?\n[ ] Would members of the depicted community find it respectful?\n[ ] Are there unintended symbols or gestures with negative meanings in target markets?\n```\n\nPrompting tips:\n\n- Specify the audience you want to represent, concretely and respectfully (\"a group of colleagues of different ages in a Karachi office\").\n- Avoid loaded or vague descriptors that invite stereotypes.\n- Review batches as a whole — diversity across a campaign matters, not only within one image.\n- Involve people from the communities depicted in review, especially for cultural or religious content.\n\n### Accessibility of AI imagery\n\n- Write **alt text** for published images; AI can draft it, but review for accuracy.\n- Ensure text over images meets contrast standards.\n- Avoid flashing or highly busy imagery for motion content.\n\n### Quality: the final gate\n\nCombine the checks from this course into a final gate:\n\n```\nFinal AI image gate\nBrief:        Meets objective and format? Space for text?\nCraft:        Artefacts fixed? Upscaled properly? Composites believable?\nBrand:        On-style, on-palette, correct typography and logos?\nAccuracy:     Products, places, cultural details correct?\nInclusion:    Inclusion checklist passed?\nRights:       Tool terms OK? References licensed? Likeness consent?\nCompliance:   Claims supportable? Disclosure planned? Provenance kept?\nDocumentation: Prompt log and AI usage summary complete?\n```\n\n### Measuring effectiveness\n\nAI makes it easy to produce more images; measurement tells you whether they work.\n\n- **Define the objective** per asset: awareness, engagement, clicks, conversions, saves.\n- **Compare fairly:** test AI-assisted versus photographed or illustrated creative where possible, holding other variables steady.\n- **Watch qualitative signals:** comments about \"AI look\", confusion, or trust concerns.\n- **Track production metrics:** time and cost per approved asset, revision counts.\n- **Feed learning back** into style systems and briefs.\n\nBe cautious about generalising from small tests or single campaigns; results depend on audience, platform and execution.\n\n### Worked example: a recruitment campaign\n\nAn HR-tech startup in the UAE uses AI to illustrate job-seeker scenarios.\n\n- First batch: all engineers depicted as young men; all nurses as women; generic \"Middle Eastern\" clothing mixing regional styles.\n- Fix: prompts specify a range of genders and ages for each role; accurate, respectful clothing described for the specific context; batch reviewed by team members from the region; some images replaced with real employee photos (with consent).\n- Measurement: A/B test of illustrated versus real-photo ads; real photos performed better for trust-focused messages, illustrations for explainer content — informing the style system.\n\n### Common mistakes\n\n- Treating bias as the tool's problem only.\n- Reviewing images individually but not the campaign as a whole.\n- Publishing without alt text.\n- Judging success on volume of assets rather than results.\n\n### Building inclusion into the system\n\nInclusion works best when it is built into the system rather than checked at the end. Add inclusive casting guidance to your prompt snippets, keep a diverse set of approved reference images, and include inclusion questions in the brief template. Periodically audit a sample of published images for representation across age, gender, skin tone, body type and disability, and compare it with the audience you actually serve. Share findings with the team so everyone understands why the guidance exists.\n\n### Summary\n\nAnticipate model biases, prompt and review inclusively, involve affected communities, make imagery accessible, pass every image through a final gate, and measure effectiveness to improve your system.",
+          "video": null,
+          "keyTakeaways": [
+            "Model biases include stereotypes, narrow beauty norms and cultural flattening — you are responsible for outputs.",
+            "Use an inclusion checklist and review campaigns as a whole, involving affected communities.",
+            "Pass every AI image through a final gate covering brief, craft, brand, accuracy, inclusion, rights and compliance.",
+            "Measure effectiveness against objectives and feed learning back into your system."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A batch of AI images shows every doctor as an older man and every nurse as a young woman. What should you do?",
+              "options": [
+                "Publish — it reflects the model",
+                "Adjust prompts to represent a realistic range, review the batch as a whole, and replace stereotyped images",
+                "Remove all people",
+                "Add a disclaimer"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Deliberate prompting and batch review address stereotypes; disclaimers don't fix representation."
+            },
+            {
+              "question": "Who should review AI images depicting a specific cultural celebration?",
+              "options": [
+                "Only the client's finance team",
+                "Only the model",
+                "Nobody",
+                "People with knowledge of and from that community, alongside the design team"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Community knowledge catches inaccuracies and disrespect that others miss."
+            },
+            {
+              "question": "What is the best way to learn whether AI-assisted creative performs well?",
+              "options": [
+                "Assume it performs better",
+                "Test against objectives, comparing fairly with other creative and watching qualitative signals",
+                "Count how many images were produced",
+                "Ask the tool"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Objective-based, fair comparisons with qualitative feedback reveal real effectiveness."
+            }
+          ],
+          "activity": "Run the inclusion checklist and final gate on your last five AI images. Fix any failures, write alt text for each, and define one metric to measure their effectiveness."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 25,
+    "timeLimitMinutes": 40,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "aiig-001",
+        "module": "how-image-models-work",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In simplified terms, how do diffusion-style image models generate an image?",
+        "options": [
+          "They draw vectors from a template library",
+          "They search the internet for a matching photo",
+          "They start from random noise and remove it step by step, guided by the prompt",
+          "They copy one training image exactly"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Diffusion models iteratively denoise from random noise; they do not retrieve or copy images by design."
+      },
+      {
+        "id": "aiig-002",
+        "module": "how-image-models-work",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A generated image of a real landmark includes architectural details that do not exist. Why?",
+        "options": [
+          "Models learn visual patterns, not verified facts, so details can be inaccurate",
+          "The model deliberately lies",
+          "The prompt was too short",
+          "Landmarks are banned"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Models approximate patterns and can invent details; accuracy must be checked."
+      },
+      {
+        "id": "aiig-003",
+        "module": "how-image-models-work",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which criteria should you evaluate before adopting an image tool for client work? (Choose all that apply.)",
+        "options": [
+          "The tool's logo colour",
+          "Editing and reference features",
+          "Whether uploads and prompts are used for training",
+          "Commercial-use terms for your plan"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Terms, data policy and features affect legality, confidentiality and workflow. Branding of the tool is irrelevant."
+      },
+      {
+        "id": "aiig-004",
+        "module": "how-image-models-work",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A real-estate agency asks for AI images showing an apartment 'at its best', with a sea view it does not have. What should you advise?",
+        "options": [
+          "Decline the misleading element; use real photos, with AI only for honest edits such as removing clutter if permitted and not misrepresentative",
+          "Use the images only on social media",
+          "Add a tiny 'AI' label and proceed",
+          "Create the images; buyers expect enhancement"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Depicting features that do not exist misleads consumers; labels do not cure misrepresentation."
+      },
+      {
+        "id": "aiig-005",
+        "module": "how-image-models-work",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which use is generally well suited to AI image generation?",
+        "options": [
+          "Moodboards to guide a photoshoot",
+          "News photographs of a real event",
+          "Fake customer testimonial photos",
+          "Before/after results for a diet product"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Ideation is a strong, low-risk use; the others risk deception."
+      },
+      {
+        "id": "aiig-006",
+        "module": "how-image-models-work",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "An agency wants to upload a client's customer photos to a free public generator to create stylised portraits. Which concerns apply? (Choose all that apply.)",
+        "options": [
+          "Client confidentiality obligations",
+          "Personal data and consent under data-protection laws",
+          "The portraits will automatically be copyrighted by the agency",
+          "The tool may make generations public or use uploads for training"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "Data protection, tool data policies and confidentiality all apply. Automatic copyright is not guaranteed and is not a concern that justifies the upload."
+      },
+      {
+        "id": "aiig-007",
+        "module": "how-image-models-work",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is the most useful measure when comparing the cost of two image tools?",
+        "options": [
+          "Cost per generation",
+          "Cost per usable, approved image including iteration",
+          "Number of models offered",
+          "Monthly price only"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Iteration discards outputs; cost per usable image reflects real cost."
+      },
+      {
+        "id": "aiig-008",
+        "module": "prompting-for-images",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which element is missing from this prompt: 'Photo of a ceramic mug on a wooden table, soft morning light, warm tones'?",
+        "options": [
+          "Lighting",
+          "Composition/aspect ratio and space for text",
+          "Subject",
+          "Style/medium"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Subject, lighting, palette and medium are present; composition, framing and ratio are not."
+      },
+      {
+        "id": "aiig-009",
+        "module": "prompting-for-images",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A campaign needs a consistent look across 20 images. Which approach is best?",
+        "options": [
+          "Use a different tool per image",
+          "Write a new style description for each image",
+          "Use a documented style spec plus approved hero images as style references",
+          "Name a famous living artist in each prompt"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A reusable style spec and references create consistency responsibly."
+      },
+      {
+        "id": "aiig-010",
+        "module": "prompting-for-images",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client asks you to prompt 'in the style of' a specific living illustrator for a paid campaign. What is the best professional response?",
+        "options": [
+          "Upload the illustrator's portfolio as references",
+          "Proceed because style is never protected",
+          "Explain the ethical, legal and reputational risks and propose describing visual characteristics or commissioning the illustrator",
+          "Proceed but don't tell anyone"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Imitating a living artist raises ethical and potential legal issues; describing characteristics or commissioning is safer."
+      },
+      {
+        "id": "aiig-011",
+        "module": "prompting-for-images",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When should you use subtle variations or fixed seeds?",
+        "options": [
+          "During early exploration",
+          "Only for text rendering",
+          "During refinement, when you want controlled changes",
+          "Never"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Subtle variations and fixed seeds help fine-tune; strong variations suit exploration."
+      },
+      {
+        "id": "aiig-012",
+        "module": "prompting-for-images",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which items belong in a prompt log entry? (Choose all that apply.)",
+        "options": [
+          "Edits made and QA notes",
+          "Tool and model version",
+          "Prompt, references and settings",
+          "The client's bank details"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Logs document how an image was made; financial data does not belong there."
+      },
+      {
+        "id": "aiig-013",
+        "module": "prompting-for-images",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why add 'no text, no logos' to many prompts?",
+        "options": [
+          "To increase resolution",
+          "To reduce unwanted artefacts like garbled text or pseudo-logos",
+          "Because platforms require it",
+          "To make images copyright-free"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Constraints reduce artefacts; they do not affect resolution, copyright status or platform rules."
+      },
+      {
+        "id": "aiig-014",
+        "module": "prompting-for-images",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "After 40 generations, a model still cannot produce an exact product label with correct small text. What should you do?",
+        "options": [
+          "Keep generating until it works",
+          "Accept the garbled label",
+          "Lower the resolution",
+          "Switch approach: generate the scene and add the real label or text in a design tool"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "A stop rule and approach switch save time and ensure accuracy."
+      },
+      {
+        "id": "aiig-015",
+        "module": "editing-and-finishing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does outpainting do?",
+        "options": [
+          "Adds text",
+          "Extends the image beyond its original edges",
+          "Removes the background",
+          "Upscales resolution"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Outpainting generates new content outside the original canvas."
+      },
+      {
+        "id": "aiig-016",
+        "module": "editing-and-finishing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An inpainted patch looks smoother than the surrounding grainy photo. What should you do?",
+        "options": [
+          "Crop the whole image",
+          "Match grain/noise and sharpness so the patch blends",
+          "Increase saturation",
+          "Nothing"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Texture mismatch reveals edits; matching grain blends the patch."
+      },
+      {
+        "id": "aiig-017",
+        "module": "editing-and-finishing",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A beauty brand wants AI to slim a model's waist and smooth skin heavily in a product ad. Which concerns apply? (Choose all that apply.)",
+        "options": [
+          "Potential breach of advertising rules on misleading retouching in beauty ads",
+          "The image may become too large to upload",
+          "The model's consent to material changes to her appearance",
+          "Possible platform disclosure requirements for materially altered realistic content"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Misleading retouching, consent and disclosure are real issues; file size is not the concern."
+      },
+      {
+        "id": "aiig-018",
+        "module": "editing-and-finishing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "When is an AI upscaler's high 'creativity' setting most appropriate?",
+        "options": [
+          "Faces of real people",
+          "Abstract backgrounds and textures",
+          "Product labels",
+          "Legal text"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Invented detail is harmless in abstract textures but alters identities and product details."
+      },
+      {
+        "id": "aiig-019",
+        "module": "editing-and-finishing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should final headline text for an AI-illustrated ad usually be created?",
+        "options": [
+          "In the image generator",
+          "Nowhere",
+          "In a design tool using brand fonts",
+          "In a screenshot app"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Design tools give accurate, on-brand typography in the correct fonts; generated text can be misspelled or garbled, and screenshots or no text do not meet the brief."
+      },
+      {
+        "id": "aiig-020",
+        "module": "editing-and-finishing",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "You composite a real product photo into an AI scene, but it looks fake. Which checks address the problem? (Choose all that apply.)",
+        "options": [
+          "The file name includes 'final'",
+          "Perspective and horizon match",
+          "Light direction and shadows match",
+          "Colour temperature matches"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Lighting, colour and perspective consistency make composites believable; file names do not."
+      },
+      {
+        "id": "aiig-021",
+        "module": "editing-and-finishing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What is C2PA-based Content Credentials metadata used for?",
+        "options": [
+          "Increasing resolution",
+          "Recording provenance, including AI generation or editing",
+          "Colour management",
+          "Compressing images"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Content Credentials record provenance and can support platform labelling."
+      },
+      {
+        "id": "aiig-022",
+        "module": "campaign-consistency",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Why is consistency across a campaign hard with image models?",
+        "options": [
+          "Models only produce one style",
+          "Each generation starts from new random noise, so details drift",
+          "Models refuse to repeat subjects",
+          "Campaigns are always too large"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Randomness causes drift unless anchored with references, seeds or fine-tuning."
+      },
+      {
+        "id": "aiig-023",
+        "module": "campaign-consistency",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which assets belong in a character bible? (Choose all that apply.)",
+        "options": [
+          "Do/don't rules",
+          "Canonical description",
+          "Reference images of poses and expressions",
+          "The tool's pricing page"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Descriptions, references and rules define the character; pricing is irrelevant."
+      },
+      {
+        "id": "aiig-024",
+        "module": "campaign-consistency",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An agency wants to train a custom model adapter on photos of a brand ambassador to generate new campaign images. What must be confirmed first?",
+        "options": [
+          "The ambassador's informed consent and contract terms covering synthetic likeness use, rights to the training photos, and platform policy compliance",
+          "Only the GPU cost",
+          "That the photos are high resolution",
+          "Nothing if the ambassador is paid"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Likeness, image rights and policies must be addressed explicitly; payment for other work does not automatically cover synthetic use."
+      },
+      {
+        "id": "aiig-025",
+        "module": "campaign-consistency",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What should you do after a model update changes your campaign's look?",
+        "options": [
+          "Change the logo",
+          "Keep going without checks",
+          "Run a benchmark set, compare with approved references, adjust and log",
+          "Abandon AI"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "A benchmark set compared against approved references reveals style drift so you can adjust snippets or reference strength and log the change; ignoring it or abandoning AI are not proportionate responses."
+      },
+      {
+        "id": "aiig-026",
+        "module": "campaign-consistency",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a do/don't gallery?",
+        "options": [
+          "A visual set of approved and rejected outputs with reasons",
+          "A client contract",
+          "A folder of stock photos",
+          "A list of banned tools"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "It aligns teams visually on what is on-brand."
+      },
+      {
+        "id": "aiig-027",
+        "module": "campaign-consistency",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client asks for 50 ad variations in one day. Which approach keeps quality and learning intact?",
+        "options": [
+          "Deliver the first 50 generations",
+          "Skip QA to meet the deadline",
+          "Use templates with fixed brand elements, vary one element per set, name files traceably and QA each variation",
+          "Randomly vary everything to maximise novelty"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Controlled, traceable variations with QA deliver usable test data and compliant creative."
+      },
+      {
+        "id": "aiig-028",
+        "module": "campaign-consistency",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement about using synthetic 'people' in marketing is correct?",
+        "options": [
+          "They can be presented as real customers",
+          "They are always legally required to be labelled in every country",
+          "Avoid presenting synthetic people as real customers, employees or reviewers",
+          "They never need review"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Presenting synthetic people as real endorsers is deceptive; labelling rules vary by jurisdiction and platform."
+      },
+      {
+        "id": "aiig-029",
+        "module": "rights-likeness-and-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A client wants to register a purely AI-generated mascot as the core of their brand and stop competitors copying it. What is the best advice?",
+        "options": [
+          "Keep it secret",
+          "Have a human illustrator create or substantially redraw the final mascot, document the process, run searches and assign rights",
+          "It is fully protected automatically",
+          "Add a watermark"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Human authorship strengthens protection in many jurisdictions; searches and assignment manage risk."
+      },
+      {
+        "id": "aiig-030",
+        "module": "rights-likeness-and-disclosure",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which three questions should you separate when assessing AI image rights?",
+        "options": [
+          "Price, speed and resolution",
+          "Platform, caption and hashtag",
+          "Colour, size and format",
+          "Is it protected, could it infringe, and what do the tool's terms allow"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Protection, infringement and terms are distinct legal questions."
+      },
+      {
+        "id": "aiig-031",
+        "module": "rights-likeness-and-disclosure",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which statements about copyright in AI images are accurate? (Choose all that apply.)",
+        "options": [
+          "In the US, human selection, arrangement or modification of AI material can be protectable",
+          "UK law has a 'computer-generated works' provision whose application to generative AI is debated",
+          "Positions differ between countries and are evolving",
+          "Terms of service can create copyright where the law does not"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Terms allocate rights between parties but cannot create copyright the law does not recognise."
+      },
+      {
+        "id": "aiig-032",
+        "module": "rights-likeness-and-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which content requires the strongest caution and likely consent or legal review?",
+        "options": [
+          "A generic object on a table",
+          "An abstract texture",
+          "A realistic image of a named public figure endorsing a product",
+          "A stylised landscape"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Real people and implied endorsement are high risk."
+      },
+      {
+        "id": "aiig-033",
+        "module": "rights-likeness-and-disclosure",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "A travel creator's sponsored post uses a realistic AI sunset over a destination. Which actions are appropriate? (Choose all that apply.)",
+        "options": [
+          "Removing Content Credentials to keep the image 'clean'",
+          "Platform AI label and caption note",
+          "Real photos of the destination alongside to avoid misleading followers",
+          "Clear paid-partnership disclosure"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Both disclosures plus real imagery maintain honesty; stripping provenance undermines transparency."
+      },
+      {
+        "id": "aiig-034",
+        "module": "rights-likeness-and-disclosure",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "When do the EU AI Act's transparency obligations for deepfakes apply from?",
+        "options": [
+          "Only after 2035",
+          "August 2026",
+          "They never apply",
+          "January 2020"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "The AI Act's transparency obligations, including deepfake disclosure, apply from August 2026."
+      },
+      {
+        "id": "aiig-035",
+        "module": "rights-likeness-and-disclosure",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "An AI background accidentally contains a shape resembling a famous sportswear logo. What should you do?",
+        "options": [
+          "Credit the brand",
+          "Increase its size",
+          "Publish; it's accidental",
+          "Remove or alter it via editing before publication"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Pseudo-logos can imply affiliation or infringe; remove them."
+      },
+      {
+        "id": "aiig-036",
+        "module": "ai-and-human-workflows",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which collaboration model uses AI mainly for ideation, with humans creating final assets?",
+        "options": [
+          "AI as production assistant",
+          "AI as sketchbook",
+          "Fully automated",
+          "AI as primary image source"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "In the sketchbook model AI is used only for ideation and moodboards, while final assets are photographed, illustrated or designed by people."
+      },
+      {
+        "id": "aiig-037",
+        "module": "ai-and-human-workflows",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which topics should AI-related contract terms address? (Choose all that apply.)",
+        "options": [
+          "Ownership and limits of copyright in AI elements",
+          "Permitted AI use and tool/data restrictions",
+          "Responsibility for disclosure at publication",
+          "The designer's favourite prompts"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Agreeing permitted use, ownership limits and who handles disclosure prevents disputes later; the designer's personal prompts are not a contractual matter."
+      },
+      {
+        "id": "aiig-038",
+        "module": "ai-and-human-workflows",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A studio's AI efficiency halves production time. It bills hourly and revenue drops. What is the most sustainable change?",
+        "options": [
+          "Stop using AI",
+          "Double the number of revisions",
+          "Hide AI use and bill the old hours",
+          "Move to value-, package- or usage-based pricing while being transparent about process"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Pricing on outcomes captures value honestly; misrepresenting hours is dishonest."
+      },
+      {
+        "id": "aiig-039",
+        "module": "ai-and-human-workflows",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which approach best addresses bias across an AI-illustrated campaign?",
+        "options": [
+          "Only use images without people",
+          "Check each image in isolation only",
+          "Rely on the tool's filters",
+          "Review the campaign as a whole with an inclusion checklist and community input"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Reviewing the whole campaign with a checklist and community input catches patterns of stereotyping that single-image checks and tool filters miss."
+      },
+      {
+        "id": "aiig-040",
+        "module": "ai-and-human-workflows",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What should accompany published AI images for accessibility?",
+        "options": [
+          "A watermark",
+          "More hashtags",
+          "Reviewed alt text",
+          "A higher resolution"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Alt text makes images accessible to screen-reader users."
+      },
+      {
+        "id": "aiig-041",
+        "module": "ai-and-human-workflows",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A client insists on generating realistic 'customer' images for a testimonial carousel, saying 'everyone does it'. What is the best response?",
+        "options": [
+          "Explain the deception and advertising-law risk, decline, and offer real customers with consent or clearly illustrative non-testimonial content",
+          "Comply to keep the client",
+          "Use stock photos of models as customers",
+          "Comply but label in tiny text"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Fabricated testimonials mislead consumers and breach advertising rules whatever the label size; real customers with consent or clearly illustrative content keep the campaign honest."
+      },
+      {
+        "id": "aiig-042",
+        "module": "ai-and-human-workflows",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "What should be reinvested when AI saves production time?",
+        "options": [
+          "Nothing — reduce quality checks",
+          "More generations without review",
+          "Longer captions",
+          "Better concepts, QA, accessibility and testing"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Time savings are best used to raise quality and learning."
+      }
+    ]
+  }
+}
