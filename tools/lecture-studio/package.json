@@ -1,0 +1,16 @@
+{
+  "name": "optimizeall-lecture-studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Deterministic frame renderer for Optimize All video lectures (Playwright + HTML/SVG templates).",
+  "type": "module",
+  "scripts": {
+    "render": "node renderer/render.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.2.5",
+    "@fontsource-variable/inter-tight": "^5.2.5",
+    "@fontsource-variable/jetbrains-mono": "^5.2.5",
+    "playwright": "1.56.1"
+  }
+}
