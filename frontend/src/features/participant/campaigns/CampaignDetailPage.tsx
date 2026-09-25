@@ -288,7 +288,7 @@ function CampaignDetailView({ campaign }: { campaign: CampaignDetail }) {
   const mentions = campaign.requiredMentions?.trim();
 
   return (
-    <div className="pp-page">
+    <div className="pp-page pp-page--cta">
       <PageHeader
         title={view.title}
         breadcrumbs={[{ label: 'Campaigns', to: '/app/campaigns' }, { label: view.title }]}
@@ -302,7 +302,7 @@ function CampaignDetailView({ campaign }: { campaign: CampaignDetail }) {
           </>
         }
         actions={
-          <div className="stack" style={{ ['--stack-gap' as string]: 'var(--space-2)' }}>
+          <div className="pp-detail-cta">
             <Button
               variant="highlight"
               size="lg"
@@ -312,7 +312,7 @@ function CampaignDetailView({ campaign }: { campaign: CampaignDetail }) {
             >
               Submit proof
             </Button>
-            <p className="text-small pp-muted" id="submit-blocker">
+            <p className="text-small pp-muted pp-detail-cta__note" id="submit-blocker">
               {blocker ?? `${pluralize(campaign.remainingSubmissions, 'submission')} left`}
             </p>
           </div>
@@ -341,7 +341,7 @@ function CampaignDetailView({ campaign }: { campaign: CampaignDetail }) {
                 }}
               >
                 {campaign.disclosures.map((d) => (
-                  <li key={d.platform} className="cluster">
+                  <li key={d.platform} className="pp-disclosure">
                     <PlatformTag platform={d.platform} />
                     <strong className="pp-break">{d.text}</strong>
                     <CopyButton text={d.text} label={`${platformLabel(d.platform)} disclosure`} />

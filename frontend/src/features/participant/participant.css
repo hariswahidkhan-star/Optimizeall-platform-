@@ -23,9 +23,10 @@
 }
 
 .pp-section__title {
-  font-size: 1rem;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.012em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .pp-section__head > .ui-link {
@@ -159,17 +160,21 @@
   font-size: var(--text-small);
 }
 
-/* ---------- Campaign cards ---------- */
+/* ---------- Campaign cards ----------
+ * Hero art, then: eyebrow + title, why it's recommended, a two-line brief, the reward as the headline figure, the two
+ * facts that decide "can I still do this" (deadline, posts left) and a footer with platforms + eligibility. */
 .pp-campaign-card {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .pp-campaign-card__hero {
+  display: block;
   width: 100%;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 2 / 1;
   object-fit: cover;
   background: var(--color-surface-2);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 .pp-campaign-card__body {
@@ -178,6 +183,12 @@
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .pp-campaign-card__body {
+    padding: var(--space-5) var(--space-6) var(--space-6);
+  }
 }
 
 .pp-campaign-card__top {
@@ -189,41 +200,91 @@
   min-height: 1.25rem;
 }
 
+.pp-campaign-card__top .eyebrow {
+  margin: 0;
+}
+
 .pp-campaign-card__title {
-  font-size: var(--text-h4);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
 }
 
 .pp-campaign-card__reason {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
   background: var(--color-accent-soft);
   color: var(--color-accent-text);
-  font-size: var(--text-small);
-  font-weight: var(--weight-medium);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
 }
 
 .pp-campaign-card__reason svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
 }
 
 .pp-campaign-card__summary {
   color: var(--color-text-muted);
   font-size: var(--text-small);
+  line-height: var(--leading-body);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* The reward is the headline number of the card. */
+.pp-campaign-card__reward {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-2);
+}
+
+.pp-campaign-card__reward-label {
+  color: var(--color-text-subtle);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+.pp-campaign-card__reward-value {
+  color: var(--color-text-muted);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.pp-campaign-card__reward-value > .ui-money:first-child {
+  margin-right: 2px;
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.pp-campaign-card__reward-more .ui-money {
+  color: var(--color-text);
+  font-weight: var(--weight-medium);
+}
+
+.pp-campaign-card__reward .pp-your-rate-inline {
+  margin-top: var(--space-1);
 }
 
 .pp-campaign-card__facts {
   display: grid;
   gap: var(--space-2) var(--space-4);
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 0;
 }
 
@@ -234,14 +295,24 @@
 }
 
 .pp-campaign-card__facts dd {
-  margin: 0;
+  margin: 2px 0 0;
   color: var(--color-heading);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
 }
 
-.pp-campaign-card__reward .ui-money {
-  font-size: var(--text-h4);
+.pp-campaign-card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.pp-campaign-card__footer > .pp-eligibility,
+.pp-campaign-card__footer > .ui-badge {
+  align-self: flex-start;
 }
 
 /* ---------- Generic lists ---------- */
@@ -901,7 +972,7 @@
 }
 
 /* Next payout: three facts as one quiet table-like block instead of three tinted boxes. */
-.pp-home .pp-legend {
+.pp-legend--rows {
   gap: 0;
   grid-template-columns: 1fr;
   overflow: hidden;
@@ -909,7 +980,7 @@
   border-radius: var(--radius-lg);
 }
 
-.pp-home .pp-legend div {
+.pp-legend--rows div {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -919,16 +990,17 @@
   background: transparent;
 }
 
-.pp-home .pp-legend div + div {
+.pp-legend--rows div + div {
   border-top: 1px solid var(--color-border);
 }
 
-.pp-home .pp-legend dt {
+.pp-legend--rows dt {
+  white-space: nowrap;
   color: var(--color-text-muted);
   font-weight: var(--weight-medium);
 }
 
-.pp-home .pp-legend dd {
+.pp-legend--rows dd {
   margin: 0;
   color: var(--color-heading);
   font-weight: var(--weight-semibold);
@@ -943,6 +1015,16 @@
   align-items: baseline;
   gap: var(--space-1);
   color: var(--brand-fg);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.pp-your-rate-inline > .pp-inline-icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  align-self: center;
 }
 
 .pp-your-rate {
@@ -982,4 +1064,428 @@
   display: flex;
   justify-content: space-between;
   gap: var(--space-3);
+}
+
+/* =====================================================================================================================
+ * Premium redesign (2026-09): balance hero, quick actions, sticky campaign CTA.
+ * ================================================================================================================== */
+
+/* ---------- Balance hero (Home "Your earnings", Earnings "Your balance") ----------
+ * A navy panel with an amber glow: the one place the portal uses a filled brand surface. Text is white at ≥ 0.8
+ * opacity so every label keeps ≥ 4.5:1 against the lightest end of the gradient. */
+.pp-balance {
+  --pp-on-brand: #ffffff;
+  --pp-on-brand-muted: rgb(255 255 255 / 0.82);
+  --pp-on-brand-line: rgb(255 255 255 / 0.14);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  overflow: hidden;
+  padding: var(--space-5);
+  border-radius: var(--radius-panel);
+  background: linear-gradient(135deg, #1f2659 0%, #28316d 55%, #343f87 100%);
+  color: var(--pp-on-brand);
+  box-shadow: var(--shadow-float), inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+.pp-balance::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(45% 80% at 100% 0%, rgb(252 179 30 / 0.16) 0%, transparent 70%),
+    radial-gradient(50% 70% at 0% 100%, rgb(125 136 224 / 0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .pp-balance {
+    padding: var(--space-6) var(--space-8) var(--space-8);
+  }
+}
+
+.pp-balance__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.pp-balance__title {
+  margin: 0;
+  color: var(--pp-on-brand-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.pp-balance__sub {
+  margin: var(--space-1) 0 0;
+  color: var(--pp-on-brand-muted);
+  font-size: var(--text-small);
+}
+
+.pp-balance__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  color: var(--pp-on-brand);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transition: background var(--duration-base) var(--ease-standard);
+}
+
+.pp-balance__link:hover {
+  background: rgb(255 255 255 / 0.18);
+  color: var(--pp-on-brand);
+  text-decoration: none;
+}
+
+.pp-balance__link:focus-visible,
+.pp-balance .pp-help:focus-visible {
+  outline: 2px solid var(--brand-amber);
+  outline-offset: 2px;
+}
+
+.pp-balance__link svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 767px) {
+  .pp-balance__link {
+    min-height: 44px;
+  }
+}
+
+/* Stats inside the panel shed their card chrome and take the on-brand colours. */
+.pp-balance .ui-stat {
+  gap: var(--space-1);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pp-balance .ui-stat__top {
+  min-height: 0;
+}
+
+.pp-balance .ui-stat__label {
+  color: var(--pp-on-brand-muted);
+}
+
+.pp-balance .ui-stat__icon {
+  display: none;
+}
+
+.pp-balance .ui-stat__body {
+  min-height: 0;
+}
+
+.pp-balance .ui-stat__value {
+  color: var(--pp-on-brand);
+  font-size: 1.25rem;
+}
+
+.pp-balance .ui-stat__footer {
+  color: var(--pp-on-brand-muted);
+}
+
+.pp-balance .ui-measure {
+  border-color: rgb(252 179 30 / 0.5);
+  background: rgb(252 179 30 / 0.16);
+  color: #fdcc52;
+}
+
+.pp-balance .pp-help {
+  color: var(--pp-on-brand-muted);
+}
+
+.pp-balance .pp-help:hover {
+  background: rgb(255 255 255 / 0.12);
+  color: var(--pp-on-brand);
+}
+
+/* Headline figure(s). */
+.pp-balance__top {
+  display: grid;
+  gap: var(--space-4) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+}
+
+.pp-balance__top .ui-stat__value {
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+  letter-spacing: var(--tracking-tighter);
+  line-height: 1.05;
+}
+
+.pp-balance__top .ui-stat + .ui-stat .ui-stat__value {
+  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+}
+
+
+/* Secondary buckets: an even row separated by hairlines. */
+.pp-balance__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--pp-on-brand-line);
+}
+
+.pp-balance__grid > .ui-stat {
+  padding: 0 var(--space-3);
+}
+
+.pp-balance__grid > .ui-stat:first-child {
+  padding-left: 0;
+}
+
+.pp-balance__grid > .ui-stat + .ui-stat {
+  border-left: 1px solid var(--pp-on-brand-line);
+}
+
+.pp-balance__grid .ui-stat__value {
+  font-size: 1.125rem;
+}
+
+.pp-balance__grid--four {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  row-gap: var(--space-4);
+}
+
+.pp-balance__grid--four > .ui-stat:nth-child(odd) {
+  padding-left: 0;
+  border-left: 0;
+}
+
+@media (min-width: 768px) {
+  .pp-balance__grid > .ui-stat {
+    padding: 0 var(--space-5);
+  }
+
+  .pp-balance__grid .ui-stat__value {
+    font-size: 1.375rem;
+  }
+
+  .pp-balance__grid--four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pp-balance__grid--four > .ui-stat:nth-child(odd) {
+    padding-left: var(--space-5);
+  }
+
+  .pp-balance__grid--four > .ui-stat:first-child {
+    padding-left: 0;
+  }
+
+  .pp-balance__grid--four > .ui-stat:nth-child(3) {
+    border-left: 1px solid var(--pp-on-brand-line);
+  }
+}
+
+/* ---------- Quick actions ---------- */
+.pp-quick {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pp-quick__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  height: 100%;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-1);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-heading);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.pp-quick__item:hover {
+  color: var(--color-heading);
+  text-decoration: none;
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.pp-quick__item:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.pp-quick__icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+}
+
+.pp-quick__icon svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.75;
+}
+
+@media (min-width: 768px) {
+  .pp-quick {
+    gap: var(--space-4);
+  }
+
+  .pp-quick__item {
+    flex-direction: row;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    font-size: var(--text-small);
+    text-align: left;
+  }
+}
+
+/* ---------- Campaign detail: the submit CTA sticks above the tab bar on phones ---------- */
+.pp-detail-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.pp-detail-cta__note {
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .pp-page--cta {
+    padding-bottom: var(--space-20);
+  }
+
+  .pp-detail-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+    z-index: var(--z-sticky);
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--gutter);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: 0 -1px 0 var(--color-border);
+  }
+
+  .pp-detail-cta > .ui-button {
+    flex: none;
+  }
+
+  .pp-detail-cta__note {
+    min-width: 0;
+    line-height: var(--leading-snug);
+  }
+}
+
+/* Home: on wide screens the headline figure sits left of the three secondary buckets. */
+@media (min-width: 1024px) {
+  .pp-balance--split {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr);
+    align-items: end;
+    column-gap: var(--space-8);
+  }
+
+  .pp-balance--split > .pp-balance__head {
+    grid-column: 1 / -1;
+  }
+
+  .pp-balance--split > .pp-balance__grid {
+    padding-top: 0;
+    padding-left: var(--space-8);
+    border-top: 0;
+    border-left: 1px solid var(--pp-on-brand-line);
+  }
+}
+
+/* Home "needs attention" rows: the status pill stays top-right instead of wrapping under the title. */
+.pp-home .pp-list__item {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+
+.pp-home .pp-list__item > .ui-badge {
+  flex: none;
+}
+
+.pp-section:has(> .pp-balance) {
+  gap: var(--space-4);
+}
+
+/* Disclosure rows: [platform + text] [copy], the copy button never drops onto its own line. */
+.pp-disclosure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+.pp-disclosure + .pp-disclosure {
+  border-top: 1px solid var(--warning-border);
+}
+
+.pp-disclosure > .pp-platform {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.pp-disclosure > strong {
+  grid-column: 1;
+}
+
+.pp-disclosure > :last-child {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.pp-hero-image {
+  aspect-ratio: 2 / 1;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 768px) {
+  .pp-hero-image {
+    aspect-ratio: 16 / 5;
+  }
 }

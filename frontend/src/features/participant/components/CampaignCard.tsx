@@ -44,32 +44,30 @@ export function CampaignCard({ campaign, reason, headingLevel = 3 }: CampaignCar
         )}
         <p className="pp-campaign-card__summary">{campaign.summary}</p>
 
-        <dl className="pp-campaign-card__facts">
-          <div>
-            <dt>Reward per post</dt>
-            <dd className="pp-campaign-card__reward">
-              {reward ? (
-                <>
-                  <Money amount={reward.baseAmount} currency={reward.currency} />
+        <div className="pp-campaign-card__reward">
+          <p className="pp-campaign-card__reward-label">Reward per post</p>
+          {reward ? (
+            <p className="pp-campaign-card__reward-value">
+              <Money amount={reward.baseAmount} currency={reward.currency} />
+              {(reward.maxAmount > reward.baseAmount || reward.hasBonuses) && (
+                <span className="pp-campaign-card__reward-more">
                   {reward.maxAmount > reward.baseAmount && (
-                    <span className="text-small text-muted">
+                    <>
                       {' '}
                       up to <Money amount={reward.maxAmount} currency={reward.currency} />
-                    </span>
+                    </>
                   )}
-                  {reward.hasBonuses && <span className="text-small text-muted"> + bonuses</span>}
-                </>
-              ) : (
-                <span className="text-muted">Reward to be announced</span>
+                  {reward.hasBonuses && ' + bonuses'}
+                </span>
               )}
-              {campaign.yourRate && (
-                <>
-                  <br />
-                  <YourRateInline rate={campaign.yourRate} />
-                </>
-              )}
-            </dd>
-          </div>
+            </p>
+          ) : (
+            <p className="text-muted">Reward to be announced</p>
+          )}
+          {campaign.yourRate && <YourRateInline rate={campaign.yourRate} />}
+        </div>
+
+        <dl className="pp-campaign-card__facts">
           <div>
             <dt>Submit by</dt>
             <dd>
@@ -83,11 +81,13 @@ export function CampaignCard({ campaign, reason, headingLevel = 3 }: CampaignCar
           </div>
         </dl>
 
-        <PlatformList platforms={campaign.platforms} label={`Platforms for ${campaign.title}`} />
-        <EligibilityBadge
-          isEligible={campaign.eligibility.isEligible}
-          reasons={campaign.eligibility.reasons}
-        />
+        <div className="pp-campaign-card__footer">
+          <PlatformList platforms={campaign.platforms} label={`Platforms for ${campaign.title}`} />
+          <EligibilityBadge
+            isEligible={campaign.eligibility.isEligible}
+            reasons={campaign.eligibility.reasons}
+          />
+        </div>
       </div>
     </Card>
   );

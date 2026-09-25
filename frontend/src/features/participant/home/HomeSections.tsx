@@ -5,9 +5,12 @@ import {
   Banknote,
   Bell,
   CircleCheck,
+  FileCheck2,
   Hourglass,
   LifeBuoy,
   MailCheck,
+  Megaphone,
+  TicketPercent,
   UserPlus,
 } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
@@ -22,7 +25,6 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Money } from '@/components/ui/Money';
 import { ProgressBar } from '@/components/ui/Progress';
 import { ScrollArea } from '@/components/ui/ScrollArea';
-import { StatGrid } from '@/components/ui/Dashboard';
 import { Stat } from '@/components/ui/Stat';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Stepper, type Step } from '@/components/ui/Stepper';
@@ -379,23 +381,19 @@ export function Recommendations({
 export function EarningsSnapshot({ summary }: { summary: EarningsSummary }) {
   const c = summary.currency;
   return (
-    <section aria-labelledby="snapshot-title" className="pp-section">
-      <div className="pp-section__head">
-        <h2 id="snapshot-title" className="pp-section__title">
+    <section aria-labelledby="snapshot-title" className="pp-balance pp-balance--split">
+      <div className="pp-balance__head">
+        <h2 id="snapshot-title" className="pp-balance__title">
           Your earnings
         </h2>
-        <Link to="/app/earnings" className="ui-link">
+        <Link to="/app/earnings" className="pp-balance__link">
           See all earnings
+          <ArrowRight aria-hidden="true" />
         </Link>
       </div>
-      <StatGrid strip min="190px">
+      <div className="pp-balance__top">
         <Stat
-          label="Pending review"
-          icon={<Hourglass />}
-          measurement="Estimated"
-          value={<Money amount={summary.pending} currency={c} />}
-        />
-        <Stat
+          className="pp-balance__feature"
           label="Approved"
           icon={<CircleCheck />}
           value={<Money amount={summary.approved} currency={c} />}
@@ -407,14 +405,47 @@ export function EarningsSnapshot({ summary }: { summary: EarningsSummary }) {
             ) : undefined
           }
         />
+      </div>
+      <div className="pp-balance__grid">
+        <Stat
+          label="Pending review"
+          icon={<Hourglass />}
+          measurement="Estimated"
+          value={<Money amount={summary.pending} currency={c} />}
+        />
         <Stat label="Paid to date" icon={<Banknote />} value={<Money amount={summary.paid} currency={c} />} />
         <Stat
           label="Lifetime earned"
           icon={<Award />}
           value={<Money amount={summary.lifetimeEarned} currency={c} />}
         />
-      </StatGrid>
+      </div>
     </section>
+  );
+}
+
+const QUICK_ACTIONS = [
+  { to: '/app/campaigns', label: 'Explore campaigns', icon: Megaphone },
+  { to: '/app/submissions', label: 'Track submissions', icon: FileCheck2 },
+  { to: '/app/codes', label: 'Share my codes', icon: TicketPercent },
+  { to: '/app/referrals', label: 'Invite friends', icon: UserPlus },
+] as const;
+
+/** Shortcuts to the four things an active creator does most. */
+export function QuickActions() {
+  return (
+    <ul className="pp-quick" aria-label="Quick actions">
+      {QUICK_ACTIONS.map(({ to, label, icon: Icon }) => (
+        <li key={to}>
+          <Link to={to} className="pp-quick__item">
+            <span className="pp-quick__icon" aria-hidden="true">
+              <Icon />
+            </span>
+            <span className="pp-quick__label">{label}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -443,7 +474,7 @@ export function NextPayoutCard({
               'Your payouts are paused while we review your account. Contact support for help.'}
           </Alert>
         )}
-        <dl className="pp-legend">
+        <dl className="pp-legend pp-legend--rows">
           <div>
             <dt>Period cutoff</dt>
             <dd>

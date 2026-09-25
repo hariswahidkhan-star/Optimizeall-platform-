@@ -66,42 +66,70 @@ function BucketHelp({ label, help }: { label: string; help: string }) {
   );
 }
 
+type Bucket = (typeof BUCKETS)[number];
+const TOP_BUCKETS = BUCKETS.filter((b) => b.key === 'approved' || b.key === 'lifetimeEarned');
+const REST_BUCKETS = BUCKETS.filter((b) => b.key !== 'approved' && b.key !== 'lifetimeEarned');
+
+function BucketStat({
+  bucket: b,
+  summary,
+  feature,
+}: {
+  bucket: Bucket;
+  summary: EarningsSummary;
+  feature?: boolean;
+}) {
+  const c = summary.currency;
+  return (
+    <Stat
+      className={feature ? 'pp-balance__feature' : undefined}
+      label={
+        <span>
+          {b.label} <BucketHelp label={b.label} help={b.help} />
+        </span>
+      }
+      icon={feature ? <Wallet /> : undefined}
+      measurement={b.key === 'pending' ? 'Estimated' : undefined}
+      value={<Money amount={summary[b.key]} currency={c} />}
+      hint={
+        b.key === 'approved' && summary.onHold > 0 ? (
+          <>
+            <Money amount={summary.onHold} currency={c} /> on hold until its hold period ends
+          </>
+        ) : b.key === 'approved' ? (
+          <>
+            <Money amount={summary.availableForNextPayout} currency={c} /> available for the next payout
+          </>
+        ) : undefined
+      }
+    />
+  );
+}
+
 export function BalanceBuckets({ summary }: { summary: EarningsSummary }) {
   const c = summary.currency;
   const otherPending = summary.pendingByCurrency.filter((p) => p.currency !== c || !p.converted);
   return (
     <section aria-labelledby="buckets-title" className="pp-section">
-      <div className="pp-section__head">
-        <h2 id="buckets-title" className="pp-section__title">
-          Your balance
-        </h2>
-        <p className="text-small pp-muted">All amounts in {c}, your settlement currency.</p>
-      </div>
-      <div className="pp-stats">
-        {BUCKETS.map((b) => (
-          <Stat
-            key={b.key}
-            label={
-              <span>
-                {b.label} <BucketHelp label={b.label} help={b.help} />
-              </span>
-            }
-            icon={<Wallet />}
-            measurement={b.key === 'pending' ? 'Estimated' : undefined}
-            value={<Money amount={summary[b.key]} currency={c} />}
-            hint={
-              b.key === 'approved' && summary.onHold > 0 ? (
-                <>
-                  <Money amount={summary.onHold} currency={c} /> on hold until its hold period ends
-                </>
-              ) : b.key === 'approved' ? (
-                <>
-                  <Money amount={summary.availableForNextPayout} currency={c} /> available for the next payout
-                </>
-              ) : undefined
-            }
-          />
-        ))}
+      <div className="pp-balance">
+        <div className="pp-balance__head">
+          <div>
+            <h2 id="buckets-title" className="pp-balance__title">
+              Your balance
+            </h2>
+            <p className="pp-balance__sub">All amounts in {c}, your settlement currency.</p>
+          </div>
+        </div>
+        <div className="pp-balance__top">
+          {TOP_BUCKETS.map((b) => (
+            <BucketStat key={b.key} bucket={b} summary={summary} feature />
+          ))}
+        </div>
+        <div className="pp-balance__grid pp-balance__grid--four">
+          {REST_BUCKETS.map((b) => (
+            <BucketStat key={b.key} bucket={b} summary={summary} />
+          ))}
+        </div>
       </div>
 
       {otherPending.length > 0 && (

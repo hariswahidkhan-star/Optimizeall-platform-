@@ -26,6 +26,7 @@ import {
   EarningsSnapshot,
   NextPayoutCard,
   OnboardingCard,
+  QuickActions,
   Recommendations,
   UnreadNotice,
   VerifyEmailHero,
@@ -105,6 +106,8 @@ function StateSection({ home, email }: { home: ParticipantHome; email: string })
       return (
         <>
           {summary.isSuccess && <EarningsSnapshot summary={summary.data} />}
+          {summary.isPending && <Skeleton height={232} radius="var(--radius-panel)" />}
+          <QuickActions />
           <div className="pp-two-col">
             <div className="stack">
               {attention.isSuccess && <AttentionList items={attention.data} />}
@@ -170,8 +173,8 @@ export function HomePage() {
 
       {home.isSuccess && (
         <>
-          <Banners banners={home.data.banners} />
           <StateSection home={home.data} email={user?.email ?? ''} />
+          <Banners banners={home.data.banners} />
           <OnboardingCard onboarding={home.data.onboarding} />
           <LearningPanel />
           {achievements.isSuccess && <AchievementStrip achievements={achievements.data} />}
