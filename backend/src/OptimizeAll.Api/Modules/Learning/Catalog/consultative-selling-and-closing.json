@@ -1,0 +1,1254 @@
+{
+  "slug": "consultative-selling-and-closing",
+  "version": 1,
+  "title": "Consultative Selling & Closing",
+  "subtitle": "Discover real needs, handle objections, negotiate fairly and close without pressure",
+  "category": "sales",
+  "level": "intermediate",
+  "estimatedMinutes": 170,
+  "description": "Whether you're a creator pitching brands, a freelancer selling services or a junior salesperson at an agency, the fastest way to grow revenue is to stop pitching and start diagnosing. This course teaches a complete, ethical consultative sales process in plain language.\n\nYou'll learn how to prepare for conversations, ask discovery questions using SPIN, qualify opportunities with a simplified MEDDICC, and bring genuine insight in the spirit of the Challenger approach. You'll then turn discovery into tailored value propositions, handle the most common objections with a ready-made library, negotiate using interests and trades rather than discounts, and close with techniques that respect the buyer's autonomy. Finally, you'll build follow-up cadences and CRM habits that keep every promise and opportunity on track — while respecting data-protection and consumer-protection principles.",
+  "outcomes": [
+    "Plan and open a sales conversation with research, hypotheses and a clear objective",
+    "Ask SPIN-style discovery questions that reveal problems, implications and value",
+    "Qualify opportunities using a simplified MEDDICC checklist",
+    "Write a tailored value proposition that links features to buyer benefits",
+    "Handle common objections using the LAARC method",
+    "Negotiate with BATNA, interests and 'if… then…' trades instead of discounts",
+    "Close respectfully and run value-adding follow-up and clean CRM records"
+  ],
+  "skills": [
+    "Consultative selling",
+    "Discovery questioning",
+    "Sales qualification",
+    "Objection handling",
+    "Negotiation",
+    "Closing",
+    "CRM management"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Consultative Sales Practitioner",
+    "description": "The holder can run a full consultative sales process: preparing and structuring discovery, qualifying opportunities, crafting tailored value propositions, handling objections, negotiating fair agreements, closing respectfully, and maintaining disciplined follow-up and CRM records in line with consumer- and data-protection principles.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "consultative-mindset",
+      "title": "The consultative mindset",
+      "summary": "Shift from pitching products to diagnosing problems, and prepare for conversations so buyers feel understood.",
+      "lessons": [
+        {
+          "slug": "from-pitching-to-diagnosing",
+          "title": "From pitching to diagnosing",
+          "type": "video",
+          "durationMinutes": 9,
+          "body": "### Two ways to sell\n\nPicture two salespeople visiting a family-run restaurant in Lahore that wants more online orders.\n\nThe **pitcher** opens a deck: \"We offer social media management, influencer campaigns and paid ads. Our package is 80,000 rupees a month.\" The owner nods politely and says they'll think about it.\n\nThe **consultant** asks: \"What's happening with online orders right now? When did you notice the drop? What have you tried? What would a good month look like?\" After fifteen minutes, they discover the real problem is poor reviews on a delivery app after a kitchen staff change — marketing more would make it worse. The consultant suggests fixing review responses first and a small creator campaign once quality is back. The owner signs a smaller first project and later becomes a long-term client.\n\nConsultative selling means **acting like a doctor, not a vending machine**: diagnose before you prescribe.\n\n### Why consultative selling works\n\n- **Buyers are informed.** They can research products online; what they can't easily get is someone who understands *their* situation.\n- **Complex decisions carry risk.** A consultant reduces risk by making sure the solution fits.\n- **It builds long-term value.** Clients who feel understood stay, buy more and refer others.\n\nThis applies whether you're selling agency services to a business, creator packages to a brand, or a high-value product to a customer in DMs.\n\n### The four principles\n\n1. **Curiosity first** — your first job is to understand, not to persuade.\n2. **Problem ownership** — describe the buyer's problem better than they can, and they'll assume you can solve it.\n3. **Fit over force** — if your offer isn't right, say so. Walking away is part of the method.\n4. **Shared decisions** — the buyer should feel they reached the conclusion with you, not that you pushed them.\n\n### Talk ratio\n\nA practical signal: in discovery conversations, the buyer should do most of the talking. If you find yourself speaking for long stretches in an early meeting, you're probably pitching. Many experienced sellers aim to listen more than they talk until they fully understand the situation.\n\n### Worked example: a creator selling to a brand\n\nMariam, a fitness creator in Dubai, is approached by a sportswear brand. Instead of sending her rate card immediately, she asks:\n\n- \"What's the goal of this campaign — awareness, sales, app downloads?\"\n- \"Who's the customer you most want to reach?\"\n- \"What worked or didn't in past creator campaigns?\"\n- \"How will you measure success?\"\n\nShe learns the brand wants sales of a new women's running line in the UAE and KSA, and that past campaigns got views but few sales. She proposes a three-part series with a tracked code and a follow-up post answering questions — and prices it as a package tied to their goal. The brand accepts a higher fee than her standard rate because it addresses their real problem.\n\n### Mindset traps\n\n- **\"If I just explain the features well enough, they'll buy.\"** Features matter only when connected to the buyer's problem.\n- **\"Asking questions makes me look unprepared.\"** Well-researched, specific questions make you look expert.\n- **\"Saying 'this isn't right for you' loses sales.\"** It loses bad-fit sales and wins trust and referrals.\n\n### Do and don't\n\n**Do** research before the conversation. **Do** ask open questions and listen. **Do** summarise what you heard before proposing anything.\n\n**Don't** open with a price or a deck. **Don't** interrupt. **Don't** force a solution that doesn't fit.",
+          "video": {
+            "script": "Imagine you walk into a doctor's office with a headache, and before you've even sat down the doctor hands you a prescription. You'd walk out. Yet that is exactly how many people sell. Consultative selling flips that. You diagnose before you prescribe. It starts with curiosity. What's happening right now? When did it start? What have you already tried? What would success look like? Each question helps the buyer think, and helps you understand. Then comes problem ownership. When you can describe someone's challenge more clearly than they can, they naturally assume you can help solve it. Next, fit over force. If what you offer isn't right, say so. It feels risky, but buyers remember the person who told them the truth — and they come back, and they refer friends. Finally, shared decisions. The best outcome is a buyer who feels they reached the answer with you, not one who feels pushed. Here's a quick check you can use in your next conversation: who's talking more? In discovery, it should be the buyer. If you're speaking for long stretches, pause and ask a question instead. Whether you're pitching a brand as a creator, selling agency services to a restaurant, or helping a customer choose a product in your DMs, the principle is the same. Understand first. Recommend second. In the lessons ahead, you'll learn exactly which questions to ask, how to turn answers into a value proposition, how to handle objections and negotiate fairly, and how to close without pressure.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Consultative selling means diagnosing before prescribing.",
+            "Buyers value someone who understands their specific situation.",
+            "Let the buyer do most of the talking in discovery.",
+            "Being willing to say 'this isn't right for you' builds long-term trust."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is the core difference between pitching and consultative selling?",
+              "options": [
+                "Consultative selling uses longer decks",
+                "Consultative sellers diagnose the buyer's situation before recommending a solution",
+                "Pitching is only for products",
+                "Consultative sellers never mention price"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "The consultative approach starts with understanding the problem, then recommends a fitting solution."
+            },
+            {
+              "question": "In an early discovery conversation, who should do most of the talking?",
+              "options": [
+                "The buyer",
+                "Both equally at all times",
+                "Whoever is more senior",
+                "The seller"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Discovery is about understanding the buyer, so they should speak more."
+            },
+            {
+              "question": "Mariam discovers the brand's past campaigns got views but few sales. How should this shape her proposal?",
+              "options": [
+                "Design a package focused on driving and measuring sales, such as tracked codes and follow-up content",
+                "Offer more views for less money",
+                "Ignore it and send her standard rate card",
+                "Decline without explanation"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Aligning the proposal to the buyer's stated goal and past pain makes it more valuable and easier to justify."
+            }
+          ],
+          "activity": "Think of your last sales conversation. Estimate your talk ratio and list three questions you could have asked before recommending anything."
+        },
+        {
+          "slug": "preparing-for-conversations",
+          "title": "Preparing for a sales conversation",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Preparation is a form of respect\n\nBuyers can tell within minutes whether you've done your homework. Preparation shortens the conversation, lets you ask sharper questions and shows you value their time.\n\n### The 20-minute prep routine\n\nBefore any meaningful sales conversation (a call with a brand, a meeting with a business owner, or a detailed DM exchange with a high-value buyer), spend around 20 minutes on:\n\n1. **Their world (5 min)** — website, social profiles, recent posts, reviews, news. What do they sell? Who to? What's changed recently?\n2. **Their likely problems (5 min)** — based on what you see, write three hypotheses. \"Their Instagram is active but their website has no reviews\" or \"They launched a new product line with little creator content\".\n3. **Your relevant proof (5 min)** — pick one or two examples of similar work or results you can share honestly.\n4. **Your plan for the call (5 min)** — objective, key questions, what a good next step would be.\n\n### Set a call objective and a next step\n\nEvery conversation should have a realistic objective. Not \"close the deal\" in a first meeting, but something like:\n\n- \"Understand their goals and agree to send a proposal.\"\n- \"Confirm budget range and who approves.\"\n- \"Book a follow-up with the marketing lead.\"\n\nDecide in advance what a good next step looks like — this is sometimes called an **advance**. A conversation that ends in \"let's stay in touch\" with no date is usually a stall.\n\n### A simple call structure\n\n1. **Open (2–3 min)** — thank them, confirm time available, set an agenda: \"I'd love to understand your goals, share a couple of ideas if relevant, and agree whether a next step makes sense. Does that work?\"\n2. **Discover (most of the time)** — questions and listening.\n3. **Summarise** — \"So if I've understood…\"\n4. **Share (only if relevant)** — ideas or offer linked to what they said.\n5. **Agree next step** — date, owner, what happens.\n\nSetting an agenda upfront, including the possibility that there's no fit, relaxes buyers and makes the conversation feel like collaboration.\n\n### Research sources, ethically\n\nUse publicly available information: company websites, social profiles, published interviews, reviews, business directories and LinkedIn. Don't use scraped personal data, private information obtained without consent, or pretexting (pretending to be someone else to get information). Respect data-protection laws in your markets.\n\n### Worked example\n\nBilal, a junior account executive at a digital agency in Karachi, prepares for a call with a regional bakery chain.\n\n- **Their world**: four branches, strong Instagram, weak Google reviews at one branch, no delivery-app promotions.\n- **Hypotheses**: (1) growth is limited by one underperforming branch's reputation; (2) festive-season demand isn't captured online; (3) they rely on the owner to create all content.\n- **Proof**: a case study of a café where review management and a local creator campaign improved footfall (described qualitatively; he doesn't invent figures).\n- **Objective**: understand their priorities for the festive season and agree to a proposal review meeting with the owner and the operations manager.\n\nThe call goes well because Bilal's questions are specific: \"I noticed your DHA branch has fewer reviews than the others — is that something you're aware of?\"\n\n### Common mistakes\n\n- Over-preparing a pitch and under-preparing questions.\n- Assuming hypotheses are true — they're starting points to test, not conclusions.\n- Forgetting the next step and ending with vague goodwill.\n\n### Do and don't\n\n**Do** write three hypotheses and test them with questions. **Do** agree an agenda. **Do** end with a dated next step.\n\n**Don't** walk in without researching. **Don't** use unethical research methods. **Don't** try to close in the first conversation if the decision is complex.",
+          "video": null,
+          "keyTakeaways": [
+            "Spend about 20 minutes researching their world, hypotheses, proof and plan.",
+            "Set a realistic call objective and aim for a concrete next step (an 'advance').",
+            "Open with an agenda that includes the option of no fit.",
+            "Treat hypotheses as questions to test, not conclusions."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is a realistic objective for a first call about a complex agency service?",
+              "options": [
+                "Send an invoice",
+                "Get a signed annual contract",
+                "Get a discount approved",
+                "Understand goals and agree to review a proposal with decision-makers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Complex decisions need several steps; a clear advance is a good first-call objective."
+            },
+            {
+              "question": "Which call ending is a stall rather than an advance?",
+              "options": [
+                "'Let's stay in touch'",
+                "'You'll introduce me to the finance manager this week'",
+                "'I'll send the proposal Friday and we'll review it Monday'",
+                "'Let's meet Tuesday at 3pm with your marketing lead'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A stall has no date, owner or specific action."
+            },
+            {
+              "question": "Which research method is inappropriate?",
+              "options": [
+                "Pretending to be a customer to extract confidential pricing from staff",
+                "Reading the company's website",
+                "Checking public reviews",
+                "Reading the founder's published interviews"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Pretexting is deceptive and unethical; public sources are fine."
+            }
+          ],
+          "activity": "Pick an upcoming conversation and complete the 20-minute prep routine: three hypotheses, one proof point, an objective and a proposed next step."
+        }
+      ]
+    },
+    {
+      "slug": "discovery",
+      "title": "Discovery that uncovers real needs",
+      "summary": "Use proven questioning frameworks — explained in plain language — to understand problems, qualify opportunities and bring fresh insight.",
+      "lessons": [
+        {
+          "slug": "spin-in-plain-language",
+          "title": "SPIN questions in plain language",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Where SPIN comes from\n\nSPIN is a questioning model developed from research into successful sales conversations in larger, more complex sales. It stands for **Situation, Problem, Implication, Need-payoff**. You don't need to memorise jargon — just understand what each type of question does.\n\n### The four question types\n\n**1. Situation questions — \"What's the setup?\"**\nFacts about their current state. Useful, but keep them few, because buyers find too many boring and you can often find the answers in research.\n- \"How are you currently getting online orders?\"\n- \"Who creates your social content today?\"\n\n**2. Problem questions — \"What's not working?\"**\nThese uncover difficulties and dissatisfaction.\n- \"What's the hardest part of getting consistent content out?\"\n- \"Where do you feel you're losing customers?\"\n\n**3. Implication questions — \"What does that cause?\"**\nThese are the most powerful and the most often skipped. They help the buyer see the consequences and size of a problem.\n- \"When content goes quiet for two weeks, what happens to orders?\"\n- \"If the new product line doesn't get traction before Eid, what does that mean for stock?\"\n- \"How much of your own time goes into fixing this each week?\"\n\n**4. Need-payoff questions — \"What would solving it be worth?\"**\nThese invite the buyer to describe the benefits of a solution in their own words.\n- \"If you had a steady stream of creator content, how would that help the launch?\"\n- \"What would it mean for you personally to get those hours back?\"\n\nWhen buyers explain the value themselves, they persuade themselves — far more powerfully than you could.\n\n### Why implication questions matter\n\nMost buyers tolerate small problems. A problem becomes worth solving when its consequences become clear. Implication questions connect a minor irritation (\"our reviews are a bit low\") to meaningful consequences (\"new customers choose competitors, the branch misses targets, staff morale drops\"). Without them, your solution looks expensive relative to a problem that seems small.\n\nUse them sensitively. The goal is clarity, not manufactured fear. If the implications are genuinely small, your solution may not be a priority — and that's useful to know.\n\n### Worked conversation\n\nA creator-management agency speaks to a skincare brand owner in Abu Dhabi.\n\n- **S**: \"How are you working with creators at the moment?\" → \"We send free products and hope they post.\"\n- **P**: \"How's that going?\" → \"Hit and miss. Some never post, and we can't tell what drives sales.\"\n- **I**: \"What does not knowing what drives sales mean for your budget decisions?\" → \"We keep spending on product seeding without knowing if it works. Honestly, my partner wants to stop.\"\n- **I**: \"And if you stopped, what would happen to the launch next quarter?\" → \"We'd rely on paid ads, which have got expensive for us.\"\n- **N**: \"If you could see which creators drive sales through tracked codes, how would that change things?\" → \"We'd put money behind the ones that work and I could justify the budget.\"\n\nThe owner has now described the value of a tracked creator programme in her own words.\n\n### Common mistakes\n\n- **Too many situation questions** — feels like an interrogation.\n- **Jumping from problem to pitch** — skipping implications, so the value feels small.\n- **Leading questions** — \"Wouldn't you agree that you need our service?\" feels manipulative.\n- **Not listening to answers** — following a script regardless of what they say.\n\n### A question bank to adapt\n\n- S: \"Walk me through how a customer typically finds you.\"\n- P: \"What frustrates you most about your current approach?\"\n- I: \"What happens if this isn't fixed by [date that matters]?\"\n- I: \"Who else is affected when this goes wrong?\"\n- N: \"If this worked the way you wanted, what would be different in three months?\"\n- N: \"Which of those benefits matters most to you?\"\n\n### Do and don't\n\n**Do** research to reduce situation questions. **Do** spend real time on implications. **Do** let the buyer articulate value.\n\n**Don't** fake urgency with exaggerated implications. **Don't** use leading questions. **Don't** pitch while the buyer is still describing the problem.",
+          "video": null,
+          "keyTakeaways": [
+            "SPIN = Situation, Problem, Implication, Need-payoff.",
+            "Keep situation questions few; research the basics beforehand.",
+            "Implication questions reveal the true size of a problem — use them honestly.",
+            "Need-payoff questions let buyers describe value in their own words."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "'When content goes quiet for two weeks, what happens to orders?' is which type of question?",
+              "options": [
+                "Implication",
+                "Problem",
+                "Situation",
+                "Need-payoff"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "It explores the consequence of a problem, which makes it an implication question."
+            },
+            {
+              "question": "Why are need-payoff questions persuasive?",
+              "options": [
+                "They are short",
+                "The buyer states the benefits in their own words",
+                "They reveal the price",
+                "They pressure the buyer"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "People believe what they say themselves more than what they're told."
+            },
+            {
+              "question": "What is a common mistake when using SPIN?",
+              "options": [
+                "Researching before the call",
+                "Listening carefully",
+                "Asking too many situation questions and skipping implications",
+                "Summarising answers"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Too many situation questions bore buyers; skipping implications makes the value feel small."
+            }
+          ],
+          "activity": "Write two questions of each SPIN type for a real prospect or brand you'd like to work with."
+        },
+        {
+          "slug": "qualifying-opportunities",
+          "title": "Qualifying opportunities: a plain-English MEDDICC",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why qualify?\n\nNot every conversation deserves the same effort. Qualification means checking whether an opportunity is real, winnable and worth pursuing. It protects your time — and the buyer's.\n\n**MEDDICC** is a qualification checklist widely used in business-to-business sales. It sounds technical, but each letter is a common-sense question. Here it is in plain English, adapted for agencies, freelancers and creators selling to brands.\n\n### The seven letters\n\n**M — Metrics: how will success be measured?**\n\"What result would make this a success for you — sales, leads, sign-ups, reach?\" Without agreed metrics, you can't prove value later.\n\n**E — Economic buyer: who controls the budget?**\nThe person who can say yes to spending money. It's often not the person you first speak to. \"Besides you, who's involved in approving the budget?\"\n\n**D — Decision criteria: how will they choose?**\n\"What will you look at when comparing options — price, results, experience, speed?\"\n\n**D — Decision process: what steps and timeline?**\n\"What happens between now and a decision? Who needs to review it, and by when?\"\n\n**I — Identify pain: what's the real problem and why now?**\nThis connects to your SPIN discovery. No pain, no priority.\n\n**C — Champion: who inside wants this to happen?**\nSomeone with influence who believes in your solution and will advocate internally. Champions give you information and help you navigate.\n\n**C — Competition: what else are they considering?**\nOther agencies, other creators, doing it in-house — or doing nothing. \"Doing nothing\" is often the biggest competitor.\n\n### A lighter version for small deals\n\nFor a brand deal or a small business client, you don't need a formal scorecard. Use four quick checks:\n\n1. **Need** — is there a real problem, and why now?\n2. **Budget** — is there money, and who approves it?\n3. **Process** — what are the steps and timeline?\n4. **Fit** — can you genuinely deliver what they need?\n\nIf two or more are unclear after the first conversation, your next step is to clarify them, not to send a proposal.\n\n### Worked example: qualifying a brand deal\n\nA UK-based lifestyle creator is contacted by a coordinator at a meal-kit company.\n\n- **Metrics**: \"We want sign-ups using a code.\"\n- **Economic buyer**: \"My manager signs off budgets.\" → The creator asks if the manager can join a short call.\n- **Criteria**: \"Engagement, audience in London and Manchester, cost per sign-up.\"\n- **Process**: \"We're choosing five creators by the end of the month.\"\n- **Pain**: \"Last quarter's campaign with bigger creators was expensive per sign-up.\"\n- **Champion**: the coordinator likes the creator's cooking content and is keen to include her.\n- **Competition**: four other shortlisted creators and possibly more paid social.\n\nKnowing this, the creator shares audience location data, suggests a tracked-code package priced around their cost-per-sign-up goal, and asks the coordinator what would help her make the case internally.\n\n### Warning signs in qualification\n\n- No one can explain how a decision will be made.\n- The \"decision-maker\" keeps changing.\n- No budget has been allocated and there's no timeline.\n- You're asked for detailed free strategy work before any commitment.\n\nThese don't mean walk away immediately, but they mean slow down and ask.\n\n### Ethics of qualification\n\nQualification isn't about judging people's worth. Be polite and helpful even when an opportunity isn't a fit — point them to a resource or someone better suited. Your reputation travels.\n\n### Do and don't\n\n**Do** ask about budget and approvals early, politely. **Do** find and support a champion. **Do** remember that \"do nothing\" is a competitor.\n\n**Don't** write detailed proposals for unqualified opportunities. **Don't** go around your contact rudely to reach the economic buyer — ask them to include that person. **Don't** treat a keen contact as the decision-maker without checking.",
+          "video": null,
+          "keyTakeaways": [
+            "MEDDICC: Metrics, Economic buyer, Decision criteria, Decision process, Identify pain, Champion, Competition.",
+            "For small deals, check need, budget, process and fit.",
+            "'Doing nothing' is often the strongest competitor.",
+            "Clarify unclear qualification points before sending proposals."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In MEDDICC, who is the 'economic buyer'?",
+              "options": [
+                "The first person who contacts you",
+                "The end customer",
+                "Your manager",
+                "The person who controls or approves the budget"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "The economic buyer can approve spending; they may not be your first contact."
+            },
+            {
+              "question": "After a first call you don't know the budget or timeline. What's the best next step?",
+              "options": [
+                "Offer a big discount",
+                "Stop responding",
+                "Send a detailed 20-page proposal",
+                "Clarify budget and process before investing in a proposal"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "If key qualification points are unclear, clarify them first."
+            },
+            {
+              "question": "What is a 'champion'?",
+              "options": [
+                "A certification",
+                "The cheapest option",
+                "An insider with influence who wants your solution to succeed and will advocate for it",
+                "A competitor"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Champions help you understand and navigate the buyer's organisation."
+            }
+          ],
+          "activity": "Take one live opportunity and fill in each MEDDICC letter. Mark any unknowns and write the question you'll ask to fill each gap."
+        },
+        {
+          "slug": "teaching-with-insight",
+          "title": "Teaching with insight: the Challenger idea",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Beyond answering questions\n\nResearch behind *The Challenger Sale* suggested that in complex sales, many high performers didn't just build rapport — they **taught buyers something new about their own business**, tailored it to them, and were comfortable taking control of the conversation respectfully. In plain language: bring a useful, relevant insight the buyer hadn't considered.\n\n### Teach, tailor, take control\n\n1. **Teach** — share a genuine insight that reframes how the buyer sees their problem.\n2. **Tailor** — connect it to their specific situation, role and goals.\n3. **Take control** — guide the conversation constructively, including discussing money and next steps confidently, without being pushy.\n\n### What a good insight looks like\n\nA good insight is:\n\n- **Relevant** to a problem they care about.\n- **Surprising** — not something they already know.\n- **Credible** — based on your real experience, observable patterns or reputable sources.\n- **Actionable** — it points to something they could do (ideally where you can help).\n\nExamples:\n\n- To a restaurant owner: \"Many restaurants focus on getting more followers, but for delivery orders, the thing customers check right before ordering is often recent reviews and photos on the delivery app itself. Your Instagram is strong; your delivery-app photos are two years old.\"\n- To a fashion brand: \"Brands often pick creators by follower count, but in our campaigns the creators whose audiences ask detailed questions in comments tend to convert better than bigger accounts. It might be worth selecting on comment quality.\"\n\nNotice these are framed as observations from experience, not invented statistics.\n\n### The reframe structure\n\nA simple way to deliver insight:\n\n1. **Warm-up** — show you understand their situation. \"You've told me the goal is more weekday orders.\"\n2. **Reframe** — \"What we often see is that the bottleneck isn't awareness but the last step before ordering.\"\n3. **Impact** — \"If that's true for you, more ads would bring people to the same weak point.\"\n4. **New way** — \"Refreshing delivery-app photos and responding to reviews could lift conversion from traffic you already have.\"\n5. **Your solution** — \"Here's how we'd approach that…\"\n\nThe insight should lead naturally to your solution but stand on its own as valuable advice.\n\n### Constructive tension, not arrogance\n\nChallenging a buyer's assumptions creates some tension. That's healthy when done respectfully:\n\n- Ask permission: \"Can I share something we often see that might challenge that approach?\"\n- Use \"we often see\" rather than \"you're wrong\".\n- Acknowledge what they're doing well.\n- Be ready to be wrong — if they have information you don't, update your view.\n\nIn many cultures, including across South Asia and the Gulf, directness with senior people or elders may need softer framing. Frame insights as options and learnings, and let the buyer save face.\n\n### Taking control of money and next steps\n\nMany sellers get nervous discussing budget. Being clear and calm helps both sides:\n\n> \"To make sure I suggest something realistic, what budget range have you set aside for this? If it's below what's needed, I'll tell you honestly and suggest what's possible.\"\n\n### Common mistakes\n\n- \"Insights\" that are actually generic facts everyone knows.\n- Lecturing instead of conversing.\n- Using made-up statistics to sound authoritative — this destroys credibility if challenged.\n- Challenging for its own sake.\n\n### Do and don't\n\n**Do** build a small library of genuine observations from your work. **Do** tailor insights to the buyer's role. **Do** ask permission before challenging.\n\n**Don't** fabricate data. **Don't** make the buyer feel foolish. **Don't** confuse confidence with pressure.",
+          "video": null,
+          "keyTakeaways": [
+            "Challenger-style selling means teaching a relevant insight, tailoring it and guiding the conversation.",
+            "Good insights are relevant, surprising, credible and actionable.",
+            "Reframe: warm-up, reframe, impact, new way, your solution.",
+            "Challenge respectfully and never fabricate data."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which is the best example of a commercial insight?",
+              "options": [
+                "'Marketing costs money'",
+                "'We are the best agency'",
+                "'Social media is important nowadays'",
+                "'Your delivery-app photos are two years old, and that's often the last thing customers check before ordering'"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "It's specific, relevant, possibly surprising and actionable. The others are generic or self-promotional."
+            },
+            {
+              "question": "How should you challenge a senior buyer's assumption respectfully?",
+              "options": [
+                "Avoid it completely",
+                "Challenge them in front of their team",
+                "Tell them they're wrong",
+                "Ask permission and frame it as something you often see"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Permission and observational framing create constructive, not hostile, tension."
+            },
+            {
+              "question": "Why should you avoid made-up statistics in insights?",
+              "options": [
+                "They are illegal in all cases",
+                "If challenged, they destroy credibility, and presenting them is misleading",
+                "They're too long",
+                "Buyers don't like numbers"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Credibility is the foundation of insight-led selling; fabricated data is misleading."
+            }
+          ],
+          "activity": "Write three genuine insights from your own experience with clients, brands or audiences, and draft a five-step reframe for one of them."
+        }
+      ]
+    },
+    {
+      "slug": "value-and-objections",
+      "title": "Value propositions and objection handling",
+      "summary": "Turn discovery into a tailored value proposition and handle common objections with empathy and evidence.",
+      "lessons": [
+        {
+          "slug": "crafting-value-propositions",
+          "title": "Crafting tailored value propositions",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### What a value proposition is\n\nA value proposition is a clear statement of **the outcome you'll help the buyer achieve, why it matters to them, and why you're a credible choice**. It isn't a list of services. The best ones use the buyer's own words from discovery.\n\n### The formula\n\n> **For** [who] **who** [problem/goal in their words], **we/I** [do what] **so that** [outcome they care about]. **Unlike** [alternative], **we/I** [difference], **as shown by** [proof].\n\nExample for an agency:\n> \"For your bakery chain, which needs to capture festive-season orders across four branches, we'll run a creator and review-management programme so that your weaker branch catches up and online orders rise during the season. Unlike one-off influencer posts, every creator has a tracked code, so you'll see exactly which ones drive orders — as we did for a café group last year.\"\n\nExample for a creator pitching a brand:\n> \"For [Brand], launching women's running gear in the UAE and KSA, I'll create a three-part series that takes my audience from 'why I switched' to a tracked-code offer, so you can measure sales, not just views. My audience is mostly women aged 22–35 in Dubai and Riyadh who regularly ask me about running kit.\"\n\n### Features, advantages, benefits\n\nTranslate everything into benefits:\n\n- **Feature**: what it is. \"Weekly reporting dashboard.\"\n- **Advantage**: what it does. \"Shows which creators drive orders.\"\n- **Benefit**: what it means for *this* buyer. \"You can justify the budget to your partner and stop wasting money on seeding that doesn't work.\"\n\nUse the \"so what?\" test: after each statement, ask \"so what?\" until you reach something the buyer said they care about.\n\n### Quantifying value — carefully\n\nWhere possible, help the buyer estimate value in their own numbers. For example:\n\n> \"You mentioned each new regular customer spends roughly X a month. If the programme brought in even a handful of new regulars per branch, how would that compare with the fee?\"\n\nUse their figures, label estimates clearly and avoid guarantees. Promising specific results you can't control (\"guaranteed 10x sales\") is misleading and may breach consumer-protection or advertising rules.\n\n### Proof that persuades\n\n- Case studies (with client permission), described accurately.\n- Your own verifiable results (analytics screenshots, tracked-code data).\n- Testimonials from real clients.\n- A small pilot or trial, which reduces risk for the buyer.\n\n### Presenting options\n\nOffering **two or three options** often helps buyers decide:\n\n- **Essential**: solves the core problem.\n- **Recommended**: solves the core problem plus the main secondary need.\n- **Comprehensive**: everything, for buyers with bigger ambitions.\n\nEach should be a genuine choice, clearly explained — not a decoy designed to trick. We'll look at the ethics of options and anchors in more depth in the advanced psychology course.\n\n### Worked example: rewriting a weak proposal\n\n**Weak**: \"We offer content creation, community management, influencer marketing and paid ads. Package: 150,000 PKR/month.\"\n\n**Strong**: \"Goal: fill weekday dinner slots at your Gulberg branch before Ramadan. Problem you described: good food, but few recent reviews and no creator content. Plan: 4 local food creators with tracked codes, weekly review responses, refreshed delivery-app photos. Measure: code redemptions and weekday covers. Option A (essential) … Option B (recommended) …\"\n\n### Do and don't\n\n**Do** use the buyer's words and priorities. **Do** connect every feature to a benefit they care about. **Do** show proof honestly.\n\n**Don't** list every service you offer. **Don't** guarantee results you can't control. **Don't** invent case studies or numbers.",
+          "video": null,
+          "keyTakeaways": [
+            "A value proposition states the outcome, why it matters and why you're credible.",
+            "Translate features into advantages and benefits with the 'so what?' test.",
+            "Quantify value using the buyer's numbers and label estimates.",
+            "Offer two or three genuine options; never guarantee uncontrollable results."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which statement is a benefit rather than a feature?",
+              "options": [
+                "'We use the latest tools'",
+                "'You'll be able to justify the budget to your partner because you'll see which creators drive orders'",
+                "'Weekly reporting dashboard'",
+                "'Our team has ten people'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "A benefit connects to the specific outcome the buyer cares about."
+            },
+            {
+              "question": "A client asks if you can guarantee a tenfold increase in sales. What's the best answer?",
+              "options": [
+                "Promise a refund of double the fee",
+                "Explain honestly what you can control, what you'll measure and what past results looked like, without guarantees",
+                "Refuse to discuss results",
+                "'Yes, guaranteed'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Guaranteeing uncontrollable results is misleading; transparency about process and measurement builds trust."
+            },
+            {
+              "question": "What is the purpose of the 'so what?' test?",
+              "options": [
+                "To challenge the buyer",
+                "To calculate price",
+                "To shorten proposals",
+                "To keep translating a feature until it reaches a benefit the buyer cares about"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Repeatedly asking 'so what?' converts features into relevant benefits."
+            }
+          ],
+          "activity": "Write a value proposition for a real prospect using the formula, then run each feature through the 'so what?' test."
+        },
+        {
+          "slug": "objection-handling-library",
+          "title": "An objection-handling library",
+          "type": "article",
+          "durationMinutes": 11,
+          "body": "### Objections are information\n\nAn objection isn't a rejection; it's a buyer telling you what's in the way. Handled well, objections build trust. Handled badly — with arguments, pressure or tricks — they end the conversation.\n\n### The LAARC method\n\n1. **Listen** — let them finish. Don't jump in.\n2. **Acknowledge** — show you heard: \"That's a fair concern.\"\n3. **Ask** — clarify the real issue: \"When you say it's expensive, is that compared with another option, or relative to the budget you'd planned?\"\n4. **Respond** — address the specific concern with evidence or options.\n5. **Confirm** — \"Does that address your concern?\"\n\nThe **Ask** step is where most of the value lies. The first objection is often not the real one.\n\n### Types of objection\n\n- **Genuine concern** — a real issue you can address.\n- **Misunderstanding** — they have wrong information; clarify kindly.\n- **Real limitation** — your offer genuinely doesn't fit; acknowledge it.\n- **Smokescreen** — a polite way of saying no or not now; probe gently.\n\n### The library: common objections and responses\n\n**1. \"It's too expensive.\"**\n> \"I understand — it's a real investment. Can I ask what you're comparing it with?\" Then either re-anchor on value (\"You mentioned each new regular is worth around X a month…\"), adjust scope (\"We could start with the essential option\"), or accept that it isn't a fit right now.\n\n**2. \"We need to think about it.\"**\n> \"Of course — it's an important decision. So I can help, what specifically would you like to think through? Is it the budget, the approach, or something else?\" Then agree a specific follow-up date.\n\n**3. \"We already work with someone.\"**\n> \"That's great — what do you like about working with them? Is there anything you wish was different?\" If they're happy, respect it. If there's a gap, you may complement rather than replace.\n\n**4. \"Send me some information.\"**\n> \"Happy to. So I send something useful rather than a generic brochure, which part is most relevant — the approach, pricing or examples?\" Then agree when you'll discuss it.\n\n**5. \"Now isn't a good time.\"**\n> \"Understood. Is it timing on your side, or is it not a priority? If it's timing, when would be better to revisit?\" Record and respect it.\n\n**6. \"I've had a bad experience with influencer campaigns / agencies before.\"**\n> \"I'm sorry that happened. What went wrong?\" Listen fully, then show specifically how your approach addresses those issues (tracked codes, clear deliverables, reporting). Consider a small pilot.\n\n**7. \"Your audience is too small.\"** (creator to brand)\n> \"That's fair to consider. Smaller audiences often have tighter engagement. Would it help if I shared my audience location data and how many people asked about similar products last month? We could also agree a code-based fee so you pay more only if it performs.\"\n\n**8. \"Can you do it cheaper?\"**\n> \"I want to find something that works for you. Rather than cutting the price for the same work, could we adjust the scope?\" Trade, don't just discount — more in the negotiation lesson.\n\n**9. \"I need to check with my partner / manager.\"**\n> \"Absolutely. What do you think their main questions will be? Would it help if I joined a short call or prepared a one-page summary for them?\"\n\n**10. \"How do I know it will work?\"**\n> \"Good question. Here's what we'll measure, how we'll report it weekly and what we've seen with similar clients. We could start with a pilot so you can judge results before committing further.\"\n\n### Anticipate and pre-empt\n\nIf you hear the same objection often, address it before it's raised. For example: \"Some clients worry about paying for posts that don't sell, so every creator uses a tracked code and you'll see results weekly.\"\n\n### What not to do\n\n- **Argue** — winning the argument loses the sale.\n- **Discount immediately** — it signals your price wasn't real.\n- **Pressure** — \"This offer disappears if you don't sign today\" (unless genuinely true).\n- **Dismiss** — \"Everyone says that.\"\n\n### Worked mini-dialogue\n\n> **Buyer**: \"Honestly, this seems expensive.\"\n> **Seller**: \"That's fair — thanks for being direct. What are you comparing it with?\"\n> **Buyer**: \"Another agency quoted less.\"\n> **Seller**: \"That makes sense. Could you tell me what's included in theirs? … It sounds like theirs doesn't include tracked codes or review management. Given that measuring sales was your main frustration, how important is that?\"\n> **Buyer**: \"Very. Can we start smaller though?\"\n> **Seller**: \"Absolutely — the essential option covers tracking with two creators. Would that work as a start?\"",
+          "video": null,
+          "keyTakeaways": [
+            "Treat objections as information about what's in the way.",
+            "Use LAARC: Listen, Acknowledge, Ask, Respond, Confirm.",
+            "The first objection often isn't the real one — ask clarifying questions.",
+            "Trade scope rather than discounting, and never pressure or argue."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A buyer says 'We need to think about it.' What is the best response?",
+              "options": [
+                "Offer an immediate 30% discount",
+                "'Offer ends today, sign now'",
+                "End the conversation without a next step",
+                "'Of course — what specifically would you like to think through?' and agree a follow-up date"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Clarifying the real concern and agreeing a follow-up keeps the conversation productive without pressure."
+            },
+            {
+              "question": "In LAARC, which step most often reveals the real objection?",
+              "options": [
+                "Acknowledge",
+                "Ask",
+                "Confirm",
+                "Listen"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Asking clarifying questions uncovers what's truly behind the objection."
+            },
+            {
+              "question": "A buyer asks for a lower price. What's generally the best approach?",
+              "options": [
+                "Cut the price immediately",
+                "Add hidden fees later",
+                "Adjust scope to match the budget rather than discounting the same work",
+                "Refuse to discuss it"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Trading scope preserves the value of your work and your credibility."
+            }
+          ],
+          "activity": "List the five objections you hear most often. For each, write a LAARC-style response in your own words and practise it aloud."
+        }
+      ]
+    },
+    {
+      "slug": "negotiation-and-closing",
+      "title": "Negotiation and respectful closing",
+      "summary": "Negotiate fair agreements and ask for commitment in ways that respect the buyer's autonomy.",
+      "lessons": [
+        {
+          "slug": "negotiation-basics",
+          "title": "Negotiation basics for sellers and creators",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Negotiation is problem-solving\n\nGood negotiation isn't about winning at the other side's expense. It's about reaching an agreement both sides are happy to keep. This matters especially in creator and agency work, where relationships repeat.\n\n### Key concepts in plain language\n\n- **BATNA** — *Best Alternative To a Negotiated Agreement*. What will you do if this deal doesn't happen? A creator with three other brand offers has a strong BATNA; one with none has a weak one. Know yours and estimate theirs.\n- **Walk-away point** — the least favourable terms you'll accept. Decide it *before* negotiating.\n- **Target** — what you'd realistically like to achieve.\n- **ZOPA** — *Zone Of Possible Agreement*: the overlap between what you'll accept and what they'll accept.\n- **Anchor** — the first number put on the table tends to shape the discussion. A well-reasoned first offer can help, but it must be justifiable.\n\n### Interests, not positions\n\nA **position** is what someone says they want: \"We can only pay 50,000.\" An **interest** is why: \"Our quarterly budget is split across six creators and my manager needs to see cost-per-sale.\" Solving for interests opens creative options — perhaps a lower fixed fee plus a commission per sale, or a smaller deliverable now and a larger one next quarter.\n\nAsk: \"Help me understand what's driving that number?\"\n\n### Trade, don't concede\n\nNever give something for nothing. Use \"if… then…\":\n\n- \"If you can extend usage rights to only 3 months rather than 12, then I can do the lower rate.\"\n- \"If we can have a 6-month commitment, then we can reduce the monthly fee.\"\n- \"If you need it faster, then we'll need to reduce scope or add a rush fee.\"\n\nCommon tradeable items: scope, deliverables, timeline, payment terms, usage rights, exclusivity, contract length, reporting, commission structure.\n\n### Preparing a negotiation\n\n1. Your target, walk-away and BATNA.\n2. Their likely interests and constraints.\n3. A list of tradeables: what's cheap for you but valuable to them, and vice versa.\n4. Your justification for your opening position.\n\n### Worked example: a creator rate negotiation\n\nFatima, a food creator in Riyadh, quotes a brand 8,000 SAR for two reels and three stories with 30 days' usage rights. The brand says their budget is 5,000.\n\nInstead of dropping to 5,000, she asks about their interests: they need content for Ramadan and want to reuse it in paid ads. She proposes:\n\n- **Option A**: 5,000 SAR for one reel and three stories, no paid-ad usage.\n- **Option B**: 8,000 SAR as quoted, with 30 days' paid usage.\n- **Option C**: 5,500 SAR fixed plus a commission on sales through her code, with 30 days' paid usage.\n\nThe brand chooses C. Fatima gets a fair rate and upside; the brand manages budget risk.\n\n### Cultural awareness\n\nNegotiation norms vary. In many markets across South Asia and the Middle East, some back-and-forth is expected and relationships and respect are central; building rapport and hospitality matter. In some UK and US corporate contexts, buyers may expect a more structured process through procurement. Adapt your style, but keep your principles: honesty, trade-not-concede and a clear walk-away point.\n\n### Ethics in negotiation\n\n- Don't lie about other offers or your costs.\n- Don't invent deadlines.\n- Put agreements in writing: deliverables, dates, payment terms, usage rights, disclosure requirements and cancellation terms.\n- Don't agree to terms that require you to break disclosure rules or make misleading claims.\n\n### Do and don't\n\n**Do** know your walk-away and BATNA. **Do** explore interests. **Do** trade with \"if… then…\".\n\n**Don't** negotiate against yourself (dropping price before they respond). **Don't** bluff about competing offers. **Don't** leave terms unwritten.",
+          "video": null,
+          "keyTakeaways": [
+            "Know your BATNA, walk-away point and target before negotiating.",
+            "Solve for interests (why), not positions (what).",
+            "Trade using 'if… then…' — never concede for nothing.",
+            "Put all agreed terms in writing, including disclosure and usage rights."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What is a BATNA?",
+              "options": [
+                "A type of contract",
+                "Your best alternative if this deal doesn't happen",
+                "The buyer's budget",
+                "Your ideal price"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "BATNA is your fallback option, which determines your negotiating strength."
+            },
+            {
+              "question": "A brand says 'our budget is only 5,000'. What's the best first move?",
+              "options": [
+                "Accept immediately",
+                "Ask what's driving that number and explore their interests",
+                "Insist on your original rate without discussion",
+                "Walk away"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Understanding interests opens creative options that can satisfy both sides."
+            },
+            {
+              "question": "Which is a well-formed trade?",
+              "options": [
+                "'I'll do it for free this time'",
+                "'If you can reduce usage rights to three months, then I can do the lower rate'",
+                "'OK, I'll drop my price'",
+                "'Take it or leave it'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "An 'if… then…' trade gives something in return for something."
+            }
+          ],
+          "activity": "For a real or upcoming deal, write down your target, walk-away, BATNA and at least five tradeable items."
+        },
+        {
+          "slug": "closing-with-respect",
+          "title": "Closing techniques that respect the buyer",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Closing is asking for a decision\n\nClosing is simply helping the buyer make a decision — yes, no or a clear next step. Many sellers lose deals not because buyers say no but because nobody asks. Equally, high-pressure closing tricks damage trust and can breach consumer-protection laws. The goal is a **clear, comfortable ask**.\n\n### Signs a buyer is ready\n\n- Questions about implementation: \"How soon could you start?\"\n- Questions about terms: \"What are the payment options?\"\n- Talking in ownership language: \"When we run the Eid campaign…\"\n- Objections have been resolved and they're summarising.\n\n### Respectful closing techniques\n\n**1. The summary close**\nRecap what they told you and how the solution addresses it, then ask.\n> \"So you want to capture festive orders, see which creators drive sales and get your weaker branch's reviews up. The recommended option covers all three. Shall we go ahead?\"\n\n**2. The next-step close**\nFor complex decisions, close on the next step rather than the whole deal.\n> \"Would it make sense to book 30 minutes with your partner on Thursday to review the proposal together?\"\n\n**3. The choice close (genuine options)**\n> \"Would you prefer to start with the essential option or the recommended one?\"\nThis is respectful when both options are real, and \"neither\" remains an acceptable answer.\n\n**4. The trial or pilot close**\n> \"Would a four-week pilot with two creators be a sensible way to test it?\"\n\n**5. The direct question**\n> \"Based on everything we've discussed, are you ready to go ahead?\"\nSimple, honest and often effective.\n\n**6. The permission-to-close-the-file close**\nWhen a deal has stalled:\n> \"I haven't heard back, so I'm guessing priorities have changed. Should I close this for now? Happy to pick it up later.\"\nThis often prompts a genuine response either way.\n\n### Tactics to avoid\n\n- **False urgency**: \"This price is only valid today\" when it isn't.\n- **Assumptive pressure**: sending a contract as though they'd agreed when they haven't.\n- **Guilt**: \"I've put so much work into this…\"\n- **Hiding terms**: automatic renewals, cancellation fees or extra charges not clearly explained upfront. Hidden terms can breach consumer-protection laws in many countries.\n- **Exploiting vulnerability**: pressuring someone who is clearly confused, distressed or unable to make an informed decision.\n\n### After \"yes\"\n\n- Confirm everything in writing: scope, deliverables, price, dates, payment terms, disclosure requirements, cancellation.\n- Thank them and explain what happens next.\n- Deliver quickly on the first step to reinforce the decision.\n\n### After \"no\"\n\n- Thank them sincerely.\n- Ask, if appropriate, what influenced the decision — it's valuable learning.\n- Ask permission to stay in touch.\n- Leave the door open: \"If anything changes, I'd be glad to help.\"\n\n### Worked example\n\nA small agency has presented a proposal to a boutique gym in Manchester. The owner says: \"This looks good. My only concern is committing for six months.\"\n\n> **Seller**: \"That's understandable. Would a three-month start with a review at week ten work better? If results are there, we continue; if not, you're free to stop.\"\n> **Owner**: \"That feels fairer.\"\n> **Seller**: \"Great. Shall I send the agreement for the three-month option today, with a start date of the 1st?\"\n> **Owner**: \"Yes, please.\"\n\nThe objection was addressed, the offer adjusted fairly, and the close was clear and specific.\n\n### Do and don't\n\n**Do** ask clearly. **Do** close on next steps in complex sales. **Do** make terms transparent.\n\n**Don't** use false urgency or guilt. **Don't** hide terms. **Don't** treat \"no\" as a personal failure — it's information.",
+          "video": null,
+          "keyTakeaways": [
+            "Closing is asking clearly for a decision or next step.",
+            "Use summary, next-step, genuine choice, pilot and direct closes.",
+            "Avoid false urgency, guilt, hidden terms and pressure.",
+            "Confirm everything in writing after 'yes'; learn from 'no'."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A buyer asks 'How soon could you start?' What does this usually signal?",
+              "options": [
+                "They may be ready to buy — a buying signal",
+                "They want a discount",
+                "They're confused",
+                "They're not interested"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Implementation questions are classic buying signals."
+            },
+            {
+              "question": "Which closing approach is respectful for a complex decision involving several people?",
+              "options": [
+                "Close on a specific next step, such as a review meeting with the decision-makers",
+                "Keep calling until they agree",
+                "Say the price expires today",
+                "Assume the sale and send an invoice"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Next-step closes suit multi-person decisions."
+            },
+            {
+              "question": "Which is a problematic closing tactic?",
+              "options": [
+                "Summarising their needs and asking if they'd like to proceed",
+                "Asking a direct question",
+                "Offering a pilot",
+                "Adding an automatic renewal that isn't mentioned upfront"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Hidden terms mislead buyers and can breach consumer-protection laws."
+            }
+          ],
+          "activity": "Write a summary close and a next-step close for a current opportunity, using the buyer's own words from discovery."
+        }
+      ]
+    },
+    {
+      "slug": "follow-up-and-crm",
+      "title": "Follow-up cadences and CRM hygiene",
+      "summary": "Follow up persistently without pestering, and keep clean records so no opportunity or promise slips through the cracks.",
+      "lessons": [
+        {
+          "slug": "follow-up-cadences",
+          "title": "Follow-up cadences that add value",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Why follow-up matters\n\nMany deals aren't lost to competitors — they're lost to silence. Buyers are busy; priorities shift. A thoughtful follow-up cadence keeps you present without becoming a nuisance.\n\n### Principles of good follow-up\n\n1. **Every touch adds value.** \"Just checking in\" adds nothing. Share something useful: an idea, a relevant example, an answer to a question they had.\n2. **Use agreed next steps.** The best follow-up is one the buyer already agreed to: \"As promised, here's the proposal before Monday's call.\"\n3. **Vary channels thoughtfully.** Email, a message on the platform you've been using, a call if appropriate. Respect their preferred channel.\n4. **Space it out.** Gaps usually lengthen over time.\n5. **Know when to stop.** After several unanswered touches, close the loop politely.\n\n### A sample cadence after a proposal\n\nThis is an illustrative pattern — adjust to the buyer's stated timeline and culture.\n\n- **Day 0** — Send proposal with a short summary and the agreed next step.\n- **Day 2–3** — Value touch: \"One idea I didn't include: a Ramadan iftar reel series could suit your menu. Happy to add it as an option.\"\n- **Day 7** — Check on the decision process: \"Has your partner had a chance to review? Any questions I can answer before you decide?\"\n- **Day 14** — Helpful resource or relevant example.\n- **Day 21–30** — Permission-to-close: \"I haven't heard back, so I'll assume timing isn't right. Shall I close this for now and check in next quarter?\"\n\n### Templates\n\n**Value follow-up**\n> \"Hi Sana, following our chat about weekday orders — I noticed your competitor launched a lunch deal this week. It reminded me of the midweek offer idea we discussed. Happy to sketch how a creator could promote it if useful.\"\n\n**After a meeting**\n> \"Thanks for your time today. As agreed: (1) I'll send the revised option B by Wednesday; (2) you'll check budget timing with Imran; (3) we'll speak Friday at 11. Anything I've missed?\"\n\n**Re-engaging a cold lead (months later)**\n> \"Hi Daniel, it's been a while since we discussed creator campaigns for your autumn range. We've since run something similar for another fashion brand and learned a few things that might help. Worth a quick chat?\"\n\n### Follow-up with customers after purchase\n\nFor creators and sellers using discount codes, follow-up after a purchase is where repeat business begins:\n\n- A thank-you message (where you have a genuine conversation already).\n- A tip on getting the most from the product.\n- A check-in later: \"How's it working for you?\"\n\nRespect privacy: follow up only through channels people have used with you, and never add people to broadcast lists or marketing emails without their consent. Electronic-marketing rules in many countries (including the UK's PECR, the EU's ePrivacy rules and data-protection laws in the Gulf and elsewhere) require consent for many kinds of marketing messages.\n\n### Cultural and timing considerations\n\n- Avoid pushing decisions during major religious observances, public holidays or known busy periods for the buyer's industry.\n- Working weeks vary: in the UAE the standard working week runs Monday to Friday, while in Saudi Arabia it's typically Sunday to Thursday. Be aware of local weekends.\n- Time zones: schedule messages for the buyer's working hours.\n\n### Common mistakes\n\n- Following up with no new value.\n- Following up too aggressively in the first days.\n- Giving up after one message.\n- Not recording what was promised.\n\n### Do and don't\n\n**Do** plan a cadence and add value each time. **Do** confirm actions in writing after meetings. **Do** close the loop respectfully.\n\n**Don't** send \"just checking in\" repeatedly. **Don't** add people to marketing lists without consent. **Don't** follow up at inappropriate times.",
+          "video": null,
+          "keyTakeaways": [
+            "Every follow-up should add value or advance an agreed step.",
+            "Space touches out and close the loop politely after several unanswered messages.",
+            "Confirm actions in writing after meetings.",
+            "Respect consent rules, local working weeks and cultural timing."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which follow-up adds the most value?",
+              "options": [
+                "'Just checking in'",
+                "'Why haven't you replied?'",
+                "'Any update?'",
+                "A relevant idea or example linked to what the buyer said they care about"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Value-adding follow-ups give the buyer a reason to engage."
+            },
+            {
+              "question": "After several unanswered follow-ups over a month, what's the best move?",
+              "options": [
+                "Post publicly about it",
+                "Message daily",
+                "Call their boss",
+                "Send a polite permission-to-close message"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Closing the loop respects the buyer and often prompts a real answer."
+            },
+            {
+              "question": "Can you add everyone who bought with your code to a marketing email list?",
+              "options": [
+                "Yes, always",
+                "Only in Pakistan",
+                "Only with their consent, in line with electronic-marketing and data-protection rules",
+                "Yes, if you include an unsubscribe link later"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Many jurisdictions require consent for marketing messages; data must be handled lawfully."
+            }
+          ],
+          "activity": "Write a four-touch follow-up cadence for a current opportunity, making sure each touch adds a different piece of value."
+        },
+        {
+          "slug": "crm-hygiene",
+          "title": "CRM hygiene: records that help you sell",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### What a CRM is for\n\nA CRM (customer relationship management system) is where you record contacts, conversations, opportunities and next steps. It can be a dedicated tool, the CRM features within a platform, or even a well-organised spreadsheet if you're starting out. The point isn't the software — it's **never losing track of a person, a promise or a next step**.\n\n### The hygiene rules\n\n1. **Log every meaningful interaction within 24 hours.** Date, channel, summary, what was agreed.\n2. **Every open opportunity has a next step and a date.** No next step = the deal is drifting.\n3. **Use consistent stages.** For example: Lead → Qualified → Discovery done → Proposal sent → Negotiation → Won / Lost.\n4. **Record why deals are won or lost.** This is your best source of learning.\n5. **Keep contact data accurate and minimal.** Only store what you need, with a lawful reason, and update or delete out-of-date information.\n6. **Review weekly.** Fifteen minutes to update stages, chase overdue next steps and close dead deals.\n\n### Fields worth tracking\n\n- Contact name, role, organisation, preferred channel, time zone.\n- Source (referral, inbound DM, event, campaign).\n- Qualification notes (need, budget, process, fit — or MEDDICC).\n- Stage, estimated value, expected decision date.\n- Next step and due date.\n- Notes: key quotes from discovery in the buyer's words.\n- Outcome and reason.\n\n### Stages and honest forecasting\n\nYour pipeline is only useful if it's honest. Common problems:\n\n- **Happy ears** — marking a deal as likely because the buyer was friendly.\n- **Zombie deals** — opportunities with no activity for months still counted as live.\n- **Sandbagging** — deliberately underreporting to look good later.\n\nDefine stage criteria based on buyer actions, not your feelings. For example, \"Proposal sent\" only when the buyer has agreed to review it with the decision-maker.\n\n### Data protection basics\n\nCRMs hold personal data, so data-protection laws apply in many places — for example the UK GDPR and EU GDPR, Saudi Arabia's Personal Data Protection Law, the UAE's federal data-protection law, and other regional laws. At a principle level:\n\n- Collect only what you need (**data minimisation**).\n- Use it only for the purpose people would reasonably expect.\n- Keep it secure: strong passwords, two-factor authentication, restricted access.\n- Don't export contact lists to personal devices or share them with others without authority.\n- Delete data you no longer need, and respect requests to access or delete personal data.\n\n### Worked example: a weekly pipeline review\n\nSadia, a junior sales executive at a Dubai agency, runs her Friday review:\n\n- Three deals in \"Proposal sent\" have no next step. She emails each with a specific question and a proposed call time.\n- One deal has had no response for six weeks. She sends a permission-to-close message and moves it to \"Lost — no decision\" with a note.\n- A won deal lacks a reason. She adds: \"Won because of tracked-code reporting; competitor couldn't offer it.\"\n- Two contacts have changed roles; she updates their records.\n\nHer forecast is now realistic, and her Monday plan is clear.\n\n### Using notes to sell better\n\nGreat CRM notes capture the buyer's words: \"Worried partner will say it's too expensive\" or \"Main goal: fill weekday slots before Ramadan\". When you prepare follow-ups or proposals, these quotes help you tailor your message — and show the buyer you listened.\n\n### Do and don't\n\n**Do** log interactions promptly and set next steps for every deal. **Do** record win/loss reasons. **Do** protect personal data.\n\n**Don't** keep zombie deals in your forecast. **Don't** store unnecessary personal information. **Don't** share contact lists without authority.",
+          "video": null,
+          "keyTakeaways": [
+            "A CRM exists so you never lose track of a person, promise or next step.",
+            "Every open opportunity needs a next step and a date.",
+            "Define stages by buyer actions to keep forecasts honest.",
+            "Apply data-protection principles: minimise, secure, delete when no longer needed."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "An opportunity has had no activity for three months but is still marked 'Negotiation'. What is this called?",
+              "options": [
+                "A champion",
+                "A zombie deal",
+                "A BATNA",
+                "A pilot"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Zombie deals distort forecasts; they should be re-engaged or closed."
+            },
+            {
+              "question": "Which stage definition is most reliable?",
+              "options": [
+                "'Proposal sent' when you feel good about the call",
+                "'Qualified' when you have their email",
+                "'Proposal sent' when the buyer has agreed to review it with the decision-maker",
+                "'Won' when the buyer smiles"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Stages based on buyer actions make forecasts more accurate."
+            },
+            {
+              "question": "Which is good data-protection practice for a CRM?",
+              "options": [
+                "Storing every detail you can find about contacts",
+                "Exporting lists to personal devices",
+                "Sharing contacts with friends who sell",
+                "Collecting only necessary data and securing it with strong access controls"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Data minimisation and security are core data-protection principles."
+            }
+          ],
+          "activity": "Set up (or clean up) your pipeline: define stage criteria based on buyer actions, add a next step and date to every open deal, and close any zombie deals."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "csc-001",
+        "module": "consultative-mindset",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which behaviour best reflects consultative selling?",
+        "options": [
+          "Talking more than the buyer in discovery",
+          "Opening with a price list",
+          "Diagnosing the buyer's situation before recommending",
+          "Presenting every service you offer"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Consultative selling diagnoses before prescribing."
+      },
+      {
+        "id": "csc-002",
+        "module": "consultative-mindset",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A restaurant asks for more marketing, but discovery shows the real issue is poor recent reviews. What's the consultative response?",
+        "options": [
+          "Explain that fixing reviews first will make marketing more effective and propose an appropriate starting point",
+          "Offer a discount on ads",
+          "Decline without explanation",
+          "Sell the biggest marketing package anyway"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Fit over force: recommend what actually solves the problem, even if the first sale is smaller."
+      },
+      {
+        "id": "csc-003",
+        "module": "consultative-mindset",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is an 'advance' at the end of a sales conversation?",
+        "options": [
+          "A thank-you email",
+          "A specific, agreed next step that moves the decision forward",
+          "A discount",
+          "A payment upfront"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "An advance is a concrete next step with a date or action."
+      },
+      {
+        "id": "csc-004",
+        "module": "consultative-mindset",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which opening agenda is most likely to relax a buyer?",
+        "options": [
+          "'I'd like to understand your goals, share ideas if relevant, and agree whether a next step makes sense'",
+          "'I only have five minutes'",
+          "'Let's discuss the contract'",
+          "'I'll show you our 40-slide deck'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Collaborative agendas that allow for 'no fit' reduce pressure."
+      },
+      {
+        "id": "csc-005",
+        "module": "consultative-mindset",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which preparation activities are appropriate before a first meeting? (Choose all that apply.)",
+        "options": [
+          "Reviewing public reviews and social profiles",
+          "Posing as a customer to obtain confidential pricing",
+          "Choosing one or two honest proof points",
+          "Writing three hypotheses to test with questions"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Public research, hypotheses and honest proof are good preparation. Pretexting is deceptive."
+      },
+      {
+        "id": "csc-006",
+        "module": "discovery",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What does the 'I' in SPIN stand for?",
+        "options": [
+          "Implication",
+          "Interest",
+          "Investment",
+          "Insight"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "SPIN = Situation, Problem, Implication, Need-payoff."
+      },
+      {
+        "id": "csc-007",
+        "module": "discovery",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "'If this worked the way you wanted, what would be different in three months?' is which type of question?",
+        "options": [
+          "Situation",
+          "Need-payoff",
+          "Problem",
+          "Implication"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "It invites the buyer to describe the value of a solution."
+      },
+      {
+        "id": "csc-008",
+        "module": "discovery",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A buyer admits a problem, and the seller immediately pitches, but the buyer says the price seems high relative to the issue. What was most likely skipped?",
+        "options": [
+          "Introductions",
+          "Situation questions",
+          "Implication questions that reveal the problem's consequences",
+          "The contract"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Without implication questions, the problem seems small and the solution looks expensive."
+      },
+      {
+        "id": "csc-009",
+        "module": "discovery",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "In MEDDICC, what does 'Decision process' refer to?",
+        "options": [
+          "What the buyer values when comparing options",
+          "The competitor list",
+          "The budget holder",
+          "The steps, people and timeline involved in reaching a decision"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Decision process is how and when the decision will be made; decision criteria are what they'll judge on."
+      },
+      {
+        "id": "csc-010",
+        "module": "discovery",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A keen marketing coordinator loves your pitch but can't approve budget, and no one else has been involved yet. What should you do?",
+        "options": [
+          "Treat the deal as won",
+          "Stop working on the deal",
+          "Go around her to email the CEO without telling her",
+          "Support her as a champion and ask how to involve the budget holder"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Champions are valuable; involve the economic buyer respectfully through them."
+      },
+      {
+        "id": "csc-011",
+        "module": "discovery",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which qualities make a commercial insight effective? (Choose all that apply.)",
+        "options": [
+          "Supported by impressive-sounding invented statistics",
+          "Actionable",
+          "Credible, based on real experience or reputable sources",
+          "Relevant to the buyer's problem"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Good insights are relevant, surprising, credible and actionable. Invented statistics destroy credibility."
+      },
+      {
+        "id": "csc-012",
+        "module": "discovery",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is often the biggest competitor in a sale?",
+        "options": [
+          "The cheapest freelancer",
+          "The largest agency",
+          "Doing nothing",
+          "Social media platforms"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Buyers frequently choose to keep the status quo."
+      },
+      {
+        "id": "csc-013",
+        "module": "value-and-objections",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is the best description of a value proposition?",
+        "options": [
+          "A clear statement of the outcome you'll help achieve, why it matters to them and why you're credible",
+          "A list of all your services",
+          "Your price",
+          "Your logo and tagline"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Value propositions focus on the buyer's outcome and your credibility."
+      },
+      {
+        "id": "csc-014",
+        "module": "value-and-objections",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which statement passes the 'so what?' test for a buyer worried about justifying budget?",
+        "options": [
+          "'Our dashboard has 20 charts'",
+          "'You'll see which creators drive orders, so you can justify spend to your partner'",
+          "'We use advanced analytics'",
+          "'We have an office in Dubai'"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "It ties the feature to the buyer's stated concern."
+      },
+      {
+        "id": "csc-015",
+        "module": "value-and-objections",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A buyer says 'It's too expensive.' What's the best next move?",
+        "options": [
+          "Ask what they're comparing it with or what budget they had in mind",
+          "Offer a 40% discount",
+          "End the call",
+          "Argue that it's cheap"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Clarifying reveals whether it's a comparison, budget or value issue."
+      },
+      {
+        "id": "csc-016",
+        "module": "value-and-objections",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A buyer had a bad experience with influencer campaigns that 'got views but no sales'. Which response is strongest?",
+        "options": [
+          "Tell them influencer marketing always works",
+          "Change the subject",
+          "Ask what went wrong, then show how tracked codes, clear deliverables and reporting address it, perhaps via a pilot",
+          "'That won't happen with us, guaranteed'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Listening fully and addressing the specific failure with evidence and low-risk options builds trust. Guarantees are misleading."
+      },
+      {
+        "id": "csc-017",
+        "module": "value-and-objections",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which practices are appropriate in proposals? (Choose all that apply.)",
+        "options": [
+          "Presenting two or three genuine options",
+          "Using the buyer's own figures to estimate value, labelled as estimates",
+          "Including case studies shared with client permission",
+          "Guaranteeing a specific sales multiple"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Genuine options, labelled estimates and permitted case studies are sound. Guarantees of uncontrollable results mislead."
+      },
+      {
+        "id": "csc-018",
+        "module": "value-and-objections",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In LAARC, what comes after 'Acknowledge'?",
+        "options": [
+          "Listen",
+          "Respond",
+          "Close",
+          "Ask"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "LAARC: Listen, Acknowledge, Ask, Respond, Confirm."
+      },
+      {
+        "id": "csc-019",
+        "module": "negotiation-and-closing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a walk-away point?",
+        "options": [
+          "The least favourable terms you'll accept",
+          "The buyer's budget",
+          "Your ideal outcome",
+          "The end of the meeting"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "It's your bottom line, set before negotiating."
+      },
+      {
+        "id": "csc-020",
+        "module": "negotiation-and-closing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A brand insists they can pay only half your rate. Which response uses interests rather than positions?",
+        "options": [
+          "'My rate is fixed'",
+          "'Then I'm not interested'",
+          "'Fine, half it is'",
+          "'Help me understand what's driving that number?'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Exploring the reason behind a position opens creative options."
+      },
+      {
+        "id": "csc-021",
+        "module": "negotiation-and-closing",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Which trade is best structured?",
+        "options": [
+          "'I'll lower my fee because you asked nicely'",
+          "'I'll lower the price if you don't tell anyone'",
+          "'If you commit to six months, then we can reduce the monthly fee'",
+          "'I'll add extra posts for free'"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "'If… then…' exchanges value for value."
+      },
+      {
+        "id": "csc-022",
+        "module": "negotiation-and-closing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which closing technique best suits a decision involving a business owner and a partner who wasn't in the meeting?",
+        "options": [
+          "Assumptive close with an invoice",
+          "False deadline",
+          "Next-step close: book a review with both decision-makers",
+          "Guilt close"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Complex decisions are closed on the next step."
+      },
+      {
+        "id": "csc-023",
+        "module": "negotiation-and-closing",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which closing tactics are unethical or risky under consumer-protection principles? (Choose all that apply.)",
+        "options": [
+          "Offering a pilot",
+          "Auto-renewal terms not explained upfront",
+          "Stating a price expires today when it doesn't",
+          "Pressuring a clearly confused buyer to sign"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "False urgency, hidden terms and exploiting vulnerability are unethical and often unlawful. Pilots are legitimate."
+      },
+      {
+        "id": "csc-024",
+        "module": "negotiation-and-closing",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is a buying signal?",
+        "options": [
+          "'We already have an agency'",
+          "'Send me a brochure'",
+          "'I'm very busy this month'",
+          "'What are the payment options?'"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Questions about terms suggest readiness to buy."
+      },
+      {
+        "id": "csc-025",
+        "module": "negotiation-and-closing",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "After a buyer says yes, what should you do first?",
+        "options": [
+          "Confirm scope, price, dates, payment, disclosure requirements and cancellation terms in writing",
+          "Celebrate and wait",
+          "Offer another discount",
+          "Stop communicating until the start date"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Written confirmation prevents misunderstandings."
+      },
+      {
+        "id": "csc-026",
+        "module": "follow-up-and-crm",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which follow-up is most valuable?",
+        "options": [
+          "A relevant idea linked to the buyer's goal",
+          "'Just checking in'",
+          "A generic brochure",
+          "'Why haven't you answered?'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Each follow-up should add value."
+      },
+      {
+        "id": "csc-027",
+        "module": "follow-up-and-crm",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A lead hasn't replied to four value-adding follow-ups over a month. What's best?",
+        "options": [
+          "Contact them on a personal channel they haven't shared",
+          "Delete the record without notes",
+          "Send a polite permission-to-close message and record the outcome",
+          "Keep sending daily messages"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Closing the loop is respectful and keeps records accurate."
+      },
+      {
+        "id": "csc-028",
+        "module": "follow-up-and-crm",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which CRM practice keeps forecasts honest?",
+        "options": [
+          "Defining stages by buyer actions and closing zombie deals",
+          "Keeping inactive deals open indefinitely",
+          "Hiding lost deals",
+          "Marking friendly buyers as likely wins"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Buyer-action stage criteria and pruning keep pipelines realistic."
+      },
+      {
+        "id": "csc-029",
+        "module": "follow-up-and-crm",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which are sound data-protection practices for sales records? (Choose all that apply.)",
+        "options": [
+          "Collecting only data you need",
+          "Using two-factor authentication on your CRM",
+          "Deleting data you no longer need",
+          "Adding code buyers to marketing emails without consent"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Minimisation, security and deletion are core principles. Marketing without consent may breach e-marketing rules."
+      },
+      {
+        "id": "csc-030",
+        "module": "follow-up-and-crm",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Every open opportunity in a CRM should have…",
+        "options": [
+          "A contract attached",
+          "A next step and a date",
+          "A discount",
+          "Five contacts"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Next steps keep deals moving and visible."
+      },
+      {
+        "id": "csc-031",
+        "module": "follow-up-and-crm",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You're following up with a Saudi client and a UK client this week. Which consideration is most relevant?",
+        "options": [
+          "Time zones don't matter for email",
+          "Both have identical working weeks",
+          "Local working weeks, time zones and holidays differ, so schedule messages for their working hours",
+          "Only send messages on Fridays"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Saudi Arabia's working week typically runs Sunday to Thursday; timing follow-ups for each buyer shows respect and improves response."
+      },
+      {
+        "id": "csc-032",
+        "module": "consultative-mindset",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "During discovery, you realise your service can't solve the buyer's main problem. What's the best action?",
+        "options": [
+          "Pitch anyway and hope",
+          "Hide it until after signing",
+          "Lower your price",
+          "Say so honestly and, if possible, suggest a better-suited resource"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Fit over force builds reputation and referrals; hiding a misfit leads to failure and damaged trust."
+      }
+    ]
+  }
+}

@@ -1,0 +1,1310 @@
+{
+  "slug": "social-selling-fundamentals",
+  "version": 1,
+  "title": "Social Selling Fundamentals",
+  "subtitle": "Turn your audience into buyers — ethically, compliantly and effectively",
+  "category": "sales",
+  "level": "beginner",
+  "estimatedMinutes": 150,
+  "description": "Social selling is how creators and small businesses turn attention into income without losing the trust that earned the attention in the first place. This course gives you a practical, step-by-step foundation: why people buy from people they trust, how to match campaigns to your audience, how to create content that sells without feeling salesy, and how to handle comments and DMs respectfully.\n\nYou'll also learn the disclosure principles that regulators in the US, UK, EU, Pakistan, the UAE and Saudi Arabia expect, and how to apply them on every format. Finally, you'll set up a simple tracking system and a weekly improvement loop so your results get better every week. Every lesson includes templates, worked examples and a short exercise you can apply to your next Optimize All campaign.",
+  "outcomes": [
+    "Explain the trust equation and apply it to plan content that builds credibility before selling",
+    "Assess a campaign for audience–market fit using need, means and credibility",
+    "Plan a weekly content mix with pillars and a healthy value-to-pitch ratio",
+    "Write offer posts, stories and DMs with clear, low-pressure calls to action",
+    "Disclose paid and commission relationships clearly, prominently and upfront on any platform",
+    "Track attention, interest and action metrics and report sales honestly",
+    "Run a weekly test-and-learn loop to improve conversion"
+  ],
+  "skills": [
+    "Social selling",
+    "Audience research",
+    "Content strategy",
+    "Copywriting",
+    "Advertising disclosure",
+    "Sales analytics"
+  ],
+  "prerequisites": [],
+  "badge": {
+    "name": "Certified Social Seller",
+    "description": "The holder can plan and run ethical social-selling campaigns: assessing audience–market fit, creating value-first content with clear calls to action, managing comments and DMs with permission, disclosing commercial relationships to international standards, and measuring results to improve conversion.",
+    "criteria": "Completed all lessons and scored at least 80% on the final assessment."
+  },
+  "passingScore": 80,
+  "modules": [
+    {
+      "slug": "why-social-selling",
+      "title": "Why social selling works",
+      "summary": "Understand why people buy from people they trust, and how to match what you share to what your audience actually needs.",
+      "lessons": [
+        {
+          "slug": "trust-before-transactions",
+          "title": "Trust before transactions",
+          "type": "video",
+          "durationMinutes": 9,
+          "body": "### The core idea\n\nSocial selling is the practice of helping people make buying decisions through the relationships and reputation you build on social platforms. It is not posting product links and hoping. The people who earn consistently on Optimize All campaigns share one habit: they treat every post, reply and DM as a deposit into a trust account, and they only ask for a sale when the account is in credit.\n\nWhy does this work? When someone scrolls past a brand advert, they know the brand wants their money. When a creator they follow says \"I have used this for six weeks and here is what surprised me\", they hear a peer. Peer recommendations lower perceived risk, and risk, not price, is usually what stops people buying.\n\n### The trust equation\n\nA useful way to think about trust comes from consulting: **Trust = (Credibility + Reliability + Intimacy) ÷ Self-orientation.**\n\n- **Credibility** — do you know what you are talking about? Show your working: how you tested a product, what you compared it against, what it is *not* good for.\n- **Reliability** — do you show up consistently? Posting on a predictable rhythm and answering comments within a day builds this quietly.\n- **Intimacy** — do people feel safe with you? Sharing honest mistakes, replying personally and remembering followers' names all count.\n- **Self-orientation** — are you in it for them or for you? This is the divisor. If every post is a pitch, the whole equation collapses, no matter how credible you are.\n\nThe practical lesson: you can raise trust faster by *reducing* self-orientation (fewer pitches, more genuine help) than by adding more credentials.\n\n### Deposits and withdrawals\n\nThink of your audience relationship as a bank account:\n\n| Deposits | Withdrawals |\n|---|---|\n| Answering a question fully, even when there is no sale in it | Posting a promo with no context |\n| Saying \"this product is not right for you if…\" | Hiding that a post is paid |\n| Following up after someone buys to check it worked | Pushing a product you have not used |\n| Crediting other creators | Ignoring complaints or deleting critical comments |\n\nA sale is a withdrawal. It is a healthy one when the account is in credit, and damaging when it is not.\n\n### Worked example\n\nAyesha is a skincare creator in Lahore with a modest, engaged following. She joins a campaign for a sunscreen brand. Instead of posting the discount code on day one, she:\n\n1. Posts a short reel explaining why she switched sunscreens this summer (credibility, no pitch).\n2. Answers questions in comments about oily skin and humidity (intimacy).\n3. A week later, posts a clearly disclosed review — \"#ad, I am paid by this brand\" — showing two weeks of use, what she liked and one thing she did not.\n4. Shares her code in the caption and in her story with the same disclosure.\n\nHer code gets used steadily over the month, and several buyers message to say they trusted her *because* she mentioned the downside. That is the pattern: honesty about limitations increases conversion, not the opposite.\n\n### Do and don't\n\n**Do**\n- Lead with the problem your audience has, not the product.\n- Share your genuine experience, including trade-offs.\n- Disclose every commercial relationship clearly.\n- Keep a reasonable ratio of helpful content to promotional content.\n\n**Don't**\n- Promote something you have not tried or would not recommend to a friend.\n- Copy-paste the brand's script word for word — your audience follows *your* voice.\n- Treat followers as a list of targets. They are people who chose to listen to you.\n\n### Common mistakes\n\nThe most common mistake new sellers make is urgency without trust: \"Only 24 hours left!\" from someone who has never posted about the category before. It reads as desperate and it usually underperforms. The second is inconsistency: three promotional posts in one week, then silence for a month. Reliability is part of trust.\n\n### Bringing it together\n\nSocial selling is a long game played in short moves. Each post either makes the next recommendation more believable or less. Your job in this course is to learn how to make every move count — ethically, measurably and in a way you would be proud to have your name on.",
+          "video": {
+            "script": "Here is a question worth asking before you share any campaign: why would someone buy because *you* recommended it? The answer is trust. People scroll past adverts every day, but they stop for someone they believe. Think of trust as an equation. Credibility — do you know your stuff? Reliability — do you show up consistently? Intimacy — do people feel safe with you? Add those together, then divide by self-orientation: how much you seem to be in it for yourself. That divisor matters most. You can be the most knowledgeable creator in your niche, but if every post is a pitch, trust collapses. So picture your audience relationship as a bank account. Every genuinely helpful answer, every honest review, every \"this is not for you if…\" is a deposit. Every sale is a withdrawal. Withdrawals are fine — that is how you earn — as long as the account is in credit. Here is what that looks like in practice. Before sharing a discount code, share why the problem matters. Show how you tested the product. Mention one honest downside. Disclose clearly that the post is paid. Then share the code. Counter-intuitively, the honest downside usually helps. It tells your audience you are on their side. In this course, you will learn to build that trust deliberately, turn it into sales without being pushy, stay on the right side of advertising rules, and measure what is working. Let's begin.",
+            "src": null,
+            "poster": null,
+            "captions": null
+          },
+          "keyTakeaways": [
+            "Social selling is helping people decide, not broadcasting links.",
+            "Trust = (credibility + reliability + intimacy) ÷ self-orientation — reduce self-orientation first.",
+            "Honest limitations usually increase conversion because they reduce perceived risk.",
+            "A sale is a withdrawal from a trust account; make sure it is in credit."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In the trust equation, which factor divides the others and can collapse trust even when credibility is high?",
+              "options": [
+                "Intimacy",
+                "Self-orientation",
+                "Follower count",
+                "Reliability"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Self-orientation is the divisor. A highly credible creator who constantly pitches is still trusted less. Follower count is not part of the equation at all."
+            },
+            {
+              "question": "Ayesha mentions one thing she did not like about the sunscreen in her paid review. What is the most likely effect?",
+              "options": [
+                "The brand will automatically cancel the campaign",
+                "Trust rises because the review sounds honest and balanced",
+                "Sales drop because negatives scare buyers",
+                "It has no effect on the audience"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Balanced reviews reduce perceived risk and read as genuine. Brands generally benefit from credible creators; hiding negatives is what erodes trust."
+            },
+            {
+              "question": "Which of these is a trust 'deposit'?",
+              "options": [
+                "Posting a discount code with no context",
+                "Posting three promos in one day",
+                "Answering a follower's question fully when there is no sale in it",
+                "Deleting critical comments"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Helping without an immediate commercial motive builds the relationship. The other options are withdrawals."
+            }
+          ],
+          "activity": "List your last ten posts and label each as a deposit or a withdrawal. If withdrawals outnumber deposits, plan your next five posts as pure value content."
+        },
+        {
+          "slug": "audience-market-fit",
+          "title": "Audience–market fit: selling what your people need",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### What audience–market fit means\n\nStartups talk about product–market fit. As a creator or seller, you need **audience–market fit**: the overlap between what your audience genuinely needs, what they can afford, and what you can credibly recommend. When those three overlap, selling feels like helping. When they don't, even a great product flops.\n\nA fitness creator in Dubai promoting a budget protein bar may do well. The same creator promoting a luxury watch may get likes but very few sales — not because the watch is bad, but because the audience followed for training advice, not status purchases.\n\n### The three-circle test\n\nBefore accepting any campaign on Optimize All, draw three circles:\n\n1. **Need** — does this product solve a problem your audience has told you about (in comments, DMs, polls)?\n2. **Means** — can a typical follower afford it, and can they buy it where they live? A UK-only offer shared to a mostly Pakistani audience will convert poorly.\n3. **Credibility** — can you speak about it from real experience or genuine expertise?\n\nIf a campaign hits all three, go for it. Two out of three can work with extra effort (for example, you can build credibility by testing properly). One out of three is usually a pass.\n\n### How to learn what your audience needs\n\nYou probably know less about your audience than you think. Use these sources:\n\n- **Platform analytics** — age range, top cities and countries, active hours. Check where your audience actually lives; it often surprises creators.\n- **Comments and DMs** — keep a simple note of recurring questions. \"Which one is best for…\" and \"Where can I buy…\" are buying signals.\n- **Polls and question stickers** — ask directly: \"What is the one thing you struggle with in your skincare routine?\"\n- **Saved and shared posts** — saves suggest reference value; shares suggest identity (\"this is so me\").\n\n### Building a simple audience profile\n\nWrite a one-paragraph profile of your *typical* follower. For example:\n\n> \"Mostly women aged 22–34 in Karachi, Lahore and Dubai. Working or studying, budget-conscious but willing to pay for quality in skincare. Often ask about products for humid weather and sensitive skin. Trust recommendations that show before/after over several weeks. Most active in the evening.\"\n\nThis profile becomes your filter. When a campaign lands, ask: would *this person* want this?\n\n### Worked example: choosing between two campaigns\n\nOmar runs a tech-tips account with followers mainly in Riyadh and Jeddah, mostly students and young professionals. He is offered two campaigns:\n\n- **Campaign A**: a premium noise-cancelling headset at a high price point, ships only within the EU.\n- **Campaign B**: a mid-range power bank sold through a regional e-commerce store, with a discount code.\n\nCampaign A fails the *means* test (price and shipping). Campaign B passes need (students travel and run out of battery), means (affordable, local delivery) and credibility (Omar already reviews accessories). Omar picks B, tests it for a week, and posts a comparison with the power bank he used before. Illustratively, if 1 in 200 viewers used his code on B versus 1 in 5,000 on A, B would earn far more despite a lower commission per sale.\n\n### Signs of poor fit\n\n- High likes, low clicks: people enjoy the content but are not in the market.\n- Lots of \"is this available in my country?\" questions.\n- Negative or confused comments: \"Why are you promoting this?\"\n- Unfollows after promotional posts.\n\nWhen you see these, do not push harder. Adjust the product choice.\n\n### Do and don't\n\n**Do** check audience location and currency before accepting campaigns. **Do** ask your audience what they need. **Do** decline campaigns that don't fit — it protects your trust account.\n\n**Don't** assume your audience mirrors you. **Don't** chase the highest commission if the product is irrelevant. **Don't** promote products in regulated categories (for example medicines, financial products, gambling) unless you understand the extra rules and the campaign is compliant in your audience's countries.\n\n### Summary\n\nFit beats volume. A smaller number of well-matched recommendations will outperform a stream of random promotions, and it keeps your audience loyal for the next campaign.",
+          "video": null,
+          "keyTakeaways": [
+            "Audience–market fit is the overlap of need, means and credibility.",
+            "Use analytics, comments, DMs and polls to learn what your audience needs.",
+            "High likes but low clicks is a classic sign of poor fit.",
+            "Declining a poorly matched campaign protects future earnings."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Omar's audience is mainly in Saudi Arabia. A campaign ships only within the EU. Which fit test does it fail most clearly?",
+              "options": [
+                "Means (can they buy it)",
+                "Consistency",
+                "Need",
+                "Credibility"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "If followers cannot buy the product where they live, it fails the means test regardless of need or credibility."
+            },
+            {
+              "question": "Which audience signal is the strongest indicator of buying intent?",
+              "options": [
+                "A view on a story",
+                "A comment asking 'where can I buy this and which size is best for me?'",
+                "A like on a funny reel",
+                "A follower count milestone"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Questions about where to buy and which option suits them are explicit buying signals. Likes and views show attention, not intent."
+            },
+            {
+              "question": "A post gets many likes but almost no code uses. What should you consider first?",
+              "options": [
+                "Whether the product fits your audience's needs and means",
+                "Buying followers",
+                "Posting the same promo more often",
+                "Removing the disclosure"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "High engagement with low conversion usually means poor fit. Repetition, fake followers and removing disclosure are counterproductive or unlawful."
+            }
+          ],
+          "activity": "Write a one-paragraph profile of your typical follower using your analytics and last 30 days of comments. Then score your next campaign offer against need, means and credibility."
+        },
+        {
+          "slug": "the-social-selling-journey",
+          "title": "The social selling journey: from stranger to repeat buyer",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Why a journey, not a single post\n\nVery few people buy the first time they see you. They move through stages, and each stage needs a different kind of content and conversation. Mapping this journey stops you from pitching strangers and from ignoring people who are ready to buy.\n\n### The five stages\n\n1. **Discover** — someone sees your content for the first time (a reel, a shared post, a search result). Goal: be worth following.\n2. **Engage** — they like, comment, save or watch more. Goal: start a two-way relationship.\n3. **Consider** — they are aware they have a need and are comparing options. Goal: help them decide well, even if that means a different product.\n4. **Buy** — they use your code or link. Goal: make buying easy and risk-free.\n5. **Advocate** — they buy again, tag friends, or share results. Goal: delight them and make it easy to spread the word.\n\n### Content and actions for each stage\n\n| Stage | Content that works | Your action |\n|---|---|---|\n| Discover | Short, searchable tips; trending formats with your angle | Use clear hooks and relevant keywords |\n| Engage | Questions, polls, behind-the-scenes, relatable stories | Reply to every early comment |\n| Consider | Comparisons, honest reviews, \"how I chose\" posts | Answer questions specifically; share pros and cons |\n| Buy | Clear offer, code, link, deadline if genuine | Remove friction: correct code, working link, delivery info |\n| Advocate | Customer results (with permission), \"how to get the most from it\" | Thank buyers, ask for feedback, invite them to share |\n\n### Worked example: a modest fashion creator\n\nHira in Islamabad runs a modest-fashion account. Over a month-long campaign for an abaya brand she:\n\n- **Discover**: posts \"3 ways to style one abaya for work, Eid and travel\" — useful, searchable, no pitch.\n- **Engage**: asks \"Which style should I try next week?\" and replies to every comment.\n- **Consider**: posts a side-by-side of fabrics she has tested, explaining which suits hot weather.\n- **Buy**: a clearly disclosed post with her code, sizes, delivery times to Pakistan and the Gulf, and the returns policy.\n- **Advocate**: reposts (with permission) followers wearing their purchase and shares care tips.\n\nNotice that only one of five posts is a direct sales post, yet every post moves people along.\n\n### Diagnosing a stuck journey\n\nIf sales are low, find the stage where people drop off:\n\n- **Few new followers** → Discover problem: hooks, topics or formats.\n- **Followers but no interaction** → Engage problem: content is broadcast, not conversation.\n- **Questions but no purchases** → Consider or Buy problem: unclear offer, price objections, or friction (broken link, wrong code, no delivery info).\n- **One-off buyers only** → Advocate problem: no follow-up or after-sale value.\n\n### The \"one step\" rule\n\nEvery piece of content should aim to move someone **one step** forward, not from stranger to buyer in a single leap. A discovery reel ends with \"follow for part two\"; a consideration post ends with \"ask me anything about sizing\"; a buy post ends with the code and a clear way to get help.\n\n### Do and don't\n\n**Do** plan campaigns across all five stages. **Do** make the buy step as frictionless as possible — test your code and link yourself. **Do** stay in touch after purchase.\n\n**Don't** open with a hard sell to new followers. **Don't** abandon buyers after the transaction; repeat customers are usually cheaper to win than new ones. **Don't** share customer photos or messages without their permission.\n\n### Summary\n\nSocial selling is a sequence of small, helpful steps. Map your content to the stages, find where people get stuck, and fix that stage first.",
+          "video": null,
+          "keyTakeaways": [
+            "Buyers move through discover, engage, consider, buy and advocate.",
+            "Each stage needs different content — only one is a direct pitch.",
+            "Diagnose low sales by finding the stage where people drop off.",
+            "Aim to move people one step forward with each post."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Followers ask lots of sizing and delivery questions but few buy. Which stage most likely needs work?",
+              "options": [
+                "Engage",
+                "Advocate",
+                "Discover",
+                "Consider/Buy — the offer or process has friction"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Questions show interest; low purchases suggest unclear information or friction at the decision and purchase stage."
+            },
+            {
+              "question": "What is the 'one step' rule?",
+              "options": [
+                "Each piece of content should move people one stage forward",
+                "Post only one time per week",
+                "Reply to one comment per post",
+                "Only one call to action per campaign"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "The rule is about progression: you don't try to turn strangers into buyers in a single post."
+            },
+            {
+              "question": "Which action belongs to the Advocate stage?",
+              "options": [
+                "Adding a discount code to your bio",
+                "Using trending audio to reach new people",
+                "Posting a fabric comparison",
+                "Thanking buyers and sharing tips to get the most from their purchase"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Advocacy is about post-purchase delight and making it easy for happy customers to share."
+            }
+          ],
+          "activity": "Map your current or next campaign across the five stages and plan at least one piece of content for each."
+        }
+      ]
+    },
+    {
+      "slug": "content-that-sells",
+      "title": "Content that sells without being salesy",
+      "summary": "Plan a content mix that builds demand naturally, then write offers and calls to action that feel like help rather than pressure.",
+      "lessons": [
+        {
+          "slug": "content-pillars-and-ratio",
+          "title": "Content pillars and the value-to-pitch ratio",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Why structure beats inspiration\n\nCreators who sell consistently rarely rely on daily inspiration. They use **content pillars** — three to five recurring themes that serve their audience — and a deliberate balance between value content and promotional content.\n\n### Choosing your pillars\n\nA good pillar is something your audience wants repeatedly and that connects naturally to products you might promote. For a home-cooking creator in the UAE, pillars could be:\n\n1. **Quick weekday meals** (value, searchable)\n2. **Budget grocery tips** (value, relatable)\n3. **Kitchen tools I actually use** (natural home for product campaigns)\n4. **Family and festive cooking** — Ramadan, Eid, Diwali, Christmas (seasonal, emotional)\n\nNotice how pillar three creates a *natural* context for promotions. When a cookware campaign arrives, it fits a series your audience already enjoys rather than interrupting it.\n\n### The value-to-pitch ratio\n\nThere is no universal perfect ratio, but a useful starting guideline is that **most of your content should be value-first**, with direct promotions making up a clear minority. Many creators start around four or five value posts for every direct pitch and adjust based on audience response. Watch the signals rather than a formula: if engagement, saves and follows drop after promotions, you are pitching too often.\n\nImportantly, a value post can still *feature* a product — a recipe using a pan you have been paid to promote is both helpful and commercial. If there is a commercial relationship, it still needs disclosure. The ratio is about how often you *ask* for the sale, not whether products ever appear.\n\n### Five formats that sell softly\n\n1. **Tutorial** — \"How I make crispy paratha in a non-stick pan.\" The product is the tool, not the hero.\n2. **Honest review** — what you tested, for how long, who it suits, who it doesn't.\n3. **Comparison** — two or three options side by side, including ones you are not paid for.\n4. **Day-in-the-life** — the product appears in a real routine.\n5. **Problem–solution story** — \"My skin used to… I tried… here's what changed.\"\n\nEach gives the viewer something useful even if they never buy.\n\n### Worked example: a weekly plan\n\nFor a campaign week, the cooking creator might plan:\n\n- **Mon** — 20-minute biryani tutorial (value; pan appears, disclosed as a paid partnership)\n- **Tue** — story poll: \"Which kitchen tool do you want me to test next?\" (engagement)\n- **Wed** — budget grocery haul (value)\n- **Thu** — honest review of the pan after two weeks, with code (pitch, disclosed)\n- **Fri** — reply video to follower questions about the pan (consideration)\n- **Sat** — family recipe (value)\n\nOne direct pitch, one supporting product post, and four posts that serve the audience first.\n\n### Writing hooks that respect the viewer\n\nThe first line or first two seconds decide whether anyone sees the rest. Good hooks promise a specific benefit or open a genuine question:\n\n- \"The one mistake that makes your paratha soggy.\"\n- \"I tested three budget sunscreens in 40°C heat — here's the winner.\"\n- \"Stop buying this if you have oily skin.\"\n\nAvoid clickbait you cannot deliver on. A hook that over-promises is a trust withdrawal.\n\n### Common mistakes\n\n- **Campaign whiplash** — switching niche for every paid campaign.\n- **Brand voice takeover** — pasting the brand's polished copy into your casual feed.\n- **All peak, no base** — only posting when there is a campaign, so your audience only sees you selling.\n\n### Do and don't\n\n**Do** plan pillars before campaigns arrive. **Do** let products live inside useful content. **Do** track which formats get saves and shares.\n\n**Don't** pitch in every post. **Don't** remove disclosure because a post \"is mostly value\". **Don't** use hooks you cannot pay off.",
+          "video": null,
+          "keyTakeaways": [
+            "Pick 3–5 content pillars that serve your audience and give products a natural home.",
+            "Keep direct pitches a clear minority and watch audience signals to adjust.",
+            "Tutorials, reviews, comparisons and stories sell softly by being useful first.",
+            "A value post that features a paid product still needs disclosure."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A recipe video features a pan you are paid to promote but does not include a code. Does it need disclosure?",
+              "options": [
+                "Only in the United States",
+                "Yes, because there is a commercial relationship",
+                "No, because there is no direct call to buy",
+                "Only if it gets more than 10,000 views"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Disclosure depends on the material connection, not on whether you include a code or hard sell."
+            },
+            {
+              "question": "What is the main purpose of content pillars?",
+              "options": [
+                "To avoid ever promoting products",
+                "To copy competitors' formats",
+                "To use as many hashtags as possible",
+                "To give your content consistent, audience-relevant themes that products can fit into naturally"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Pillars create consistency and a natural context for relevant campaigns."
+            },
+            {
+              "question": "Which hook is most likely to build trust rather than erode it?",
+              "options": [
+                "'You won't BELIEVE what happened'",
+                "'This will change your life forever!!!'",
+                "'I tested three budget sunscreens in 40°C heat — here's the winner'",
+                "'Doctors hate this trick'"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Specific, deliverable promises attract the right viewers. Exaggerated clickbait over-promises and damages credibility."
+            }
+          ],
+          "activity": "Define three to five content pillars for your account and draft a one-week plan with no more than one direct pitch."
+        },
+        {
+          "slug": "offers-and-ctas",
+          "title": "Offers and calls to action that feel like help",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### The job of a call to action\n\nA call to action (CTA) tells people exactly what to do next. Without one, interested people drift away. With a pushy one, they feel pressured and leave anyway. The goal is a CTA that is **clear, specific and low-pressure**.\n\n### Anatomy of a strong offer post\n\nA good sales post for a discount-code campaign answers five questions before the viewer has to ask:\n\n1. **What is it?** Product name and what it does, in one line.\n2. **Who is it for (and not for)?** \"Great if you have dry skin; skip it if you are acne-prone.\"\n3. **Why now?** Only if there is a genuine reason — a seasonal need or a real deadline set by the brand.\n4. **What's the deal?** The code, what it gives (for example, 15% off), where it works, and any exclusions.\n5. **How do I get help?** \"DM me if you are unsure about sizing.\"\n\nPlus the disclosure, placed where people will see it before they engage.\n\n### CTA ladder: match the ask to the stage\n\nNot every post should say \"buy now\". Use a ladder:\n\n- **Low commitment**: \"Save this for later\", \"Follow for part two\"\n- **Medium**: \"Comment 'size' and I'll help you choose\", \"Vote in my story\"\n- **High**: \"Use code HIRA15 at checkout — valid until Sunday\"\n\nNew followers get low-commitment asks; warm audiences in the consideration stage get medium or high asks.\n\n### Templates you can adapt\n\n**Review post caption**\n> #ad — paid partnership with [Brand]. I've used [product] for [time]. What I liked: [2 points]. What I didn't: [1 point]. Best for [who]. Not ideal if [who]. Code [CODE] gives [benefit] until [date] at [store/country]. Questions? Ask below and I'll answer honestly.\n\n**Story sequence (3 frames)**\n1. The problem: \"My phone dies by 3pm every day 🙃\"\n2. The solution in use: short clip, with paid-partnership label.\n3. The offer: code sticker, link sticker, deadline, \"DM me if you want my honest comparison.\"\n\n**Comment reply**\n> \"Great question! For your skin type I'd actually suggest the gel version — the cream felt heavy on me in humidity. Code AYESHA10 works on both.\"\n\n### Urgency and scarcity — use only when true\n\nGenuine urgency helps people act: \"The brand's Eid discount ends Friday.\" Fake urgency — invented countdowns, \"only 3 left\" when stock is plentiful — is misleading and may breach consumer-protection law in many countries, including the UK, US, Pakistan and the Gulf states. Only state deadlines and limits that the brand has confirmed.\n\n### Reducing friction\n\nMany sales are lost at checkout, not in persuasion. Before posting:\n\n- Test the code yourself (or confirm with the brand) and check it isn't case-sensitive in a way that trips people up.\n- Check the link opens on mobile and lands on the right product.\n- Know the delivery areas, times and returns policy.\n- State currency and country restrictions clearly.\n\n### Worked example\n\nA weak CTA: \"Link in bio, go go go!!!\"\n\nA strong CTA: \"#ad Code OMAR10 gives 10% off the 20,000mAh power bank at [store] until 30 June — delivery across KSA in 2–4 days. If you're choosing between this and the 10,000mAh one, comment 'which' and I'll help.\"\n\nThe strong version is specific, sets expectations, and invites a conversation for people who aren't ready yet.\n\n### Do and don't\n\n**Do** include one primary CTA per post. **Do** state who the product is *not* for. **Do** make help easy to ask for.\n\n**Don't** stack five different asks. **Don't** invent scarcity. **Don't** hide exclusions in tiny text.",
+          "video": null,
+          "keyTakeaways": [
+            "A strong offer post answers what, who, why now, the deal, and how to get help.",
+            "Match the size of the ask to the audience's stage using a CTA ladder.",
+            "Only use urgency and scarcity the brand has confirmed — fake scarcity is misleading.",
+            "Test codes and links yourself; friction kills sales."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which CTA best suits a brand-new follower who has never interacted with you?",
+              "options": [
+                "'Save this for later and follow for part two'",
+                "'Buy now with code X before midnight!'",
+                "'Share this with 10 friends to win'",
+                "'DM me your card details'"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Low-commitment asks suit cold audiences. High-pressure asks are premature; requesting card details in DMs is unsafe."
+            },
+            {
+              "question": "A brand has not set any deadline, but you write 'Only 3 left, ends tonight!'. What is the problem?",
+              "options": [
+                "It is fine if you use capital letters",
+                "Nothing, urgency always helps",
+                "It only matters on LinkedIn",
+                "It is misleading and may breach consumer-protection law"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Invented scarcity or deadlines mislead consumers and can breach consumer-protection rules in many jurisdictions."
+            },
+            {
+              "question": "Why state who a product is NOT for?",
+              "options": [
+                "It has no benefit",
+                "Because brands require it",
+                "To reduce sales on purpose",
+                "To build credibility and reduce returns and disappointed buyers"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Honest qualification increases trust and attracts the right buyers, which reduces refunds and complaints."
+            }
+          ],
+          "activity": "Rewrite your last promotional caption using the five-question offer structure and a single, stage-appropriate CTA."
+        },
+        {
+          "slug": "storytelling-for-social-sellers",
+          "title": "Storytelling posts that convert",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Why stories sell\n\nFacts inform; stories persuade. A story lets the viewer imagine themselves in your situation, which makes the benefit feel real and personal. For social sellers, a short, honest story is often the most effective sales format — and the most natural.\n\n### The before–bridge–after structure\n\nThe simplest selling story has three parts:\n\n- **Before**: the problem as you (or a customer) experienced it. Be specific. \"I was spending two hours every Sunday ironing school uniforms.\"\n- **Bridge**: what you tried, including what didn't work, and how you found the product. \"I tried three steamers; two leaked. This one didn't.\"\n- **After**: the realistic result. \"Now it takes about 40 minutes. It isn't magic — thick cotton still needs a second pass.\"\n\nThe honest caveat in the \"after\" is doing important work: it makes the whole story believable.\n\n### The hero is the viewer, not the product\n\nFrame stories so the product is a tool the hero (you, and by extension your viewer) uses to overcome a problem. Compare:\n\n- Product-as-hero: \"This amazing steamer has 1,800W of power and five settings!\"\n- Viewer-as-hero: \"If Sunday evenings disappear into ironing, here's what gave me an hour back.\"\n\nThe second invites people in; the first lists specifications they can find on the website.\n\n### Story sources you already have\n\n- Your own before-and-after experiences.\n- Questions followers asked and how you solved them.\n- Customer results (only with explicit permission and without exaggeration).\n- Mistakes you made buying the *wrong* product.\n- Cultural and seasonal moments: preparing for Ramadan, back-to-school, wedding season, winter in the UK.\n\n### Short-form story template (30–60 seconds)\n\n1. **Hook (0–3s)**: the relatable problem. \"My hair frizzes the moment I step outside in Dubai humidity.\"\n2. **Struggle (3–15s)**: what you tried. Show, don't just tell.\n3. **Turn (15–30s)**: the product, how you use it, disclosure visible.\n4. **Result (30–45s)**: realistic outcome plus one caveat.\n5. **CTA (45–60s)**: code, or a softer ask like \"Comment 'routine' and I'll share my full steps.\"\n\n### Worked example\n\nA UK-based study-tips creator promotes a note-taking app:\n\n> *Hook*: \"I failed my first-year stats exam.\" *Struggle*: \"My notes were everywhere — three notebooks, screenshots, voice memos.\" *Turn*: \"#ad This year I moved everything into [App]. Here's my setup.\" *Result*: \"I passed with a 2:1 — the app didn't do the studying, but I stopped losing an hour a week looking for notes.\" *CTA*: \"Student code in my bio gives 3 months free.\"\n\nNotice the honest attribution: the app helped organisation; it did not magically raise the grade.\n\n### Ethics of storytelling\n\n- **Never fabricate** a story, a result or a customer. Fake testimonials are prohibited in many jurisdictions, and in the US the FTC's rule on fake reviews and testimonials allows significant penalties.\n- **Don't imply typical results** that aren't typical. If your result was unusual, say so.\n- **Protect privacy**: get permission before sharing someone else's story or screenshot, and blur personal details.\n\n### Common mistakes\n\n- Starting with the product instead of the problem.\n- Stories with no struggle — they feel like adverts.\n- Overclaiming: \"This cured my acne\" when you mean \"my skin looks calmer\".\n\n### Do and don't\n\n**Do** use specific, sensory detail. **Do** include an honest limitation. **Do** keep the story short.\n\n**Don't** invent results. **Don't** make health, weight-loss or income claims you cannot substantiate. **Don't** bury the disclosure after the story.",
+          "video": null,
+          "keyTakeaways": [
+            "Before–bridge–after is the simplest selling story.",
+            "Make the viewer the hero and the product the tool.",
+            "An honest caveat makes the story more believable.",
+            "Never fabricate stories, results or testimonials."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "In the before–bridge–after structure, what belongs in the 'bridge'?",
+              "options": [
+                "Your follower count",
+                "A list of product specifications",
+                "What you tried and how you found the product",
+                "The discount code"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The bridge is the journey from problem to solution — attempts, discovery and how you used the product."
+            },
+            {
+              "question": "Which framing makes the viewer the hero?",
+              "options": [
+                "'Buy now, limited stock'",
+                "'If Sunday evenings disappear into ironing, here's what gave me an hour back'",
+                "'This steamer has 1,800W and five settings!'",
+                "'Brand X is the market leader'"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Viewer-as-hero framing centres their problem and outcome rather than product features."
+            },
+            {
+              "question": "A follower's result was far better than most users see. How should you present it?",
+              "options": [
+                "Without asking permission, since it's positive",
+                "Exaggerate it slightly for impact",
+                "As a typical result",
+                "With permission and a clear note that results vary and this was unusual"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Implying atypical results are typical is misleading; testimonials also need consent."
+            }
+          ],
+          "activity": "Draft a 45-second before–bridge–after script for a product you genuinely use, including one honest caveat and a visible disclosure."
+        }
+      ]
+    },
+    {
+      "slug": "conversations-and-dms",
+      "title": "Conversations and DM etiquette",
+      "summary": "Turn comments into conversations and conversations into sales, using respectful, permission-based messaging.",
+      "lessons": [
+        {
+          "slug": "dm-etiquette",
+          "title": "DM etiquette: permission, pace and privacy",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### DMs are someone's living room\n\nDirect messages feel personal. A good DM is like being invited into someone's home; a spammy one is like a stranger walking in uninvited. The single most important rule of social selling in DMs is **permission**: sell in DMs only when the other person has invited the conversation.\n\n### Inbound versus outbound\n\n- **Inbound DMs** — the person messages you (\"Where did you get that?\", \"Does your code work in Qatar?\"). These are warm; they have asked for help.\n- **Outbound DMs** — you message someone first. These need far more care. Cold pitching strangers with links is widely seen as spam, can get your account restricted under platform rules, and in some contexts may conflict with electronic-marketing and data-protection laws.\n\nA safe principle: **outbound DMs should continue a conversation that already exists in public** (for example, they commented asking a question) and should ask permission before sharing anything commercial.\n\n### The permission-based DM flow\n\n1. **Trigger** — someone comments \"price?\" or \"is this good for sensitive skin?\".\n2. **Public reply** — answer briefly in the comments so others benefit: \"Great question — it's fragrance-free. I'll DM you my full routine if that's OK?\"\n3. **Permission** — if they say yes (or message you), move to DM.\n4. **Understand** — ask one or two questions before recommending anything.\n5. **Recommend** — give an honest answer, including \"this might not be right for you\".\n6. **Offer** — share the code or link, with disclosure.\n7. **Close the loop** — \"Let me know how it goes!\" and follow up once, later, if appropriate.\n\n### DM templates\n\n**Answering an inbound question**\n> \"Hi Sara! Thanks for asking 😊 Quick question so I don't point you to the wrong thing — is your skin more oily or dry? The gel and the cream suit different skin types.\"\n\n**Sharing a code (after they've asked)**\n> \"Based on what you said, I'd go for the gel. Just so you know, I'm a paid partner of the brand. My code AYESHA10 gives 10% off on their site until Sunday. If it doesn't suit you, they have a 14-day return policy.\"\n\n**A polite follow-up (once)**\n> \"Hi Sara, just checking — did the gel arrive OK? Happy to share how I layer it with sunscreen if helpful.\"\n\n### Pace: how often to follow up\n\nOne friendly follow-up after a reasonable gap is usually fine. Repeated chasing (\"Hi?\", \"Did you see my message?\", \"Offer ends soon!!\") damages trust and can be reported as harassment or spam. If someone doesn't reply, let it go.\n\n### Privacy and security\n\n- **Never ask for payment details** in DMs. Buyers should always pay on the brand's official checkout.\n- **Don't share screenshots** of private conversations publicly without consent; blur names and photos if you have permission to share.\n- **Keep personal data minimal**: don't collect phone numbers, addresses or ID unless the process genuinely requires it and the person understands why. Data-protection laws such as the UK GDPR, the EU GDPR, the UAE and Saudi personal-data protection laws and other regional laws apply to many sellers.\n- **Watch for scams**: fake \"brand managers\" and phishing links target creators too.\n\n### Cultural sensitivity\n\nYour audience may span many cultures. Be mindful of greetings, formality and timing — for example, avoid pushy messaging during prayer times or major religious observances, and respect that some followers prefer not to receive messages from people of a different gender. When unsure, keep it polite and professional.\n\n### Do and don't\n\n**Do** reply publicly first, then ask to DM. **Do** ask questions before recommending. **Do** disclose in DMs too.\n\n**Don't** mass-DM followers with links. **Don't** send voice notes or calls uninvited. **Don't** chase more than once.",
+          "video": null,
+          "keyTakeaways": [
+            "Sell in DMs only when invited — permission is the core rule.",
+            "Reply publicly first, then ask before moving to DM.",
+            "Disclose commercial relationships in DMs as well as posts.",
+            "Never collect payment details in DMs; follow up once at most."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Someone comments 'Is this good for sensitive skin?'. What is the best first step?",
+              "options": [
+                "Reply publicly with a brief answer and offer to DM more detail",
+                "Ignore it",
+                "Tag ten friends in the reply",
+                "DM them your code immediately"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "A public reply helps everyone reading and lets you ask permission before moving to private messages."
+            },
+            {
+              "question": "Do you need to disclose your paid relationship when sharing a code in a DM?",
+              "options": [
+                "No, DMs are private",
+                "Only for purchases over a certain amount",
+                "Yes, disclosure applies wherever you recommend a product you're paid for",
+                "Only if the person asks"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "The material connection exists regardless of channel, so disclose in DMs too."
+            },
+            {
+              "question": "A buyer offers to send you their card details so you can order for them. What should you do?",
+              "options": [
+                "Take a bank transfer instead",
+                "Decline and direct them to the brand's official checkout",
+                "Accept and place the order",
+                "Ask for a photo of the card"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Handling payment details creates security, fraud and data-protection risks. Buyers should use official checkouts."
+            }
+          ],
+          "activity": "Write your own versions of the three DM templates in your voice, including a disclosure line, and save them for reuse."
+        },
+        {
+          "slug": "comment-to-conversation",
+          "title": "From comment to conversation to sale",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Comments are your best sales channel\n\nPublic comments are underrated. They are visible to everyone reading your post, they show social proof, and a good answer can persuade dozens of silent readers at once. Treat your comment section as a live Q&A, not an afterthought.\n\n### The first hour matters\n\nOn most platforms, early interaction signals help a post reach more people. Being present in the first hour after posting — replying thoughtfully, asking follow-up questions — both boosts reach and starts conversations while interest is fresh. You don't need to be online all day; schedule posts for times you can respond.\n\n### The LAER method for replies\n\nUse **LAER** — Listen, Acknowledge, Explore, Respond — especially for questions and doubts:\n\n- **Listen**: read the whole comment and check their profile context if public.\n- **Acknowledge**: \"Totally fair question.\"\n- **Explore**: ask one clarifying question if needed. \"Are you using it for travel or daily?\"\n- **Respond**: give a specific, honest answer.\n\nExample:\n> **Comment**: \"Looks nice but is it worth the price?\"\n> **Reply**: \"Totally fair — it's not cheap. What are you comparing it with? For daily commuting I think it's worth it because the battery lasts all week for me, but if you only need it occasionally, the cheaper model is honestly fine.\"\n\nThis reply may *lose* one sale and win five, because everyone reading sees honesty.\n\n### Turning common questions into content\n\nKeep a running list of repeated questions. Each one is a future post: \"You asked if the power bank is allowed on flights — here's what I found.\" Answering at scale reduces DM load and builds consideration.\n\n### Handling negative comments\n\nNegative comments are inevitable. Your response is visible to all, so it matters more than the comment itself.\n\n- **Genuine complaint** (\"Mine arrived broken\"): thank them, apologise that it happened, give the brand's support route, and follow up. Do not argue.\n- **Disagreement** (\"I prefer brand X\"): respect it. \"Fair — X is great for [use]. I prefer this for [reason].\"\n- **Accusation of being paid**: be transparent. \"Yes, this is a paid partnership — it's labelled at the top. My opinions are my own, and I've shared what I didn't like too.\"\n- **Abuse or spam**: hide, restrict or report according to platform tools. You don't owe abusive users a debate.\n\nAvoid deleting legitimate criticism. Audiences notice, and selective deletion can make your reviews misleading.\n\n### From public to private to purchase\n\nA healthy flow looks like this:\n\n1. Public question → public helpful answer.\n2. If personal detail is needed → \"Happy to DM you — OK?\"\n3. In DM → understand, recommend honestly, share code with disclosure.\n4. After purchase → thank, check it arrived, ask for honest feedback.\n\n### Measuring conversation quality\n\nUseful signals include: the number of genuine questions per post, the share of questions you answered, DMs started from comments, and codes used after conversations. You don't need complex tools — a simple weekly note is enough to see patterns.\n\n### Do and don't\n\n**Do** reply to early comments quickly. **Do** use questions as content ideas. **Do** answer criticism calmly and publicly.\n\n**Don't** use generic replies like \"DM me!\" to every comment. **Don't** delete honest negative feedback. **Don't** argue with customers in public.",
+          "video": null,
+          "keyTakeaways": [
+            "Your comment section is a public sales conversation that many people read.",
+            "Use LAER: Listen, Acknowledge, Explore, Respond.",
+            "Handle criticism calmly and transparently; don't delete honest complaints.",
+            "Repeated questions are ready-made content ideas."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "What does the 'E' in LAER stand for?",
+              "options": [
+                "Explain",
+                "Explore",
+                "Escalate",
+                "Encourage"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Explore means asking a clarifying question before responding."
+            },
+            {
+              "question": "Someone comments 'You're only saying this because you're paid'. What is the best response?",
+              "options": [
+                "Deny any payment",
+                "Block them immediately",
+                "Delete the comment",
+                "Acknowledge the partnership openly and explain your honest view, including downsides"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Transparency builds trust with everyone reading. Denying payment would be deceptive; deleting fair comments looks evasive."
+            },
+            {
+              "question": "Why might an honest 'the cheaper model is fine for you' reply increase overall sales?",
+              "options": [
+                "Silent readers see you are trustworthy, making them more likely to buy on your advice",
+                "Brands pay extra for honesty",
+                "Algorithms reward cheaper products",
+                "It doesn't — it always reduces sales"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Public honesty builds credibility with the many people who read comments without posting."
+            }
+          ],
+          "activity": "For your next post, commit to replying to every genuine comment in the first hour using LAER, then note which replies led to DMs or code uses."
+        }
+      ]
+    },
+    {
+      "slug": "disclosure-and-compliance",
+      "title": "Disclosure and advertising rules",
+      "summary": "Learn the principles behind advertising disclosure across major markets and how to apply them on every platform.",
+      "lessons": [
+        {
+          "slug": "disclosure-principles",
+          "title": "Disclosure principles: clear, prominent, upfront",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### Why disclosure matters\n\nWhen you are paid, gifted, or earn commission for recommending something, your audience has a right to know. Disclosure isn't a bureaucratic chore: it is what makes your recommendation honest. Regulators in the US, UK, EU, the Gulf, South Asia and elsewhere broadly agree on one principle — **people must be able to tell when content is advertising.**\n\n> This lesson explains principles, not legal advice. Rules change and vary by country; check current guidance for the markets you reach and follow the campaign brief.\n\n### What counts as a \"material connection\"\n\nDisclose when any of these apply:\n\n- You are **paid** (fixed fee, per post, per view).\n- You earn **commission** or rewards from sales, including through a discount code or affiliate link.\n- You received the product **free** or on loan.\n- You have a **family, employment or ownership** link with the brand.\n- The brand has **control over** what you say (for example, approved scripts).\n- You've been given **other benefits** such as trips, event access or entry into prize draws.\n\nOn Optimize All, earning from campaign shares or discount-code sales is a material connection. Every campaign post needs a disclosure.\n\n### The three tests: clear, prominent, upfront\n\n1. **Clear** — use plain words people understand: \"Ad\", \"Advert\", \"Paid partnership with [Brand]\", \"Sponsored\", or in other languages an equivalent people will recognise (for example \"اعلان\" in Arabic or \"اشتہار\" in Urdu when posting in those languages). Vague tags like \"#sp\", \"#collab\", \"#thanks[Brand]\" or \"#partner\" on their own are generally considered unclear.\n2. **Prominent** — people must notice it without effort. Not buried in a pile of hashtags, not in pale text, not hidden behind \"see more\".\n3. **Upfront** — before people engage with the content: at the start of a caption, on screen at the start of a video, said out loud in audio or live content.\n\n### Platform tools help but may not be enough\n\nMost major platforms offer a \"paid partnership\" or \"branded content\" label. Use it — it is often required by the platform's own policies. But regulators such as the UK's ASA and the US FTC have indicated that you should not rely *only* on a platform tool if it isn't clear and prominent enough in context. A safe practice is **platform label + \"Ad\" in the first line of your caption or on screen**.\n\n### Format-by-format checklist\n\n- **Feed post / carousel**: \"Ad\" or \"#ad\" at the start of the caption; paid-partnership label on.\n- **Reels / short video**: on-screen text at the start plus caption disclosure; say it if you speak.\n- **Stories**: label on *every* frame that promotes the product, not just the first.\n- **Live streams**: say it at the start and repeat periodically, since people join late.\n- **YouTube**: tick the paid-promotion setting, say it verbally near the start, and mention it in the description above the fold.\n- **Link-in-bio / link pages**: label affiliate links, for example \"Affiliate links — I earn commission\".\n- **DMs and WhatsApp**: say you're a paid partner before or when sharing the code.\n\n### Worked example: fixing a weak disclosure\n\n**Weak**: \"Loving my new trainers 😍 Use code ZAIN15! #fitness #running #style #sp #gymlife\"\n\nProblems: \"#sp\" is unclear and buried; there is no upfront label.\n\n**Fixed**: \"Ad | Paid partnership with [Brand]. I've run 60km in these trainers over three weeks — here's my honest take… Code ZAIN15 gives 15% off.\"\n\n### Honesty beyond the label\n\nDisclosure doesn't make misleading claims acceptable. Your content must still be truthful: you must actually have used the product if you say you have, and you must not make claims (health, results, earnings) you cannot back up. Your honest opinion must be *your* opinion, even when a brand gives you talking points.\n\n### Do and don't\n\n**Do** disclose every time, on every platform and in every format. **Do** put disclosure first. **Do** keep records of your campaign briefs and agreements.\n\n**Don't** rely on ambiguous hashtags. **Don't** hide disclosure in the middle of hashtags. **Don't** assume \"everyone knows I'm paid\".",
+          "video": null,
+          "keyTakeaways": [
+            "Disclose any material connection: payment, commission, free products, or other benefits.",
+            "Disclosure must be clear, prominent and upfront.",
+            "Use the platform label plus a plain 'Ad' in the caption or on screen.",
+            "Disclosure doesn't make false or unsubstantiated claims acceptable."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Which disclosure is clearest?",
+              "options": [
+                "'Ad | Paid partnership with [Brand]' at the start of the caption",
+                "#collab",
+                "#thanks at the end of 30 hashtags",
+                "#sp"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Plain words placed upfront meet the clear, prominent and upfront tests. Abbreviations and buried tags generally don't."
+            },
+            {
+              "question": "You earn commission when followers use your discount code but you weren't paid a fee. Must you disclose?",
+              "options": [
+                "Only if the brand asks",
+                "Yes, commission is a material connection",
+                "Only if you received a free product too",
+                "No, only fixed fees count"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Commission from codes or affiliate links is a material connection that must be disclosed."
+            },
+            {
+              "question": "In a five-frame story promoting a product, where should the disclosure appear?",
+              "options": [
+                "Only on the first frame",
+                "Only on the last frame",
+                "In your bio",
+                "On every frame that promotes the product"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Viewers may skip frames, so each promotional frame needs its own label."
+            }
+          ],
+          "activity": "Audit your last five sponsored or code-based posts against the clear, prominent and upfront tests, and fix any that fall short."
+        },
+        {
+          "slug": "regional-rules-at-a-glance",
+          "title": "Regional rules at a glance: US, UK, Pakistan, UAE and KSA",
+          "type": "article",
+          "durationMinutes": 10,
+          "body": "### A principle-level tour\n\nYour audience rarely lives in one country, so it helps to know the main frameworks. This lesson summarises principles as of 2026. It is **not legal advice**: rules change, enforcement varies, and campaign briefs may impose stricter requirements. When in doubt, disclose more clearly, not less, and check official guidance.\n\n### United States — FTC\n\n- The Federal Trade Commission's **Endorsement Guides** require disclosure of material connections between endorsers and brands. Disclosures must be \"clear and conspicuous\" — hard to miss and easy to understand.\n- Creators can be held responsible, not just brands.\n- Endorsements must reflect honest opinions and actual use.\n- The FTC's rule on **consumer reviews and testimonials** (in force since late 2024) prohibits fake reviews, buying or selling fake reviews, and certain undisclosed insider reviews, and allows civil penalties.\n- The FTC publishes plain-English guidance for influencers (\"Disclosures 101 for Social Media Influencers\").\n\n### United Kingdom — ASA/CAP and CMA\n\n- The **Advertising Standards Authority (ASA)** enforces the CAP Code, which requires marketing communications to be \"obviously identifiable\".\n- ASA and CMA guidance recommends labels like **\"Ad\"**, **\"Advert\"** or **\"#ad\"** placed upfront, and treats affiliate links and gifted products as requiring disclosure in many situations.\n- The **Competition and Markets Authority (CMA)** enforces consumer-protection law. Since the Digital Markets, Competition and Consumers Act 2024 came into force, the CMA can directly impose significant fines for breaches, and fake reviews are explicitly banned.\n- The ASA publicly names non-compliant influencers.\n\n### European Union\n\n- The Unfair Commercial Practices Directive prohibits hidden advertising, and the Digital Services Act requires platforms to give users tools to label commercial content. Several member states (for example France) have specific influencer laws. If you reach EU audiences, disclose to EU standards too.\n\n### Pakistan\n\n- There is no single influencer code equivalent to the UK's, but the **Competition Act 2010** prohibits **deceptive marketing practices**, enforced by the **Competition Commission of Pakistan (CCP)**, which has acted against misleading advertising.\n- Provincial **consumer protection laws** also prohibit false or misleading claims.\n- Electronic-media and cyber laws may apply to certain content.\n- Best practice: disclose clearly (in English, Urdu or the language of your post), avoid unsubstantiated claims, and follow brand briefs.\n\n### United Arab Emirates\n\n- Advertising and media content are regulated federally, with the **UAE Media Council** overseeing media and advertising content.\n- The UAE requires people who carry out **paid advertising on social media** to hold the appropriate **licence or permit** from the relevant authority, and advertising content must respect UAE media content standards (including respect for religion, national identity and public morals).\n- Disclosure of paid content is expected, and misleading claims are prohibited under consumer-protection law.\n- Check current licensing requirements before accepting paid work aimed at UAE audiences, as they have been updated in recent years.\n\n### Saudi Arabia (KSA)\n\n- The **General Authority for Media Regulation (GAMR)** — formerly GCAM — runs the **Mawthooq** licence for individuals who advertise on social media. Advertising without the required licence can lead to penalties.\n- Content must comply with Saudi media content standards, and consumer-protection and e-commerce rules prohibit misleading advertising.\n\n### A practical compliance checklist\n\n1. **Know where your audience is** (use your analytics).\n2. **Check licensing** if you do paid advertising aimed at the UAE or KSA.\n3. **Disclose upfront** using plain language in the language of the post.\n4. **Substantiate claims**: don't say \"clinically proven\", \"best\", \"cures\" or \"guaranteed results\" unless the brand can prove it and it's allowed.\n5. **Respect category rules**: health, financial products, alcohol, gambling, tobacco/vaping and children's products have extra restrictions or bans in many markets.\n6. **Keep records**: briefs, contracts, approvals and proof of disclosure.\n\n### Worked example\n\nA Dubai-based creator with followers in the UAE, KSA, Pakistan and the UK accepts a skincare campaign. She confirms her UAE advertising permit is current, checks that the brief doesn't ask for medical claims (\"cures eczema\" becomes \"helped my dry patches feel calmer\"), labels every post \"Ad\" in English and Arabic, and uses the platform label. Following the strictest applicable standard keeps her safe across all four markets.\n\n### Do and don't\n\n**Do** follow the strictest standard that applies to your audience. **Do** check licences before paid work in the Gulf. **Do** refuse briefs that ask you to hide the ad or make unproven claims.\n\n**Don't** assume that local rules for your home country are the only ones that apply. **Don't** treat this summary as a substitute for current official guidance.",
+          "video": null,
+          "keyTakeaways": [
+            "Across regions, the shared principle is that advertising must be recognisable as advertising.",
+            "US FTC and UK ASA/CMA hold creators responsible; fake reviews are banned.",
+            "The UAE and KSA require licences or permits for paid social-media advertising.",
+            "Pakistan's Competition Act prohibits deceptive marketing — disclose clearly anyway.",
+            "When in doubt, follow the strictest standard that applies to your audience."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "A creator reaches audiences in Pakistan, the UK and the UAE. Which approach is safest?",
+              "options": [
+                "Follow only Pakistan's rules because she lives there",
+                "Disclose only in UK posts",
+                "Skip disclosure if the platform label is on",
+                "Follow the strictest applicable standard across her audience markets"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Audiences span markets, so meeting the strictest applicable standard keeps you compliant everywhere."
+            },
+            {
+              "question": "What is Mawthooq?",
+              "options": [
+                "A US FTC guide",
+                "A UK disclosure hashtag",
+                "A Saudi licence for individuals who advertise on social media",
+                "A Pakistani consumer court"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Mawthooq is the Saudi licensing scheme for social-media advertisers, administered by the media regulator."
+            },
+            {
+              "question": "A brief asks you to say a cream 'cures eczema'. What should you do?",
+              "options": [
+                "Say it; the brand takes responsibility",
+                "Say it but add #ad",
+                "Push back and avoid unsubstantiated medical claims",
+                "Say it only in Stories"
+              ],
+              "correct": [
+                2
+              ],
+              "explanation": "Disclosure doesn't legitimise misleading claims. Medical claims usually need strong substantiation and are restricted in many markets."
+            }
+          ],
+          "activity": "Check your analytics for your top three audience countries and write down, for each, the disclosure label you'll use and any licence or category rules to check."
+        }
+      ]
+    },
+    {
+      "slug": "measuring-results",
+      "title": "Measuring results and improving",
+      "summary": "Track the numbers that actually show sales progress, report honestly, and run a simple weekly improvement loop.",
+      "lessons": [
+        {
+          "slug": "metrics-that-matter",
+          "title": "Metrics that matter for social sellers",
+          "type": "article",
+          "durationMinutes": 9,
+          "body": "### Vanity versus value\n\nLikes feel good, but they don't pay. Social sellers need a small set of metrics that connect effort to outcomes. Think of them in three layers:\n\n1. **Attention** — reach, impressions, views, watch time.\n2. **Interest** — saves, shares, comments with questions, profile visits, link clicks, DMs started.\n3. **Action** — code uses, attributed sales, revenue, commission earned, repeat purchases.\n\nAttention without interest means your content entertains but doesn't connect to a need. Interest without action points to friction or a weak offer.\n\n### Key formulas\n\nUse simple ratios to compare posts fairly:\n\n- **Engagement rate** = (likes + comments + saves + shares) ÷ reach × 100\n- **Click-through rate (CTR)** = link clicks ÷ reach (or views) × 100\n- **Conversion rate** = orders ÷ clicks × 100 (or code uses ÷ reach if there's no link)\n- **Earnings per 1,000 reach** = commission earned ÷ reach × 1,000\n- **Repeat-buyer share** = repeat orders ÷ total orders\n\n**Illustrative example** (numbers are made up for learning): a reel reaches 20,000 people and gets 300 link clicks (CTR 1.5%). Of those, 12 people buy (conversion 4%). At a commission of 5 per sale in your currency, you earn 60 — that's 3 per 1,000 reach. A carousel reaches 8,000 but converts 10 buyers — earnings per 1,000 reach of 6.25. The carousel performed better per viewer, even with less reach.\n\n### Attribution basics\n\nAttribution means connecting a sale to what caused it. On Optimize All, your **personal discount code** and your **tracked share links** are the main ways sales are attributed to you. Keep in mind:\n\n- Some buyers see your content but buy later without your code — you won't see those sales.\n- Some use your code after seeing it elsewhere (a friend shares it).\n- Different platforms report reach differently.\n\nSo treat numbers as directional, compare like with like, and look at trends over several weeks rather than one post.\n\n### Reporting honestly\n\nWhen you report sales or results — to Optimize All, to a brand, or in a media kit:\n\n- Report only **genuine, verifiable orders** (with order IDs or platform proof where required).\n- Never inflate reach, buy followers or engagement, or use engagement pods to fake interest. Brands increasingly detect it, and fraudulent reporting can lead to removal from programmes and forfeited earnings.\n- Don't count your own purchases or those of people you pay to buy as organic sales unless the programme explicitly allows it.\n- Share screenshots of analytics directly from the platform; don't edit them.\n\n### A simple tracking sheet\n\nColumns you need: date, platform, format, topic/pillar, hook, reach, saves, shares, comments with questions, clicks, code uses, revenue/commission, notes. Ten minutes a week is enough.\n\n### Common mistakes\n\n- Chasing reach with viral trends unrelated to your niche — the wrong audience rarely buys.\n- Judging a campaign on day one; many purchases come days later.\n- Comparing yourself to much larger accounts instead of your own past performance.\n\n### Do and don't\n\n**Do** track attention, interest and action. **Do** compare ratios, not raw numbers. **Do** report only genuine sales.\n\n**Don't** buy followers or engagement. **Don't** edit screenshots. **Don't** over-interpret a single post.",
+          "video": null,
+          "keyTakeaways": [
+            "Track three layers: attention, interest and action.",
+            "Compare posts with ratios such as CTR, conversion and earnings per 1,000 reach.",
+            "Attribution is imperfect — look at trends over weeks.",
+            "Report only genuine, verifiable sales; never fake metrics."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Post A reaches 20,000 and earns 60 in commission; Post B reaches 8,000 and earns 50. Which performed better per viewer?",
+              "options": [
+                "Post B",
+                "They are equal",
+                "Post A",
+                "Impossible to compare"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Post B earns 6.25 per 1,000 reach versus 3 for Post A, so it converted its audience better."
+            },
+            {
+              "question": "Lots of saves and clicks but very few orders most likely indicates…",
+              "options": [
+                "Friction or a weak offer at the point of purchase",
+                "An attention problem",
+                "Too many followers",
+                "Good performance that needs no changes"
+              ],
+              "correct": [
+                0
+              ],
+              "explanation": "Interest without action suggests problems at checkout: price, code issues, delivery, or unclear offer."
+            },
+            {
+              "question": "Which is acceptable when reporting sales on a campaign?",
+              "options": [
+                "Editing an analytics screenshot to round up",
+                "Using engagement pods",
+                "Adding your own purchases to boost numbers without permission",
+                "Reporting verified orders with order IDs"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Only genuine, verifiable sales should be reported. The others are misleading or fraudulent."
+            }
+          ],
+          "activity": "Set up a tracking sheet with the columns in this lesson and log your last five posts, calculating CTR and earnings per 1,000 reach where you have data."
+        },
+        {
+          "slug": "weekly-improvement-loop",
+          "title": "The weekly improvement loop",
+          "type": "article",
+          "durationMinutes": 8,
+          "body": "### Small experiments, steady gains\n\nThe best social sellers aren't the most creative on day one; they're the ones who learn fastest. A simple **weekly improvement loop** turns your tracking sheet into better results.\n\n### The loop: Review → Hypothesise → Test → Decide\n\n1. **Review (15 minutes)** — look at last week's posts. Which had the best earnings per 1,000 reach? The best save rate? The most questions?\n2. **Hypothesise** — write one sentence: \"I think comparison posts convert better than tutorials for my audience because people are choosing between options.\"\n3. **Test** — change *one* thing next week (format, hook, posting time, CTA, offer framing) and keep everything else similar.\n4. **Decide** — keep, drop or re-test. Record what you learned.\n\nChanging one variable at a time is what makes the lesson clear. If you change the format, the time and the product in the same week, you won't know what made the difference.\n\n### What to test\n\n- **Hooks**: problem-first vs. result-first.\n- **Formats**: review vs. comparison vs. tutorial.\n- **CTAs**: \"comment for help\" vs. direct code.\n- **Timing**: evening vs. lunchtime, weekday vs. weekend (bearing in mind religious and cultural calendars — for example, activity patterns often shift during Ramadan).\n- **Placement**: code in first line of caption vs. pinned comment vs. story sticker.\n\n### Qualitative signals matter too\n\nNumbers don't tell you *why*. Read comments and DMs weekly and note:\n\n- Repeated objections (\"too expensive\", \"doesn't ship here\").\n- Words your audience uses to describe their problem — use those words in your hooks.\n- Feedback from buyers after purchase.\n\n### Worked example\n\nZain, a fitness creator in Manchester with followers in the UK and Pakistan, reviews four weeks of data. Tutorials get high reach but few code uses; honest reviews get less reach but most of his sales. Several comments ask whether the brand ships to Pakistan (it doesn't).\n\nHis hypothesis: \"Reviews convert better because they answer 'is it worth it?'; and I'm losing Pakistani viewers on delivery.\" His test: two reviews next week with clearer \"UK only\" messaging and a pinned comment answering delivery questions. Result: similar sales, fewer frustrated comments. Decision: keep the change, and look for a campaign that suits his Pakistani audience next month.\n\n### Knowing when to stop a campaign\n\nIt's fine to stop promoting a product if:\n\n- Your audience consistently reports poor quality or service.\n- The brand asks you to make claims you're not comfortable with.\n- Conversions stay near zero despite testing, and the fit is clearly poor.\n\nTell the brand or platform respectfully and move on. Protecting your audience protects your future income.\n\n### A monthly reflection\n\nOnce a month, ask three bigger questions:\n\n1. Which pillar and format earned the most trust *and* revenue?\n2. Which campaigns should I say no to next time?\n3. What did my audience ask for that I haven't delivered?\n\n### Do and don't\n\n**Do** change one variable at a time. **Do** combine numbers with comments and DMs. **Do** write down what you learn.\n\n**Don't** abandon a format after one post. **Don't** chase every trend. **Don't** keep promoting something your audience tells you is poor.",
+          "video": null,
+          "keyTakeaways": [
+            "Run a weekly Review → Hypothesise → Test → Decide loop.",
+            "Change one variable at a time so you know what caused the result.",
+            "Use comments and DMs to understand why numbers move.",
+            "Stop promoting products that harm audience trust."
+          ],
+          "knowledgeCheck": [
+            {
+              "question": "Why test only one change per week?",
+              "options": [
+                "Platforms limit changes",
+                "Because more changes cost money",
+                "It makes content go viral",
+                "So you can tell which change caused the difference"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Isolating one variable makes the result interpretable."
+            },
+            {
+              "question": "Several comments say a product doesn't ship to their country. What's the best response?",
+              "options": [
+                "Tell them to use a friend's address abroad",
+                "Ignore them",
+                "Delete the comments",
+                "Clarify delivery areas upfront and consider campaigns that suit that audience"
+              ],
+              "correct": [
+                3
+              ],
+              "explanation": "Clear expectations reduce frustration; the feedback also tells you about audience–market fit."
+            },
+            {
+              "question": "Which is a valid reason to stop promoting a product?",
+              "options": [
+                "You got bored of the colour",
+                "Your audience consistently reports poor quality",
+                "A competitor posted about it",
+                "It had one slow day"
+              ],
+              "correct": [
+                1
+              ],
+              "explanation": "Consistent quality complaints signal a trust risk; one slow day isn't meaningful."
+            }
+          ],
+          "activity": "Write one hypothesis for next week, choose the single variable you'll change, and schedule 15 minutes at the end of the week to review the result."
+        }
+      ]
+    }
+  ],
+  "finalExam": {
+    "questionCount": 20,
+    "timeLimitMinutes": 30,
+    "maxAttemptsPerDay": 3,
+    "pool": [
+      {
+        "id": "ssf-001",
+        "module": "why-social-selling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which best describes social selling?",
+        "options": [
+          "Buying ads on social media",
+          "Helping people make buying decisions through relationships and reputation on social platforms",
+          "Posting as many product links as possible",
+          "Sending bulk messages to followers"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Social selling is relationship-led. Link spam and mass messaging are the opposite; paid ads are a separate discipline."
+      },
+      {
+        "id": "ssf-002",
+        "module": "why-social-selling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A creator with high credibility pitches in nearly every post and sees trust fall. Which part of the trust equation explains this?",
+        "options": [
+          "Low credibility",
+          "Low intimacy",
+          "Low reliability",
+          "High self-orientation"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Self-orientation is the divisor; constant pitching raises it and reduces trust regardless of credibility."
+      },
+      {
+        "id": "ssf-003",
+        "module": "why-social-selling",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A campaign's product is relevant and affordable, but you have never used it or anything similar. Which step best improves fit before promoting?",
+        "options": [
+          "Hide the disclosure to seem independent",
+          "Promote immediately with the brand's script",
+          "Decline all future campaigns",
+          "Test it properly so you can speak credibly"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "It passes need and means; testing builds the missing credibility."
+      },
+      {
+        "id": "ssf-004",
+        "module": "why-social-selling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "An account has strong follower growth and many comments, but almost no one asks about products or clicks links. Where in the journey is the biggest gap likely to be?",
+        "options": [
+          "Discover",
+          "Consider — content isn't connecting to a need or decision",
+          "Engage",
+          "Advocate"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "People discover and engage but don't move into consideration, suggesting content doesn't bridge to needs or products."
+      },
+      {
+        "id": "ssf-005",
+        "module": "why-social-selling",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which is a clear buying signal from a follower?",
+        "options": [
+          "A heart emoji",
+          "Watching a story",
+          "'Does this come in a size for a 5-year-old and ship to Jeddah?'",
+          "Following you"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Specific questions about size and delivery indicate purchase intent."
+      },
+      {
+        "id": "ssf-006",
+        "module": "why-social-selling",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which of these are signs of poor audience–market fit? (Choose all that apply.)",
+        "options": [
+          "High likes but very low clicks on product posts",
+          "Confused comments asking why you're promoting it",
+          "Many 'is this available in my country?' questions",
+          "Buyers returning to purchase again"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Availability questions, low click-through despite likes, and confused comments signal poor fit. Repeat buyers indicate good fit."
+      },
+      {
+        "id": "ssf-007",
+        "module": "content-that-sells",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is a content pillar?",
+        "options": [
+          "A single viral post",
+          "A paid advertisement",
+          "A recurring theme your audience values that gives your content consistency",
+          "A hashtag set"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Pillars are the recurring themes around which you plan content."
+      },
+      {
+        "id": "ssf-008",
+        "module": "content-that-sells",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "You post a tutorial where a paid-partner product appears but you don't mention a code. What is required?",
+        "options": [
+          "Nothing, it's not a sales post",
+          "A disclaimer that results vary",
+          "A link in bio",
+          "Disclosure, because a commercial relationship exists"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Disclosure depends on the material connection, not on whether there's a direct call to buy."
+      },
+      {
+        "id": "ssf-009",
+        "module": "content-that-sells",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which CTA is most appropriate for a warm audience in the consideration stage?",
+        "options": [
+          "'Comment \"size\" and I'll help you pick the right one'",
+          "'Buy now, last chance forever!'",
+          "'Follow me for more'",
+          "'Tag 20 friends'"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Consideration-stage buyers benefit from help deciding; the medium-commitment ask fits."
+      },
+      {
+        "id": "ssf-010",
+        "module": "content-that-sells",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A brand asks you to post 'Only 5 left — ends tonight!' but stock is plentiful and the discount runs all month. What should you do?",
+        "options": [
+          "Decline that wording and state the real deadline instead",
+          "Post it but add #ad",
+          "Post it; the brand is responsible",
+          "Post it only in Stories so it disappears"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "False scarcity and deadlines are misleading and can breach consumer-protection law; disclosure doesn't fix a misleading claim."
+      },
+      {
+        "id": "ssf-011",
+        "module": "content-that-sells",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "In before–bridge–after storytelling, what is the 'after'?",
+        "options": [
+          "A list of competitors",
+          "The discount code",
+          "The realistic result, ideally with an honest caveat",
+          "The brand's logo"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "The 'after' is the outcome; an honest caveat makes it believable."
+      },
+      {
+        "id": "ssf-012",
+        "module": "content-that-sells",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which elements should a strong discount-code offer post include? (Choose all that apply.)",
+        "options": [
+          "Who the product is for and not for",
+          "Five different calls to action",
+          "The code, what it gives and any key exclusions",
+          "A disclosure placed upfront"
+        ],
+        "correct": [
+          0,
+          2,
+          3
+        ],
+        "explanation": "Clarity on fit, the deal and disclosure are essential. Multiple competing CTAs confuse people."
+      },
+      {
+        "id": "ssf-013",
+        "module": "content-that-sells",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A follower's dramatic result is far better than typical. You want to feature it. Which approach is compliant and ethical?",
+        "options": [
+          "Share with their permission and state clearly that results vary and this was unusual",
+          "Share without permission since it's positive",
+          "Edit the photo to look even better",
+          "Present it as typical"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Implying atypical results are typical is misleading; consent and accuracy are required."
+      },
+      {
+        "id": "ssf-014",
+        "module": "conversations-and-dms",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the core rule for selling in DMs?",
+        "options": [
+          "Follow up daily until they reply",
+          "Send every new follower your code",
+          "Always use voice notes",
+          "Only sell when the person has invited the conversation"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Permission is the foundation of respectful DM selling."
+      },
+      {
+        "id": "ssf-015",
+        "module": "conversations-and-dms",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Someone comments 'price?' on your reel. What is the best sequence?",
+        "options": [
+          "Ignore it and post again",
+          "Reply 'DM me' and nothing else",
+          "DM your code without replying publicly",
+          "Reply publicly with helpful info, offer to DM details, then recommend honestly with disclosure"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "A public answer helps everyone reading; asking permission before DMing respects the person."
+      },
+      {
+        "id": "ssf-016",
+        "module": "conversations-and-dms",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "A buyer hasn't replied to your DM with the code for a week. What's appropriate?",
+        "options": [
+          "Post publicly about them",
+          "Call them",
+          "One friendly follow-up at most, then let it go",
+          "Message daily until they respond"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "One polite follow-up is reasonable; repeated chasing damages trust and may be reported as spam."
+      },
+      {
+        "id": "ssf-017",
+        "module": "conversations-and-dms",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A commenter says the product arrived broken and they're angry. Which response is best?",
+        "options": [
+          "Argue that it's the courier's fault",
+          "Ignore it",
+          "Thank them, apologise it happened, give the brand's support route publicly and follow up",
+          "Delete the comment to protect sales"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Calm, visible help builds trust with everyone reading. Deleting legitimate complaints can make your content misleading."
+      },
+      {
+        "id": "ssf-018",
+        "module": "conversations-and-dms",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Where should buyers enter their payment details?",
+        "options": [
+          "In your DMs",
+          "On the brand's official checkout",
+          "Over a voice call with you",
+          "In a comment"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Payment should happen on official, secure checkouts, never through personal messages."
+      },
+      {
+        "id": "ssf-019",
+        "module": "conversations-and-dms",
+        "difficulty": "medium",
+        "type": "multiple",
+        "question": "Which practices protect privacy in social selling? (Choose all that apply.)",
+        "options": [
+          "Collecting home addresses 'just in case'",
+          "Blurring names and photos in shared messages",
+          "Never asking for card details in messages",
+          "Getting permission before sharing a DM screenshot"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Consent, redaction and avoiding payment data protect people. Collecting unnecessary personal data creates risk and may breach data-protection laws."
+      },
+      {
+        "id": "ssf-020",
+        "module": "disclosure-and-compliance",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which of these is a material connection that needs disclosure?",
+        "options": [
+          "Buying a product with your own money and no brand contact",
+          "Earning commission when people use your discount code",
+          "Following a brand account",
+          "Liking a brand's post"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Commission is a material connection. Buying independently with no relationship is not."
+      },
+      {
+        "id": "ssf-021",
+        "module": "disclosure-and-compliance",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Which disclosure best meets the 'clear, prominent, upfront' tests?",
+        "options": [
+          "#partner hidden in the comments",
+          "#sp at the end of the caption",
+          "'Ad | Paid partnership with [Brand]' in the first line plus the platform label",
+          "'Thanks to my friends at [Brand]' at the end"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Plain words in the first line, combined with the platform tool, are clear, prominent and upfront."
+      },
+      {
+        "id": "ssf-022",
+        "module": "disclosure-and-compliance",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "During a 40-minute live stream promoting a product, how should you disclose?",
+        "options": [
+          "Only in the stream title",
+          "At the start and periodically throughout, as viewers join late",
+          "No disclosure is needed for live content",
+          "Once at the start only"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "People join lives at different times, so repeat the disclosure."
+      },
+      {
+        "id": "ssf-023",
+        "module": "disclosure-and-compliance",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "A creator based in Karachi has 40% of followers in the UAE and KSA and wants to accept a paid campaign aimed at Gulf buyers. What should she check first?",
+        "options": [
+          "Whether Gulf licensing or permit rules for paid social advertising apply, alongside disclosure and content standards",
+          "Whether the product is trending",
+          "Nothing; only Pakistani rules apply to her",
+          "Only the brand's logo guidelines"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "The UAE and KSA require licences/permits for paid social advertising and have content standards; creators should check before accepting Gulf-targeted paid work."
+      },
+      {
+        "id": "ssf-024",
+        "module": "disclosure-and-compliance",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which statements about disclosure are accurate? (Choose all that apply.)",
+        "options": [
+          "Disclosure doesn't make a misleading claim acceptable",
+          "In the UK, the CMA can now directly fine businesses for consumer-law breaches such as fake reviews",
+          "Relying only on a platform label may not be enough if it isn't prominent",
+          "Gifted products never need disclosure"
+        ],
+        "correct": [
+          0,
+          1,
+          2
+        ],
+        "explanation": "Claims must still be truthful, platform labels may need supplementing, and the CMA gained direct fining powers under the DMCC Act 2024. Gifted products often do require disclosure."
+      },
+      {
+        "id": "ssf-025",
+        "module": "disclosure-and-compliance",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which body enforces the CAP Code on advertising in the UK?",
+        "options": [
+          "FTC",
+          "CCP",
+          "GAMR",
+          "ASA"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The Advertising Standards Authority enforces the CAP Code. The FTC is US, the CCP is Pakistan, and GAMR is Saudi Arabia."
+      },
+      {
+        "id": "ssf-026",
+        "module": "measuring-results",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "Which metric belongs to the 'action' layer?",
+        "options": [
+          "Saves",
+          "Reach",
+          "Impressions",
+          "Code uses and attributed sales"
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "Action metrics measure purchases; reach and impressions are attention, saves are interest."
+      },
+      {
+        "id": "ssf-027",
+        "module": "measuring-results",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Illustrative data: Reel reaches 30,000 and earns 45; Carousel reaches 10,000 and earns 40. What should you conclude?",
+        "options": [
+          "Reach is all that matters",
+          "The carousel earned more per 1,000 reach and is worth testing further",
+          "Neither is worth analysing",
+          "The reel performed better per viewer"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Carousel: 4.0 per 1,000 reach; reel: 1.5. Compare ratios, then test further before drawing firm conclusions."
+      },
+      {
+        "id": "ssf-028",
+        "module": "measuring-results",
+        "difficulty": "medium",
+        "type": "single",
+        "question": "Why should you look at trends over several weeks rather than one post?",
+        "options": [
+          "Attribution is imperfect and single posts are noisy",
+          "Platforms hide single-post data",
+          "It saves time",
+          "Brands only accept monthly reports"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "Delayed purchases and attribution gaps make single-post results unreliable."
+      },
+      {
+        "id": "ssf-029",
+        "module": "measuring-results",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "You want to know if comparison posts beat tutorials for your audience. Which test design is best?",
+        "options": [
+          "Ask a competitor",
+          "Keep time, product and CTA similar and change only the format",
+          "Post only tutorials for a month",
+          "Change format, time and product in the same week"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Changing one variable at a time makes the result interpretable."
+      },
+      {
+        "id": "ssf-030",
+        "module": "measuring-results",
+        "difficulty": "hard",
+        "type": "multiple",
+        "question": "Which are acceptable when reporting campaign results to a brand? (Choose all that apply.)",
+        "options": [
+          "Including purchases made with money you gave friends to buy",
+          "Unedited analytics screenshots from the platform",
+          "Clearly labelling estimates as estimates",
+          "Verified orders with order IDs"
+        ],
+        "correct": [
+          1,
+          2,
+          3
+        ],
+        "explanation": "Genuine, verifiable and clearly labelled data is acceptable. Paying people to purchase and reporting it as organic is fraudulent."
+      },
+      {
+        "id": "ssf-031",
+        "module": "measuring-results",
+        "difficulty": "easy",
+        "type": "single",
+        "question": "What is the formula for click-through rate?",
+        "options": [
+          "Orders ÷ clicks × 100",
+          "Link clicks ÷ reach (or views) × 100",
+          "Revenue ÷ orders",
+          "Likes ÷ followers"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "CTR measures the share of people reached who clicked."
+      },
+      {
+        "id": "ssf-032",
+        "module": "why-social-selling",
+        "difficulty": "hard",
+        "type": "single",
+        "question": "Two campaigns: A pays a high commission for a luxury item few followers can afford; B pays less for an affordable item your audience asks about often. Which is usually the better choice and why?",
+        "options": [
+          "A, because commission per sale is higher",
+          "Neither; never accept campaigns",
+          "B, because fit with need and means usually produces far more sales and protects trust",
+          "Both at once in the same post"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "Earnings depend on conversions; a well-fitting, affordable product usually earns more overall and keeps trust intact."
+      }
+    ]
+  }
+}
