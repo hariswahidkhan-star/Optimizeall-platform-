@@ -245,7 +245,8 @@
 
 /* Secondary lines inside the title cell (category, platforms, a payout summary) stay quiet: only the record name
    carries the weight. */
-.ui-table-card__primary :is(.text-muted, .text-small, .ui-badge) {
+.ui-table-card__primary :is(.text-muted, .text-small, .ui-badge),
+.ui-table-card__primary > * > :not(:first-child) {
   font-weight: var(--weight-regular);
   letter-spacing: normal;
 }
@@ -307,6 +308,17 @@
   color: var(--color-heading);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
+}
+
+/* Inside a card the phone cards are already framed: a hairline instead of a second floating shadow. */
+.ui-card__body .ui-table-cards:not(.ui-table-cards--compact) > .ui-table-card,
+.ui-card__body .ui-table-cards--compact {
+  border-radius: var(--radius-control);
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+.ui-card__body .ui-table-cards > .ui-table-card[data-selected='true'] {
+  box-shadow: 0 0 0 2px var(--color-primary);
 }
 
 /* Compact rows (long lists on phones): one surface split by hairlines; title + status, then a single meta line
