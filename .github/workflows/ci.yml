@@ -283,6 +283,16 @@ jobs:
           E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-admin
         run: scripts/e2e-journeys.sh
 
+      # The academy and learning journey end to end (public academy, lessons, knowledge checks, exam fail/retake/pass,
+      # certificate PDF, verification, LinkedIn links, admin revocation), Demo seed, SQLite.
+      - name: Learning journey (scripts/e2e-journeys.sh, E2E_SUITE=j-learning, SQLite)
+        env:
+          E2E_SUITE: j-learning
+          E2E_DB_PROVIDER: sqlite
+          E2E_SKIP_BUILD: "1"
+          E2E_WORK_DIR: ${{ runner.temp }}/e2e-j-learning
+        run: scripts/e2e-journeys.sh
+
       # Accessibility & responsive audit (docs/ACCESSIBILITY.md): every portal's representative pages at 360/768/1280 px
       # with axe (WCAG 2.2 A/AA, light and dark contrast) and no horizontal scroll, plus keyboard/focus behaviour.
       - name: Accessibility audit (scripts/e2e-journeys.sh, E2E_SUITE=a11y, SQLite)
@@ -426,6 +436,8 @@ jobs:
             ${{ runner.temp }}/e2e-j-delivery/web.log
             ${{ runner.temp }}/e2e-j-admin/api.log
             ${{ runner.temp }}/e2e-j-admin/web.log
+            ${{ runner.temp }}/e2e-j-learning/api.log
+            ${{ runner.temp }}/e2e-j-learning/web.log
             ${{ runner.temp }}/e2e-a11y/api.log
             ${{ runner.temp }}/e2e-a11y/web.log
             ${{ runner.temp }}/e2e-crawl/api.log

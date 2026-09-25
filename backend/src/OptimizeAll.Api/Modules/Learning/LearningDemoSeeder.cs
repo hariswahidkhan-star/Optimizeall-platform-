@@ -76,18 +76,19 @@ public sealed class LearningDemoSeeder(
 
         // The new participant has just started; a few other participants give the admin statistics something to show.
         var newEmail = Normalization.Email(DemoAccounts.NewParticipant);
+        var newcomer = await db.Set<User>().FirstOrDefaultAsync(u => u.NormalizedEmail == newEmail, ct);
         var learners = await db.Set<User>()
             .Where(u => u.Email.EndsWith("@" + DemoAccounts.Domain) && u.Status == UserStatus.Active && u.Id != sara.Id &&
+                        u.NormalizedEmail != newEmail &&
                         u.Roles.Any(r => r.Role == Role.Participant) && !u.Roles.Any(r => r.Role != Role.Participant))
             .OrderBy(u => u.Email).Take(8).ToListAsync(ct);
-        var newcomer = learners.FirstOrDefault(u => u.NormalizedEmail == newEmail);
         if (newcomer is not null)
         {
             var e = Enrol(db, newcomer.Id, starter, now.AddDays(-1));
             Complete(db, e, starterDoc, 1, now.AddHours(-20), random);
         }
         var passedCount = 0;
-        foreach (var (learner, index) in learners.Where(u => u != newcomer).Select((u, i) => (u, i)))
+        foreach (var (learner, index) in learners.Select((u, i) => (u, i)))
         {
             var enrolledAt = now.AddDays(-25 + index * 2);
             var e = Enrol(db, learner.Id, starter, enrolledAt);

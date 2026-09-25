@@ -104,6 +104,12 @@ import { defineConfig, devices } from '@playwright/test';
  * the browser at UTC+14, UTC-12 and UTC+05:45, invoices in currencies with 0/2/3 minor units, and a list of identical
  * rows paged through plus wildcard/quote/backslash/emoji search. Serial, one worker, desktop only. Run it with
  * `E2E_SUITE=j-edge E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
+ *
+ * The j-learning suite walks the academy and learning journey: anonymous visitors browse /learn, read a lesson and try a
+ * knowledge check; a new participant enrols, completes every lesson, fails the final exam, retakes and passes, downloads
+ * the certificate PDF, checks the LinkedIn "Add to profile"/"Share" links and the verification page; an admin revokes the
+ * certificate and the verification page shows it revoked. Serial, one worker, desktop only, Demo seed:
+ * `E2E_SUITE=j-learning E2E_DB_PROVIDER=sqlite scripts/e2e-journeys.sh`.
  */
 const suite = process.env.E2E_SUITE ?? 'smoke';
 /** Suites whose mobile project runs only responsive.spec.ts (and whose desktop project runs everything else). */
@@ -123,6 +129,7 @@ const desktopJourney = [
   'j-edge',
   'j-email',
   'j-auth',
+  'j-learning',
 ].includes(suite);
 /** The finance journey compares datetime-local input (browser time) with UTC periods, so its browser runs in UTC. */
 const finance = suite === 'j-finance';

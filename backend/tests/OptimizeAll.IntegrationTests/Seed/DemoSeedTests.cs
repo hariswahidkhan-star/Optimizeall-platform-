@@ -97,6 +97,8 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
             var seeder = scope.ServiceProvider.GetRequiredService<DemoSeeder>();
             await seeder.SeedAsync(scope.ServiceProvider.GetRequiredService<AppDbContext>(), CancellationToken.None);
             await seeder.SeedAsync(scope.ServiceProvider.GetRequiredService<AppDbContext>(), CancellationToken.None);
+            var learning = scope.ServiceProvider.GetRequiredService<OptimizeAll.Api.Modules.Learning.LearningDemoSeeder>();
+            await learning.SeedAsync(scope.ServiceProvider.GetRequiredService<AppDbContext>(), CancellationToken.None);
         }
 
         var after = await CountsAsync();
@@ -122,7 +124,38 @@ public sealed class DemoSeedTests(DemoSeedFixture fx) : IClassFixture<DemoSeedFi
         ["tickets"] = await db.Set<SupportTicket>().CountAsync(),
         ["audit"] = await db.Set<AuditLog>().CountAsync(),
         ["rates"] = await db.Set<ExchangeRate>().CountAsync(),
+        ["enrolments"] = await db.Set<OptimizeAll.Domain.Learning.Enrolment>().CountAsync(),
+        ["attempts"] = await db.Set<OptimizeAll.Domain.Learning.ExamAttempt>().CountAsync(),
+        ["certificates"] = await db.Set<OptimizeAll.Domain.Learning.Certificate>().CountAsync(),
     });
+
+    [Fact]
+    public async Task Sara_holds_a_certificate_and_demo_learners_give_the_learning_admin_real_statistics()
+    {
+        var sara = await fx.LoginAsync(DemoAccounts.Sara);
+        var dashboard = await (await sara.GetAsync("/api/v1/me/learning")).ReadJsonAsync();
+        var certificate = dashboard.GetProperty("certificates").EnumerateArray()
+            .Single(c => c.GetProperty("courseSlug").GetString() == OptimizeAll.Api.Modules.Learning.LearningDemoSeeder.GettingStarted);
+        Assert.False(certificate.GetProperty("revoked").GetBoolean());
+        Assert.True(dashboard.GetProperty("stats").GetProperty("completed").GetInt32() >= 1);
+        var verification = await (await fx.NewClient().GetAsync($"/api/v1/public/learning/certificates/{certificate.GetProperty("id").GetString()}")).ReadJsonAsync();
+        Assert.Equal("valid", verification.GetProperty("status").GetString());
+        var exam = await (await sara.GetAsync($"/api/v1/me/learning/courses/{OptimizeAll.Api.Modules.Learning.LearningDemoSeeder.GettingStarted}/exam")).ReadJsonAsync();
+        Assert.Contains(exam.GetProperty("attempts").EnumerateArray(), a => a.GetProperty("passed").GetBoolean() == false);
+        Assert.Contains(exam.GetProperty("attempts").EnumerateArray(), a => a.GetProperty("passed").GetBoolean());
+
+        var newcomer = await fx.LoginAsync(DemoAccounts.NewParticipant);
+        var theirs = await (await newcomer.GetAsync("/api/v1/me/learning")).ReadJsonAsync();
+        Assert.Equal(OptimizeAll.Api.Modules.Learning.LearningDemoSeeder.GettingStarted,
+            theirs.GetProperty("continue").GetProperty("course").GetProperty("slug").GetString());
+
+        var admin = await fx.LoginAsync(DemoAccounts.Admin);
+        var courses = await (await admin.GetAsync("/api/v1/admin/learning/courses?category=Platform")).ReadJsonAsync();
+        var row = courses.GetProperty("items").EnumerateArray().Single(c => c.GetProperty("slug").GetString() == OptimizeAll.Api.Modules.Learning.LearningDemoSeeder.GettingStarted);
+        Assert.True(row.GetProperty("enrolments").GetInt32() >= 5);
+        Assert.True(row.GetProperty("attempts").GetInt32() >= 3);
+        Assert.True(row.GetProperty("isFeatured").GetBoolean());
+    }
 
     [Fact]
     public async Task Demo_logins_work_through_the_api()
