@@ -71,7 +71,7 @@ function AccountCard({
   const titleId = `social-${account.id}-title`;
 
   return (
-    <Card as="article" aria-labelledby={titleId} flat={!account.isActive}>
+    <Card as="article" aria-labelledby={titleId} flat={!account.isActive} className="pp-social-card">
       <CardBody className="stack">
         <div className="pp-section__head">
           <div className="cluster" style={{ ['--cluster-gap' as string]: 'var(--space-2)' }}>
@@ -147,7 +147,7 @@ function AccountCard({
           ]}
         />
 
-        <div className="pp-actions">
+        <div className="pp-actions pp-social-card__actions">
           {account.isActive ? (
             <>
               <Button size="sm" variant="secondary" leadingIcon={<Pencil />} onClick={onEdit} disabled={busy}>

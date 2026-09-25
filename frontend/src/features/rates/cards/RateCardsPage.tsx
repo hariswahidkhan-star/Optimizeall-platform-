@@ -84,7 +84,7 @@ export function RateCardsPage() {
           <span className="text-muted">No rates</span>
         ) : (
           <span className="stack rt-stack-xs">
-            <span>
+            <span className="rt-nowrap">
               <Money amount={row.minAmount} currency={row.currency} />
               {row.maxAmount !== null && row.maxAmount !== row.minAmount && (
                 <>

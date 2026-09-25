@@ -32,7 +32,10 @@
 
 .dc-code-card__brand {
   margin: 0;
+  font-family: var(--font-display);
   font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   color: var(--color-heading);
 }
@@ -49,10 +52,13 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4);
-  border: 1.5px dashed var(--color-accent);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--color-accent-soft), var(--color-primary-soft));
+  position: relative;
+  padding: var(--space-5);
+  border: 1.5px dashed color-mix(in srgb, var(--color-accent) 70%, transparent);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(70% 120% at 100% 0%, var(--color-accent-soft) 0%, transparent 70%),
+    linear-gradient(135deg, var(--color-surface-2), var(--color-primary-soft));
 }
 
 .dc-token__code {
@@ -60,9 +66,10 @@
   min-width: 0;
   margin: 0;
   font-family: var(--font-mono);
-  font-size: var(--text-h2);
+  font-size: clamp(1.375rem, 1.2rem + 1vw, 1.875rem);
   font-weight: var(--weight-bold);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
   color: var(--color-heading);
   overflow-wrap: anywhere;
 }
@@ -73,19 +80,19 @@
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-accent-text);
 }
 
 .dc-facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
   gap: var(--space-3);
   margin: 0;
 }
 
 .dc-facts > div {
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-control);
   background: var(--color-surface-2);
 }
 
@@ -100,13 +107,37 @@
   color: var(--color-heading);
 }
 
+/* Inside a code card the KPIs are one hairline-split strip, not cards nested in a card. */
 .dc-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: var(--space-3);
+  gap: 1px;
+  overflow: hidden;
+  border-radius: var(--radius-control);
+  background: var(--color-border);
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+.dc-stats > .ui-stat {
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--space-4);
+}
+
+@media (max-width: 639px) {
+  .dc-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dc-stats > .ui-stat {
+    padding: var(--space-3) var(--space-4);
+  }
 }
 
 .dc-terms summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   cursor: pointer;
   font-weight: var(--weight-semibold);
   color: var(--color-link);
@@ -173,4 +204,10 @@
 .dc-tier-row > :not(button) {
   flex: 1 1 9rem;
   min-width: 0;
+}
+
+.dc-empty-note {
+  margin: 0;
+  padding: var(--space-5);
+  text-align: center;
 }

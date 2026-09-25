@@ -346,7 +346,9 @@ function OverviewTab({ program: p }: { program: CodeProgram }) {
                   ),
               },
             ]}
-            emptyState={<p className="text-small text-muted">Everyone is paid the program rate.</p>}
+            emptyState={
+              <p className="text-small text-muted dc-empty-note">Everyone is paid the program rate.</p>
+            }
           />
         </CardBody>
       </Card>

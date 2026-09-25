@@ -581,3 +581,28 @@
   font-weight: 600;
   color: var(--color-heading);
 }
+
+/* Plain-text empty states inside a DataTable get the same breathing room as <EmptyState>. */
+.mg-empty-note {
+  margin: 0;
+  padding: var(--space-5);
+  text-align: center;
+}
+
+/* Campaign list: the title column gets room to breathe; the title reads as a heading, not a blue link. */
+.mg-campaign-cell {
+  min-width: 14rem;
+}
+
+.mg-campaign-cell > .ui-link {
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.mg-campaign-cell > .ui-link:hover {
+  color: var(--color-link-hover);
+}
+
+.mg-counts {
+  max-width: 12rem;
+}

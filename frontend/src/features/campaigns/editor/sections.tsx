@@ -558,7 +558,11 @@ export function ContentSection({ form, set, errors, disabled }: SectionProps) {
             columns={columns}
             rows={form.disclosures}
             getRowId={(r) => r.key}
-            emptyState={<p className="text-muted">No overrides. Every post uses the default disclosure.</p>}
+            emptyState={
+              <p className="text-muted mg-empty-note">
+                No overrides. Every post uses the default disclosure.
+              </p>
+            }
           />
         </CardBody>
       </Card>

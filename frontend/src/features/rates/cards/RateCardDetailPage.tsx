@@ -342,6 +342,7 @@ function VersionRates({ version, compact }: { version: RateCardVersion; compact?
       {!compact && (
         <KeyValueList
           layout="inline"
+          className="rt-terms"
           items={[
             { label: 'Currency', value: version.currency },
             {

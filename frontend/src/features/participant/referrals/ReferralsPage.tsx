@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { CopyField } from '@/components/ui/CopyField';
+import { StatGrid } from '@/components/ui/Dashboard';
 import { DataTable } from '@/components/ui/DataTable';
 import { DateTime } from '@/components/ui/DateTime';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -55,7 +56,7 @@ function ReferralsView({ data }: { data: Referrals }) {
     <div className="pp-page">
       <PageHeader title="Referrals" description="Invite people who’d enjoy sharing brands they believe in." />
 
-      <Card as="section" aria-labelledby="referral-link-title">
+      <Card as="section" aria-labelledby="referral-link-title" className="pp-invite">
         <CardHeader titleId="referral-link-title" title="Your referral link" />
         <CardBody className="stack">
           <CopyField label="Referral link" value={data.link} />
@@ -100,12 +101,12 @@ function ReferralsView({ data }: { data: Referrals }) {
         <h2 id="referral-stats-title" className="pp-section__title">
           Your referrals
         </h2>
-        <div className="pp-stats">
+        <StatGrid strip min="160px">
           <Stat label="Signed up" measurement="Count" value={data.stats.registered} />
           <Stat label="Qualified" measurement="Count" value={data.stats.qualified} />
           <Stat label="Rewarded" measurement="Count" value={data.stats.rewarded} />
           <Stat label="Reward pending" measurement="Count" value={data.stats.pendingReward} />
-        </div>
+        </StatGrid>
         <DataTable
           caption="People you referred"
           rows={data.items}
