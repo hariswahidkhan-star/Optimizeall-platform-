@@ -178,7 +178,7 @@ export function CalendarPage() {
   }, [query.data]);
 
   const chip = (p: PostSummary) => (
-    <div key={p.id} className="stack" style={{ gap: 2 }}>
+    <div key={p.id} className="sm-chip-wrap">
       <button
         type="button"
         data-post-id={p.id}

@@ -234,6 +234,7 @@ export function InvoiceDetailPage() {
             <CardBody className="stack">
               <TotalsList preview={{ totals: invoice.totals }} currency={invoice.currency} />
               <KeyValueList
+                layout="inline"
                 items={[
                   { label: 'Paid', value: <Money amount={invoice.amountPaid} currency={invoice.currency} /> },
                   { label: 'Credited', value: <Money amount={invoice.amountCredited} currency={invoice.currency} /> },

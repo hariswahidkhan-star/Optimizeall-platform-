@@ -74,16 +74,19 @@
 .sm-calendar {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
   position: relative;
 }
 
 .sm-calendar__head {
-  padding: var(--space-2);
+  padding: var(--space-2) var(--space-3);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   color: var(--color-text-muted);
   background: var(--color-surface-2);
   border-bottom: 1px solid var(--color-border);
@@ -91,7 +94,7 @@
 
 .sm-day {
   min-height: 7.5rem;
-  padding: var(--space-1);
+  padding: var(--space-2);
   border-right: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-surface);
@@ -101,8 +104,16 @@
   min-width: 0;
 }
 
+.sm-day:nth-child(7n) {
+  border-right: 0;
+}
+
 .sm-day--outside {
-  background: var(--color-surface-2);
+  background: color-mix(in srgb, var(--color-surface-2) 70%, transparent);
+}
+
+.sm-day--outside .sm-day__number {
+  color: var(--color-text-muted);
 }
 
 .sm-day--today .sm-day__number {
@@ -116,11 +127,17 @@
 }
 
 .sm-day__number {
+  display: inline-grid;
+  place-items: center;
   align-self: flex-start;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-full);
+  color: var(--color-heading);
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  border-radius: var(--radius-full);
-  padding: 0 var(--space-1);
+  font-variant-numeric: tabular-nums;
 }
 
 .sm-awareness {
@@ -129,21 +146,69 @@
   overflow-wrap: anywhere;
 }
 
+/* A post chip with its "move" icon button pinned to the chip's top-right corner (a sibling, not nested). */
+.sm-chip-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sm-chip-wrap > .ui-button--icon {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+  min-height: 26px;
+}
+
 .sm-chip {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   width: 100%;
   text-align: left;
   font: inherit;
   font-size: var(--text-xs);
-  padding: var(--space-1);
+  padding: var(--space-2);
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
-  background: var(--color-surface-2);
+  border-left: 3px solid var(--color-border-strong);
+  background: var(--color-surface);
   color: var(--color-text);
   cursor: grab;
   min-width: 0;
+  transition:
+    box-shadow var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+
+.sm-chip:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.sm-chip > .ui-badge {
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.sm-chip-wrap:has(> .ui-button--icon) .sm-chip__title {
+  padding-right: 24px;
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .sm-chip-wrap > .ui-button--icon {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
+
+  .sm-chip-wrap:has(> .ui-button--icon) .sm-chip__title {
+    padding-right: 40px;
+  }
 }
 
 .sm-chip:focus-visible {
@@ -159,11 +224,15 @@
 }
 
 .sm-chip--Failed {
-  border-color: var(--danger-border);
+  border-left-color: var(--danger-fg);
 }
 
 .sm-chip--Published {
-  border-color: var(--success-border);
+  border-left-color: var(--success-fg);
+}
+
+.sm-chip--Scheduled {
+  border-left-color: var(--color-primary);
 }
 
 .sm-chip--moving {

@@ -12,8 +12,10 @@
 }
 
 .admin-section-title {
+  font-family: var(--font-display);
   font-size: var(--text-h3);
   font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
   color: var(--color-heading);
   margin: 0;
 }
@@ -66,10 +68,6 @@
   margin-block-end: var(--space-2);
 }
 
-.admin-stat-grid {
-  --grid-min: 180px;
-}
-
 .admin-two-col,
 .admin-settings-grid {
   display: grid;
@@ -79,7 +77,143 @@
 }
 
 .admin-settings-group + .admin-settings-group {
-  margin-block-start: var(--space-4);
+  margin-block-start: var(--space-8);
+}
+
+.admin-settings-group {
+  scroll-margin-top: calc(var(--portal-topbar-height) + var(--space-4));
+}
+
+/* Settings: a section nav (sticky rail on wide screens, a scrollable chip row on phones) beside the groups. */
+.admin-settings-layout {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.admin-settings-sections {
+  min-width: 0;
+}
+
+.admin-settings-nav ul {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 0 var(--space-1);
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.admin-settings-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-text);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.admin-settings-nav a:hover {
+  color: var(--color-heading);
+  background: var(--color-surface-2);
+}
+
+.admin-settings-nav a:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.admin-settings-nav__count {
+  min-width: 1.25rem;
+  padding: 0 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+@media (min-width: 1100px) {
+  .admin-settings-layout {
+    grid-template-columns: 13rem minmax(0, 1fr);
+  }
+
+  .admin-settings-nav {
+    position: sticky;
+    top: calc(var(--portal-topbar-height) + var(--space-6));
+  }
+
+  .admin-settings-nav ul {
+    flex-direction: column;
+    gap: 2px;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .admin-settings-nav a {
+    display: flex;
+    justify-content: space-between;
+    min-height: 38px;
+    border-radius: var(--radius-control);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .admin-settings-nav a:hover {
+    background: color-mix(in srgb, var(--color-surface-2) 80%, transparent);
+  }
+}
+
+/* Setting cards: the key reads as a quiet chip, the facts as a tinted strip and the actions sit on the right. */
+.admin-setting-key code {
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.admin-settings-grid .admin-facts {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-2);
+}
+
+.admin-settings-grid .admin-facts dd {
+  color: var(--color-heading);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-settings-grid .ui-card__footer {
+  justify-content: flex-end;
+}
+
+.admin-settings-grid > .ui-card {
+  height: 100%;
+}
+
+.admin-settings-grid > .ui-card > form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.admin-settings-grid > .ui-card > form > .ui-card__body {
+  flex: 1;
 }
 
 .admin-form-grid,
@@ -625,10 +759,16 @@
   flex-direction: column;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
-  box-shadow: var(--shadow-xs), var(--shadow-highlight);
+  box-shadow: var(--shadow-card);
+  transition:
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+
+.admin-link-stat:has(.admin-link-stat__link:hover) {
+  box-shadow: var(--shadow-card-hover);
 }
 
 .admin-link-stat .ui-stat {
@@ -643,15 +783,27 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-1);
+  min-height: 44px;
   padding: var(--space-2) var(--space-5);
   border-top: 1px solid var(--color-border);
-  background: var(--color-surface-2);
+  background: color-mix(in srgb, var(--color-surface-2) 70%, transparent);
+  color: var(--color-heading);
   font-size: 0.8125rem;
+  font-weight: var(--weight-medium);
   text-decoration: none;
 }
 
 .admin-link-stat__link:hover {
-  text-decoration: underline;
+  color: var(--color-link-hover);
+  text-decoration: none;
+}
+
+.admin-link-stat__link:hover svg {
+  transform: translateX(2px);
+}
+
+.admin-link-stat__link svg {
+  transition: transform var(--duration-fast) var(--ease-standard);
 }
 
 .admin-link-stat__link svg {
@@ -757,4 +909,17 @@
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+/* Analytics metric strips on phones: two narrow tiles per row, so long figures (a currency code plus amount) and
+   formula hints wrap or shrink rather than being clipped. */
+@media (max-width: 639px) {
+  .admin-analytics-group .ui-stat__value {
+    font-size: 1.375rem;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-analytics-group .ui-stat {
+    overflow-wrap: anywhere;
+  }
 }

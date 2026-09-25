@@ -91,7 +91,12 @@ export function IntegrationsPage() {
                     <li key={p.key}>
                       <article className="int-card" aria-labelledby={`int-${p.key}`}>
                         <header className="int-card__head">
-                          <h3 id={`int-${p.key}`}>{p.name}</h3>
+                          <span className="int-card__id">
+                            <span className="int-card__mark" aria-hidden="true">
+                              {p.name.charAt(0)}
+                            </span>
+                            <h3 id={`int-${p.key}`}>{p.name}</h3>
+                          </span>
                           {c ? <Badge tone={statusTone[c.status]}>{c.status}</Badge> : <Badge tone="neutral">Not connected</Badge>}
                         </header>
                         <p className="int-card__desc">{p.description}</p>
@@ -129,7 +134,7 @@ export function IntegrationsPage() {
                         )}
                         <div className="int-card__actions">
                           {!c || c.status === 'Disconnected' ? (
-                            <Button size="sm" leadingIcon={<PlugZap />} onClick={() => setEditing({ provider: p, connection: c })} aria-label={`${c ? 'Reconnect' : 'Connect'} ${p.name}`}>
+                            <Button size="sm" variant="secondary" leadingIcon={<PlugZap />} onClick={() => setEditing({ provider: p, connection: c })} aria-label={`${c ? 'Reconnect' : 'Connect'} ${p.name}`}>
                               {c ? 'Reconnect' : 'Connect'}
                             </Button>
                           ) : (

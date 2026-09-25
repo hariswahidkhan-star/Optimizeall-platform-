@@ -287,7 +287,7 @@ function DeliveryDashboard({ data, canTrack }: { data: AgencyDashboard; canTrack
             </h2>
             <p className="ui-dash-head__description">The clients you manage and your team&apos;s week.</p>
           </div>
-          <DashboardGrid>
+          <DashboardGrid className="ui-dash-grid--start">
             <DashboardCell span={7}>
               <Card as="section" aria-label="Client health">
                 <CardHeader

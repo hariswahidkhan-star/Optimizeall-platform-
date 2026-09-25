@@ -24,8 +24,12 @@
 }
 
 .int-category {
-  margin: 0;
+  margin: var(--space-4) 0 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
   font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
 }
 
 .int-grid {
@@ -38,14 +42,19 @@
 }
 
 .int-card {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-3);
-  align-content: start;
   height: 100%;
-  padding: var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.int-card:hover {
+  box-shadow: var(--shadow-card-hover);
 }
 
 .int-card__head {
@@ -56,9 +65,36 @@
   justify-content: space-between;
 }
 
+.int-card__id {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* A monogram tile stands in for the provider's logo (no external brand assets). */
+.int-card__mark {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+}
+
 .int-card__head h3 {
   margin: 0;
+  color: var(--color-heading);
+  font-family: var(--font-display);
   font-size: var(--text-h4);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
 }
 
 .int-card__desc {

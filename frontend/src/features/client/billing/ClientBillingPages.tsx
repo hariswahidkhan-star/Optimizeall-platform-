@@ -255,52 +255,54 @@ export function ClientInvoicePage() {
   return (
     <>
       <PageHeader title={`Invoice ${invoice.number}`} breadcrumbs={[{ label: 'Billing', to: '/client/billing' }, { label: invoice.number ?? 'Invoice' }]} />
-      <InvoiceDocumentView
-        invoice={invoice}
-        headingLevel={2}
-        actions={
-          <>
-            <Button
-              variant="secondary"
-              leadingIcon={<Download />}
-              loading={busy === 'download'}
-              onClick={async () => {
-                setBusy('download');
-                try {
-                  await api.download(`/client/billing/invoices/${invoiceId}/document`, `invoice-${invoice.number}.html`);
-                } catch (error) {
-                  toast.error('Download failed', billingErrorMessage(error));
-                } finally {
-                  setBusy(null);
-                }
-              }}
-            >
-              Download
-            </Button>
-            {invoice.payment.onlinePaymentAvailable && invoice.balance > 0 && (
+      <div className="stack">
+        <InvoiceDocumentView
+          invoice={invoice}
+          headingLevel={2}
+          actions={
+            <>
               <Button
-                loading={busy === 'pay'}
+                variant="secondary"
+                leadingIcon={<Download />}
+                loading={busy === 'download'}
                 onClick={async () => {
-                  setBusy('pay');
+                  setBusy('download');
                   try {
-                    const result = await api.post<{ available: boolean; redirectUrl: string | null; message: string }>(`/client/billing/invoices/${invoiceId}/pay`, {});
-                    if (result.available && result.redirectUrl) window.location.assign(result.redirectUrl);
-                    else toast.info('Online payment unavailable', result.message);
+                    await api.download(`/client/billing/invoices/${invoiceId}/document`, `invoice-${invoice.number}.html`);
                   } catch (error) {
-                    toast.error('Online payment unavailable', billingErrorMessage(error));
+                    toast.error('Download failed', billingErrorMessage(error));
                   } finally {
                     setBusy(null);
                   }
                 }}
               >
-                Pay online
+                Download
               </Button>
-            )}
-          </>
-        }
-      />
-      <div className="bill-no-print">
-        <InvoicePaymentsPanel invoiceId={invoiceId} />
+              {invoice.payment.onlinePaymentAvailable && invoice.balance > 0 && (
+                <Button
+                  loading={busy === 'pay'}
+                  onClick={async () => {
+                    setBusy('pay');
+                    try {
+                      const result = await api.post<{ available: boolean; redirectUrl: string | null; message: string }>(`/client/billing/invoices/${invoiceId}/pay`, {});
+                      if (result.available && result.redirectUrl) window.location.assign(result.redirectUrl);
+                      else toast.info('Online payment unavailable', result.message);
+                    } catch (error) {
+                      toast.error('Online payment unavailable', billingErrorMessage(error));
+                    } finally {
+                      setBusy(null);
+                    }
+                  }}
+                >
+                  Pay online
+                </Button>
+              )}
+            </>
+          }
+        />
+        <div className="bill-document bill-no-print">
+          <InvoicePaymentsPanel invoiceId={invoiceId} />
+        </div>
       </div>
     </>
   );
