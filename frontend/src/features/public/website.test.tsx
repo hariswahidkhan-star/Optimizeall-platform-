@@ -64,6 +64,26 @@ const learningRoutes: Routes = {
       { category: 'Ai', label: 'AI', courseCount: 1 },
       { category: 'Seo', label: 'SEO', courseCount: 1 },
     ]),
+  // The marketing pages and the header read one small summary instead of the whole catalog.
+  'GET /public/learning/summary': () =>
+    json(200, {
+      courseCount: 2,
+      lessonCount: 12,
+      totalMinutes: 120,
+      pathCount: 0,
+      categories: [
+        { category: 'Ai', label: 'AI', courseCount: 1 },
+        { category: 'Seo', label: 'SEO', courseCount: 1 },
+      ],
+      featuredSlugs: ['advanced-prompt-engineering'],
+      highlights: [
+        course({ slug: 'advanced-prompt-engineering', title: 'Advanced Prompt Engineering', category: 'Ai', level: 'Advanced', lessonCount: 7, isFeatured: true }),
+        course({ slug: 'seo-basics', title: 'SEO Basics', category: 'Seo' }),
+      ],
+      skills: ['Skill A', 'Skill B'],
+      updatedAt: '2026-09-01T00:00:00Z',
+    }),
+  'GET /public/learning/paths': () => json(200, { paths: [], seo: { title: 'Paths', description: 'd', canonicalPath: '/learn/paths', imageUrl: null, noIndex: false }, jsonLd: [] }),
 };
 
 /** Renders a public page inside the real site chrome (header, footer, consent banner). */

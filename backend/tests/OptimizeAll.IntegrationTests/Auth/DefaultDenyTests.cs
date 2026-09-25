@@ -97,6 +97,9 @@ public sealed class DefaultDenyTests(ApiFactory api) : IClassFixture<ApiFactory>
         // certificate PDF/SVG and Open Badges 2.0 hosted documents.
         "GET api/v1/public/learning/courses",
         "GET api/v1/public/learning/categories",
+        "GET api/v1/public/learning/summary",
+        "GET api/v1/public/learning/paths",
+        "GET api/v1/public/learning/paths/{slug}",
         "GET api/v1/public/learning/courses/{slug}",
         "GET api/v1/public/learning/courses/{slug}/lessons/{lessonSlug}",
         "GET api/v1/public/learning/courses/{slug}/badge.svg",

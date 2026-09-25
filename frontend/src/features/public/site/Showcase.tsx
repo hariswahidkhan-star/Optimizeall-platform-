@@ -18,8 +18,9 @@ import {
 import type { CSSProperties, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { ButtonLink, Skeleton } from '@/components/ui';
-import { formatMinutes, type CourseCard as CourseCardData, type CourseCategory, type CourseLevel } from '@/features/learning/api';
+import { usePaths } from '@/features/learning/api';
 import { CourseCard } from '@/features/learning/components/CourseCard';
+import { PathGrid } from '@/features/learning/components/PathViews';
 import '@/features/learning/learning.css';
 import { categoryPath, coursePath, type AcademyOverview } from './academy';
 import { CategoryArt, CertificateVisual } from './art';
@@ -111,58 +112,23 @@ export function FeaturedCourseGrid({ data, limit = 6 }: { data: AcademyOverview;
   );
 }
 
-const LEVEL_ORDER: CourseLevel[] = ['Beginner', 'Intermediate', 'Advanced'];
-
-/** One course per level (featured first) for a subject: a suggested beginner → advanced sequence. */
-export function suggestedPath(courses: CourseCardData[], category: CourseCategory): CourseCardData[] {
-  const inCategory = courses.filter((c) => c.category === category);
-  return LEVEL_ORDER.map((level) => inCategory.filter((c) => c.level === level).sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured))[0]).filter(
-    (c): c is CourseCardData => Boolean(c),
-  );
-}
-
-/** Suggested learning paths built from the live catalog (subjects named in the page copy). */
-export function SuggestedPaths({ data }: { data: AcademyOverview }) {
-  const copy = useSiteCopy();
-  const known = new Set(data.categories.map((c) => c.category.toLowerCase()));
-  const paths = copy
-    .pairs('home.paths.items')
-    .map((p) => {
-      const category = data.categories.find((c) => c.category.toLowerCase() === p.title.toLowerCase())?.category;
-      return category && known.has(category.toLowerCase()) ? { name: p.text, category, steps: suggestedPath(data.courses, category) } : null;
-    })
-    .filter((p): p is { name: string; category: CourseCategory; steps: CourseCardData[] } => Boolean(p && p.steps.length >= 2));
-  if (paths.length === 0) return null;
+/**
+ * The academy's learning paths (GET /public/learning/paths): up to four path cards with their badges and totals, and a
+ * link to every path. Renders nothing until the paths load (or when none has a published course yet).
+ */
+export function SuggestedPaths({ limit = 4 }: { limit?: number }) {
+  const paths = usePaths();
+  const list = paths.data?.paths ?? [];
+  if (list.length === 0) return null;
   return (
-    <ul className="oa-paths" data-reveal="stagger">
-      {paths.map((path) => {
-        const minutes = path.steps.reduce((s, c) => s + c.estimatedMinutes, 0);
-        const lessons = path.steps.reduce((s, c) => s + c.lessonCount, 0);
-        return (
-          <li key={path.name} className={clsx('oa-path', `lx-cat--${path.category.toLowerCase()}`)}>
-            <div className="oa-path__head">
-              <CategoryArt category={path.category} className="oa-path__art" />
-              <div>
-                <h3 className="oa-path__title">{path.name}</h3>
-                <p className="oa-path__meta">
-                  {path.steps.length} courses · {lessons} lessons · {formatMinutes(minutes)}
-                </p>
-              </div>
-            </div>
-            <ol className="oa-path__steps">
-              {path.steps.map((c) => (
-                <li key={c.id}>
-                  <span className="oa-path__level">{c.level}</span>
-                  <Link to={coursePath(c.slug)} className="oa-path__link">
-                    {c.title}
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </li>
-        );
-      })}
-    </ul>
+    <div className="oa-real-paths">
+      <PathGrid paths={list.slice(0, limit)} linkFor={(slug) => `/learn/paths/${encodeURIComponent(slug)}`} />
+      <p className="oa-real-paths__more">
+        <Link to="/learn/paths">
+          See all {list.length} learning paths <ArrowRight aria-hidden="true" className="lx-inline-icon" />
+        </Link>
+      </p>
+    </div>
   );
 }
 

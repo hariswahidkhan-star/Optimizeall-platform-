@@ -1891,3 +1891,14 @@
 }
 
 /* Keyframes for the burst live under no-preference; with reduced motion the component renders nothing. */
+
+/* Learning paths from the real paths API (SuggestedPaths). */
+.oa-real-paths {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.oa-real-paths__more {
+  margin: 0;
+  font-weight: var(--weight-semibold);
+}

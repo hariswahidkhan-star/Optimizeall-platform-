@@ -159,6 +159,18 @@ public sealed class LearningV2Tests(ApiFactory api) : IClassFixture<ApiFactory>
         Assert.Contains(jsonLd.EnumerateArray(), x => x.GetProperty("@type").GetString() == "EducationalOccupationalCredential");
 
         Assert.Equal(HttpStatusCode.NotFound, (await anon.GetAsync("/api/v1/public/learning/paths/no-such-path")).StatusCode);
+
+        // The small, cacheable academy summary for the marketing pages and the header.
+        var summaryResponse = await anon.GetAsync("/api/v1/public/learning/summary");
+        Assert.Equal("public, max-age=300", summaryResponse.Headers.CacheControl?.ToString());
+        var summary = await summaryResponse.ReadJsonAsync();
+        var catalog = await (await anon.GetAsync("/api/v1/public/learning/courses?pageSize=100")).ReadJsonAsync();
+        Assert.Equal(catalog.GetProperty("total").GetInt32(), summary.GetProperty("courseCount").GetInt32());
+        Assert.Equal(catalog.GetProperty("items").EnumerateArray().Sum(c => c.GetProperty("lessonCount").GetInt32()), summary.GetProperty("lessonCount").GetInt32());
+        Assert.Equal(paths.Count, summary.GetProperty("pathCount").GetInt32());
+        Assert.InRange(summary.GetProperty("highlights").GetArrayLength(), 1, 8);
+        Assert.True(summary.GetProperty("categories").GetArrayLength() > 1);
+        Assert.InRange(summary.GetProperty("skills").GetArrayLength(), 1, 36);
         Assert.Equal(HttpStatusCode.NotFound, (await anon.GetAsync("/_document/learn/paths/no-such-path")).StatusCode);
 
         // Sitemap + server-rendered pages.

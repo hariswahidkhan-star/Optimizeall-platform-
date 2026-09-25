@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useCategories, usePublicCatalog, type CategorySummary, type CourseCard } from '@/features/learning/api';
+import { useLearningSummary, type CategorySummary, type CourseCard } from '@/features/learning/api';
 
 /** Public course page for a course slug (the engine's enrol flow starts there). */
 export const coursePath = (slug: string) => `/learn/${encodeURIComponent(slug)}`;
@@ -8,13 +8,13 @@ export const categoryPath = (category: string) => `/learn?category=${encodeURICo
 export interface AcademyOverview {
   /** Published courses (the catalog total). */
   courseCount: number;
-  /** Lessons across all published courses (a lower bound when the catalog has more than 200 courses). */
+  /** Lessons across all published courses. */
   lessonCount: number;
-  /** False when the catalog was larger than one page, so {@link lessonCount} is "at least". */
+  /** Always true now (the summary endpoint counts every course); kept for the "+" suffix logic. */
   lessonCountComplete: boolean;
   /** Subjects that have published courses, with counts. */
   categories: CategorySummary[];
-  /** Featured courses first, then the rest of the catalog (as the catalog orders them). */
+  /** Up to eight highlight cards: featured subject courses first, then the curated order. */
   courses: CourseCard[];
   featured: CourseCard[];
   /** Distinct skills taught across the catalog (for the skills marquee). */
@@ -22,34 +22,25 @@ export interface AcademyOverview {
 }
 
 /**
- * Live academy numbers for the marketing pages, straight from the public learning API — never hard-coded. One catalog
- * request (the whole catalog, at most 200 cards) gives the course and lesson totals, featured courses and skills; the
- * categories endpoint gives the subjects. `data` is null until both have loaded (sections render nothing, or their
- * skeletons, rather than invented figures).
+ * Live academy numbers for the marketing pages, straight from the public learning API — never hard-coded. One small,
+ * cacheable request (GET /public/learning/summary, shared with the header's Academy menu) gives the course, lesson and
+ * subject counts, the highlight cards and the skills. `data` is null until it has loaded (sections render nothing, or
+ * their skeletons, rather than invented figures).
  */
 export function useAcademyOverview(): { data: AcademyOverview | null; isLoading: boolean } {
-  const catalog = usePublicCatalog({ page: 1, pageSize: 200 });
-  const categories = useCategories();
+  const summary = useLearningSummary();
   const data = useMemo<AcademyOverview | null>(() => {
-    if (!catalog.data || !categories.data) return null;
-    const courses = catalog.data.items;
-    // Subject courses lead; the platform's own onboarding course goes last.
-    const featured = courses.filter((c) => c.isFeatured).sort((a, b) => Number(a.category === 'Platform') - Number(b.category === 'Platform'));
-    // Round-robin across subject courses (each course's first skill, then each one's second…) for variety.
-    const subjectCourses = courses.filter((c) => c.category !== 'Platform');
-    const depth = Math.max(0, ...subjectCourses.map((c) => c.skills.length));
-    const skills = Array.from(
-      new Set(Array.from({ length: depth }, (_, i) => subjectCourses.map((c) => c.skills[i]).filter(Boolean)).flat()),
-    ).slice(0, 36);
+    if (!summary.data) return null;
+    const s = summary.data;
     return {
-      courseCount: catalog.data.total,
-      lessonCount: courses.reduce((sum, c) => sum + c.lessonCount, 0),
-      lessonCountComplete: courses.length >= catalog.data.total,
-      categories: categories.data.filter((c) => c.courseCount > 0),
-      courses,
-      featured,
-      skills,
+      courseCount: s.courseCount,
+      lessonCount: s.lessonCount,
+      lessonCountComplete: true,
+      categories: s.categories.filter((c) => c.courseCount > 0),
+      courses: s.highlights,
+      featured: s.highlights.filter((c) => c.isFeatured),
+      skills: s.skills,
     };
-  }, [catalog.data, categories.data]);
-  return { data, isLoading: catalog.isLoading || categories.isLoading };
+  }, [summary.data]);
+  return { data, isLoading: summary.isLoading };
 }

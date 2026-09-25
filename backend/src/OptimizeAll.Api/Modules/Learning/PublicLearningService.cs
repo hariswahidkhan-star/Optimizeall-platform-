@@ -92,6 +92,32 @@ public sealed partial class PublicLearningService(AppDbContext db, CourseContent
             .ToList();
     }
 
+    /// <summary>
+    /// The academy in numbers for the marketing pages and the header (one small, cacheable response instead of the whole
+    /// catalog): course, lesson, minute and path counts, subjects with counts, featured slugs, up to eight highlight cards
+    /// (featured subject courses first, the platform course last, then the curated order) and up to 36 skills
+    /// (round-robin across subject courses for variety).
+    /// </summary>
+    public async Task<LearningSummaryDto> SummaryAsync(CancellationToken ct)
+    {
+        var now = Now;
+        var courses = await Sort(Published(), null, false).ToListAsync(ct);
+        var categories = Enum.GetValues<CourseCategory>()
+            .Select(c => new CategorySummaryDto(c, CategoryLabels[c], courses.Count(x => x.Category == c)))
+            .Where(c => c.CourseCount > 0).ToList();
+        var highlights = courses.OrderByDescending(c => c.IsFeatured).ThenBy(c => c.Category == CourseCategory.Platform)
+            .ThenBy(c => c.SortOrder).ThenBy(c => c.Title, StringComparer.Ordinal).Take(8).Select(c => Card(c, now)).ToList();
+        var subject = courses.Where(c => c.Category != CourseCategory.Platform).ToList();
+        var depth = subject.Count == 0 ? 0 : subject.Max(c => c.Skills.Count);
+        var skills = Enumerable.Range(0, depth).SelectMany(i => subject.Where(c => c.Skills.Count > i).Select(c => c.Skills[i]))
+            .Distinct(StringComparer.OrdinalIgnoreCase).Take(36).ToList();
+        var bySlug = courses.ToDictionary(c => c.Slug, StringComparer.Ordinal);
+        var pathCount = LearningPathLibrary.Paths.Count(p => LearningPathService.Resolve(p, bySlug).Count > 0);
+        return new LearningSummaryDto(courses.Count, courses.Sum(c => c.LessonCount), courses.Sum(c => c.EstimatedMinutes), pathCount,
+            categories, courses.Where(c => c.IsFeatured).Select(c => c.Slug).ToList(), highlights, skills,
+            courses.Count == 0 ? null : courses.Max(c => c.UpdatedAt));
+    }
+
     /// <summary>A published course and its parsed published version, or 404.</summary>
     public async Task<(Course Course, CourseDocument Doc)> LoadPublishedAsync(string slug, CancellationToken ct)
     {

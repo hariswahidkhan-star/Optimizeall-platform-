@@ -27,6 +27,17 @@ public sealed class PublicLearningController(PublicLearningService learning, Lea
     [HttpGet("courses")]
     public Task<PagedResult<CourseCardDto>> Courses([FromQuery] CatalogQuery query, CancellationToken ct) => learning.CatalogAsync(query, ct);
 
+    /// <summary>
+    /// The academy in numbers (counts, subjects, featured slugs, eight highlight cards, skills) for the marketing pages and
+    /// the header: a few KB instead of the whole catalog. Cacheable for 5 minutes.
+    /// </summary>
+    [HttpGet("summary")]
+    public async Task<LearningSummaryDto> Summary(CancellationToken ct)
+    {
+        Response.Headers.CacheControl = "public, max-age=300";
+        return await learning.SummaryAsync(ct);
+    }
+
     /// <summary>Categories that have published courses, with counts.</summary>
     [HttpGet("categories")]
     public Task<IReadOnlyList<CategorySummaryDto>> Categories(CancellationToken ct) => learning.CategoriesAsync(ct);

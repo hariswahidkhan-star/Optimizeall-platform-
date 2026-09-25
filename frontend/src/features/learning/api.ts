@@ -55,6 +55,20 @@ export interface CategorySummary {
   courseCount: number;
 }
 
+/** GET /public/learning/summary: the academy in numbers for the marketing pages and the header (cacheable). */
+export interface LearningSummary {
+  courseCount: number;
+  lessonCount: number;
+  totalMinutes: number;
+  pathCount: number;
+  categories: CategorySummary[];
+  featuredSlugs: string[];
+  /** Up to eight cards: featured subject courses first, then the curated order. */
+  highlights: CourseCard[];
+  skills: string[];
+  updatedAt: string | null;
+}
+
 export interface LearningSeo {
   title: string;
   description: string;
@@ -410,6 +424,7 @@ export const learningKeys = {
   all: ['learning'] as const,
   publicCatalog: (f: CatalogFilters) => ['learning', 'public', 'catalog', f] as const,
   categories: ['learning', 'public', 'categories'] as const,
+  summary: ['learning', 'public', 'summary'] as const,
   publicCourse: (slug: string) => ['learning', 'public', 'course', slug] as const,
   publicLesson: (slug: string, lesson: string) => ['learning', 'public', 'lesson', slug, lesson] as const,
   verify: (id: string) => ['learning', 'verify', id] as const,
@@ -447,6 +462,15 @@ export function usePublicCatalog(filters: CatalogFilters) {
     queryKey: learningKeys.publicCatalog(filters),
     queryFn: () => api.get<PagedResult<CourseCard>>('/public/learning/courses', { query: catalogQuery(filters) }),
     placeholderData: keepPreviousData,
+  });
+}
+
+/** The academy summary (one small request shared by the header, the home page and /academy). */
+export function useLearningSummary() {
+  return useQuery({
+    queryKey: learningKeys.summary,
+    queryFn: () => api.get<LearningSummary>('/public/learning/summary'),
+    staleTime: 5 * 60_000,
   });
 }
 

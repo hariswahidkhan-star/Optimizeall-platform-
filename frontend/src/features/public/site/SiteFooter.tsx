@@ -16,7 +16,7 @@ const FALLBACK_COLUMNS: { title: string; links: SiteLink[] }[] = [
       { label: 'AI courses', url: '/learn?category=Ai' },
       { label: 'Marketing courses', url: '/learn?category=Marketing' },
       { label: 'SEO courses', url: '/learn?category=Seo' },
-      { label: 'Learning paths', url: '/academy#paths' },
+      { label: 'Learning paths', url: '/learn/paths' },
       { label: 'Certificates', url: '/academy#certificates' },
       { label: 'Academy overview', url: '/academy' },
     ],

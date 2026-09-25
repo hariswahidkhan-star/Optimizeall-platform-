@@ -27,6 +27,11 @@ public sealed record CourseCardDto(
 
 public sealed record CategorySummaryDto(CourseCategory Category, string Label, int CourseCount);
 
+/// <summary>The academy in numbers (GET /public/learning/summary): for the marketing pages and the header menu.</summary>
+public sealed record LearningSummaryDto(
+    int CourseCount, int LessonCount, int TotalMinutes, int PathCount, IReadOnlyList<CategorySummaryDto> Categories,
+    IReadOnlyList<string> FeaturedSlugs, IReadOnlyList<CourseCardDto> Highlights, IReadOnlyList<string> Skills, DateTime? UpdatedAt);
+
 public sealed record PrerequisiteDto(string Slug, string Title);
 
 public sealed record BadgeDto(string Name, string Description, string Criteria, string ImageUrl);

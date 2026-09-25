@@ -132,7 +132,7 @@ export function HomePage() {
           title={copy.text('home.paths.title')}
           intro={copy.text('home.paths.intro')}
         >
-          <SuggestedPaths data={academy.data} />
+          <SuggestedPaths />
         </Section>
       )}
 
