@@ -101,9 +101,10 @@
 }
 
 .ui-dash-head__title {
-  font-size: 1rem;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.012em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .ui-dash-head__description {
@@ -113,7 +114,7 @@
 
 .ui-dash-head a {
   font-size: 0.8125rem;
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-semibold);
   text-decoration: none;
 }
 
@@ -134,28 +135,29 @@
 .ui-quicklink {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-4);
+  gap: var(--space-4);
+  padding: var(--space-5);
 }
 
+/* Soft tinted icon tile (brief: 40px, control radius, primary-soft). */
 .ui-quicklink__icon {
   display: grid;
   flex: none;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-md);
-  background: var(--color-surface-2);
-  color: var(--color-text-muted);
-  box-shadow: inset 0 0 0 1px var(--color-border);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
   transition:
     background-color var(--duration-fast) var(--ease-standard),
     color var(--duration-fast) var(--ease-standard);
 }
 
 .ui-quicklink__icon svg {
-  width: 16px;
-  height: 16px;
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.75;
 }
 
 .ui-quicklink__text {
@@ -164,9 +166,10 @@
 }
 
 .ui-quicklink__title {
-  font-size: var(--text-small);
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.006em;
+  letter-spacing: -0.012em;
   line-height: 1.4;
 }
 
@@ -181,7 +184,7 @@
   flex: none;
   width: 16px;
   height: 16px;
-  margin-top: 8px;
+  margin-top: 12px;
   color: var(--color-text-subtle);
   transition:
     transform var(--duration-fast) var(--ease-standard),
@@ -189,8 +192,7 @@
 }
 
 .ui-card--interactive:hover .ui-quicklink__icon {
-  background: var(--color-primary-soft);
-  color: var(--color-primary-soft-text);
+  background: var(--color-primary-soft-hover);
 }
 
 .ui-card--interactive:hover .ui-quicklink__arrow {
@@ -261,12 +263,12 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--chart-1);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--chart-1) 70%, var(--color-surface)), var(--chart-1));
   transition: width var(--duration-slow) var(--ease-standard);
 }
 
 .ui-meter-list--accent .ui-meter-list__fill {
-  background: var(--chart-2);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--chart-2) 70%, var(--color-surface)), var(--chart-2));
 }
 
 .ui-meter-list__meta {

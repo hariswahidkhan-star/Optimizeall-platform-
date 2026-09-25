@@ -64,36 +64,40 @@
   display: none;
 }
 
+/* Workspace chip: which portal you are in. */
 .portal-sidebar__portal {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  min-height: 32px;
-  margin: 0 0 var(--space-1);
+  min-height: 40px;
+  margin: 0 0 var(--space-2);
   padding: 0 var(--space-2);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border: 0;
+  border-radius: var(--radius-control);
   background: var(--color-surface);
   color: var(--color-heading);
+  font-family: var(--font-display);
   font-size: var(--text-small);
   font-weight: var(--weight-semibold);
-  box-shadow: var(--shadow-xs);
+  letter-spacing: -0.01em;
+  box-shadow: var(--shadow-card), var(--shadow-highlight);
 }
 
 .portal-sidebar__portal-icon {
   display: grid;
   flex: none;
   place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-xs);
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--gradient-brand);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
 }
 
 .portal-sidebar__portal-icon svg {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
 }
 
 .portal-sidebar__portal-label {
@@ -113,10 +117,10 @@
   align-items: center;
   gap: var(--space-3);
   width: 100%;
-  min-height: 32px;
-  padding: 0 var(--space-2);
+  min-height: 34px;
+  padding: 0 10px;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 9px;
   background: none;
   color: var(--color-text-muted);
   font-size: 0.8125rem;
@@ -124,7 +128,7 @@
 }
 
 .portal-sidebar__collapse:hover {
-  background: var(--color-surface-3);
+  background: color-mix(in srgb, var(--color-surface-3) 80%, transparent);
   color: var(--color-heading);
 }
 
@@ -138,25 +142,25 @@
 .portal-nav {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
 .portal-nav ul {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .portal-nav__heading {
-  margin: 0 0 var(--space-1);
-  padding: 0 var(--space-2);
+  margin: 0 0 6px;
+  padding: 0 10px;
   color: var(--color-text-subtle);
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-wide);
   line-height: 1.6;
   text-transform: uppercase;
 }
@@ -166,11 +170,11 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  min-height: 32px;
-  padding: 0 var(--space-2);
-  border-radius: var(--radius-sm);
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 9px;
   color: var(--color-text-muted);
-  font-size: 0.8125rem;
+  font-size: 0.84375rem;
   font-weight: var(--weight-medium);
   line-height: 1.3;
   text-decoration: none;
@@ -188,23 +192,32 @@
 
 .portal-nav__link svg {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  stroke-width: 1.85;
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.75;
+  color: var(--color-text-subtle);
+  transition: color var(--duration-fast) var(--ease-standard);
 }
 
 .portal-nav__link:hover {
-  background: var(--color-surface-3);
+  background: color-mix(in srgb, var(--color-surface-3) 80%, transparent);
   color: var(--color-heading);
+  text-decoration: none;
 }
 
+.portal-nav__link:hover svg {
+  color: var(--color-text-muted);
+}
+
+/* Active: a raised white chip (ring in the shadow), heading text and a brand-tinted icon — never colour alone. */
 .portal-nav__link.is-active {
   background: var(--color-surface);
   color: var(--color-heading);
   font-weight: var(--weight-semibold);
   box-shadow:
-    0 0 0 1px var(--color-border),
-    var(--shadow-xs);
+    var(--ring-hairline),
+    0 1px 2px light-dark(rgb(18 21 46 / 0.06), rgb(0 0 0 / 0.35)),
+    var(--shadow-highlight);
 }
 
 .portal-nav__link.is-active svg {
@@ -213,12 +226,17 @@
 
 /* In the drawer the list sits on the elevated drawer surface. */
 .ui-drawer .portal-nav__link.is-active {
-  background: var(--color-surface-2);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
   box-shadow: none;
 }
 
+.ui-drawer .portal-nav__link.is-active svg {
+  color: currentColor;
+}
+
 .ui-drawer .portal-nav__link {
-  min-height: 40px;
+  min-height: 44px;
   font-size: var(--text-small);
 }
 
@@ -297,18 +315,29 @@
   }
 }
 
+/* Glass top bar: the frosted layer is a pseudo-element (see PublicLayout.css for why), with a hairline below. */
 .portal-topbar {
   position: sticky;
   top: var(--impersonation-banner-height, 0px); /* below the sticky impersonation banner */
   z-index: var(--z-header);
+  isolation: isolate;
   display: flex;
   align-items: center;
   gap: var(--space-2);
   min-height: var(--portal-topbar-height);
   padding: 0 var(--gutter);
-  border-bottom: 1px solid var(--color-border);
-  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
-  backdrop-filter: saturate(1.6) blur(14px);
+}
+
+.portal-topbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--color-bg) 86%, transparent);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: 0 1px 0 var(--color-border);
+  pointer-events: none;
 }
 
 .portal-topbar__menu {
@@ -338,22 +367,26 @@
   gap: var(--space-2);
   min-height: 36px;
   padding: 0 var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border: 0;
+  border-radius: 10px;
   background: var(--color-surface);
   color: var(--color-heading);
   font-size: 0.8125rem;
   font-weight: var(--weight-medium);
-  box-shadow: var(--shadow-xs);
+  box-shadow:
+    var(--ring-hairline),
+    0 1px 2px light-dark(rgb(18 21 46 / 0.05), rgb(0 0 0 / 0.3));
   transition:
     background-color var(--duration-fast) var(--ease-standard),
-    border-color var(--duration-fast) var(--ease-standard);
+    box-shadow var(--duration-fast) var(--ease-standard);
 }
 
 .portal-switcher:hover,
 .portal-account:hover {
-  border-color: var(--color-border-strong);
   background: var(--color-surface-2);
+  box-shadow:
+    0 0 0 1px var(--color-border-strong),
+    0 1px 2px light-dark(rgb(18 21 46 / 0.05), rgb(0 0 0 / 0.3));
 }
 
 .portal-switcher svg {
@@ -364,7 +397,7 @@
 
 .portal-switcher:focus-visible,
 .portal-account:focus-visible {
-  border-radius: var(--radius-md);
+  border-radius: 10px;
 }
 
 .portal-account {
@@ -372,7 +405,8 @@
 }
 
 .portal-account .ui-avatar {
-  border-radius: var(--radius-sm);
+  border-radius: 7px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
 .portal-account__name {
@@ -417,8 +451,13 @@
 
 @media (min-width: 1024px) {
   .portal-main {
-    padding-top: var(--space-8);
+    padding: var(--space-10) var(--space-10) var(--space-16);
   }
+}
+
+/* Headings and anchors inside the portal land below its (shorter) sticky top bar. */
+.portal-main :where(h1, h2, h3, [id]) {
+  scroll-margin-top: calc(var(--impersonation-banner-height, 0px) + var(--portal-topbar-height) + var(--space-4));
 }
 
 .portal-main:focus {
@@ -442,10 +481,22 @@
   right: 0;
   bottom: 0;
   z-index: var(--z-header);
-  border-top: 1px solid var(--color-border);
-  background: color-mix(in srgb, var(--color-bg-elevated) 90%, transparent);
-  backdrop-filter: saturate(1.6) blur(14px);
+  isolation: isolate;
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.portal-bottom-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    0 -1px 0 var(--color-border),
+    0 -8px 24px -12px light-dark(rgb(18 21 46 / 0.12), rgb(0 0 0 / 0.5));
+  pointer-events: none;
 }
 
 @media (min-width: 768px) {
@@ -468,7 +519,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   width: 100%;
   min-height: var(--bottom-nav-height);
   padding: 0 2px;
@@ -477,32 +528,42 @@
   color: var(--color-text-muted);
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.portal-bottom-nav__link:hover {
+  color: var(--color-heading);
   text-decoration: none;
 }
 
 .portal-bottom-nav__link svg {
+  box-sizing: content-box;
   width: 20px;
   height: 20px;
-  stroke-width: 1.85;
+  padding: 4px 16px;
+  border-radius: var(--radius-full);
+  stroke-width: 1.75;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
 }
 
-/* Active tab: a pill behind the icon plus a heavier label — never colour alone. */
+/* Active tab: a tinted pill behind the icon plus a heavier, darker label — never colour alone. */
 .portal-bottom-nav__link.is-active {
   color: var(--color-heading);
   font-weight: var(--weight-semibold);
 }
 
 .portal-bottom-nav__link.is-active svg {
-  box-sizing: content-box;
-  padding: 3px 14px;
-  border-radius: var(--radius-full);
-  background: var(--color-accent-soft);
-  color: var(--color-accent-text);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+  stroke-width: 2;
 }
 
-.portal-bottom-nav__link:not(.is-active) svg {
-  padding: 3px 14px;
-  box-sizing: content-box;
+.portal-bottom-nav__link:active svg {
+  background: var(--color-surface-3);
 }
 
 .portal-bottom-nav__link:focus-visible {
@@ -518,16 +579,20 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border: 0;
+  border-radius: 10px;
   background: var(--color-surface);
   color: var(--color-text-muted);
-  box-shadow: var(--shadow-xs);
+  box-shadow:
+    var(--ring-hairline),
+    0 1px 2px light-dark(rgb(18 21 46 / 0.05), rgb(0 0 0 / 0.3));
   cursor: pointer;
 }
 
 .portal-bell:hover {
-  border-color: var(--color-border-strong);
+  box-shadow:
+    0 0 0 1px var(--color-border-strong),
+    0 1px 2px light-dark(rgb(18 21 46 / 0.05), rgb(0 0 0 / 0.3));
   color: var(--color-heading);
 }
 

@@ -2,17 +2,17 @@
   position: relative;
   max-width: 100%;
   overflow: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border: 0;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
-  box-shadow: var(--shadow-xs), var(--shadow-highlight);
+  box-shadow: var(--shadow-card), var(--shadow-highlight);
 }
 
-/* Inside a card the table is already framed: flatten it. */
+/* Inside a card the table is already framed: flatten it to a hairline. */
 .ui-card__body > .ui-table-wrap,
 .ui-card__body > * > .ui-table-wrap {
-  border-radius: var(--radius-lg);
-  box-shadow: none;
+  border-radius: var(--radius-control);
+  box-shadow: var(--ring-hairline);
 }
 
 .ui-table-wrap--scroll {
@@ -35,30 +35,70 @@
 
 .ui-table th,
 .ui-table td {
-  padding: 10px var(--space-4);
+  padding: 14px var(--space-4);
   border-bottom: 1px solid var(--color-border);
   text-align: left;
   vertical-align: middle;
+}
+
+.ui-table th:first-child,
+.ui-table td:first-child {
+  padding-left: var(--space-5);
+}
+
+.ui-table th:last-child,
+.ui-table td:last-child {
+  padding-right: var(--space-5);
+}
+
+.ui-table td {
+  color: var(--color-text);
+  line-height: 1.45;
+}
+
+/* Record links in cells (names, titles): heading-coloured, no underline until hover. */
+.ui-table td :where(a) {
+  color: var(--color-heading);
+  font-weight: var(--weight-semibold);
+  text-decoration-line: none;
+}
+
+.ui-table td :where(a):hover {
+  color: var(--color-link-hover);
+  text-decoration-line: underline;
+}
+
+.ui-table td .ui-link {
+  color: var(--color-heading);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.ui-table td .ui-link:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
 }
 
 .ui-table tbody tr:last-child td {
   border-bottom: 0;
 }
 
+/* Clean header: same surface as the rows (a whisper of tint), small caps-style labels, a crisp hairline below. */
 .ui-table thead th {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: var(--color-surface-2);
+  padding-block: 11px;
+  background: color-mix(in srgb, var(--color-surface-2) 65%, var(--color-surface));
   color: var(--color-text-muted);
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.ui-table td[data-align='right'] {
+.ui-table td {
   font-variant-numeric: tabular-nums;
 }
 
@@ -77,7 +117,7 @@
 }
 
 .ui-table tbody tr:hover {
-  background: color-mix(in srgb, var(--color-surface-2) 60%, transparent);
+  background: color-mix(in srgb, var(--color-surface-2) 70%, transparent);
 }
 
 .ui-table tbody tr[aria-selected='true'] {
@@ -140,17 +180,18 @@
 .ui-table-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 0;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-card), var(--shadow-highlight);
 }
 
 .ui-table-card[data-selected='true'] {
-  border-color: var(--color-primary);
-  box-shadow: inset 0 0 0 1px var(--color-primary);
+  box-shadow:
+    0 0 0 2px var(--color-primary),
+    var(--shadow-card);
 }
 
 .ui-table-card__head {
@@ -164,7 +205,9 @@
   flex: 1;
   min-width: 0;
   color: var(--color-heading);
+  font-family: var(--font-display);
   font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
   /* Long unbroken values (URLs, ids, e-mail addresses) wrap instead of widening the page on phones. */
   overflow-wrap: anywhere;
 }
@@ -173,6 +216,14 @@
   display: grid;
   gap: var(--space-2);
   margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.ui-table-card__primary :where(a),
+.ui-table-card__primary .ui-link {
+  color: var(--color-heading);
+  text-decoration: none;
 }
 
 .ui-table-card__field {
@@ -191,12 +242,13 @@
   min-width: 0;
   text-align: right;
   color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
 
 .ui-table-empty {
   border: 1px dashed var(--color-border-strong);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
 }
 
@@ -208,7 +260,7 @@
   gap: var(--space-2);
   margin-bottom: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-control);
   background: var(--color-primary-soft);
   color: var(--color-primary-soft-text);
   font-size: var(--text-small);

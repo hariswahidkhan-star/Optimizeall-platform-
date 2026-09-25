@@ -33,7 +33,7 @@ export function AuthLayout() {
       <aside className="auth-brand" aria-label="About Optimize All">
         <div className="auth-brand__glow" aria-hidden="true" />
         <Link to="/" className="auth-brand__home" aria-label="Optimize All home">
-          <Logo variant="stacked" size={112} tagline tone="onDark" title="" />
+          <Logo size={34} tone="onDark" title="" />
         </Link>
         <div className="auth-brand__copy">
           <p className="auth-brand__eyebrow">{BRAND_TAGLINE}</p>

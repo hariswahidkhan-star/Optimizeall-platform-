@@ -4,13 +4,37 @@
   min-height: 100dvh;
 }
 
+/*
+ * Glass header. The frosted layer is a pseudo-element, not the header itself, because:
+ *  - a backdrop-filter on the header makes it the containing block for its position:fixed descendants (the
+ *    services mega-menu), and
+ *  - mobile WebKit smears the blurred sample across the whole bar when the filtered element also paints text,
+ *    which read as a grey band behind the logo row. The layer is opaque enough (--glass-bg) that dark headlines
+ *    scrolling underneath never show through as a smudge.
+ */
 .public-header {
   position: sticky;
   top: var(--impersonation-banner-height, 0px); /* below the sticky impersonation banner */
   z-index: var(--z-header);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
-  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
-  backdrop-filter: saturate(1.4) blur(12px);
+  isolation: isolate;
+}
+
+.public-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: 0 1px 0 light-dark(rgb(18 21 46 / 0.07), rgb(255 255 255 / 0.07));
+  pointer-events: none;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .public-header::before {
+    background: var(--color-bg-elevated);
+  }
 }
 
 .public-header__inner {
@@ -34,7 +58,7 @@
 
 .public-header__nav ul {
   display: flex;
-  gap: var(--space-1);
+  gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -45,20 +69,26 @@
   align-items: center;
   min-height: 36px;
   padding: 0 var(--space-3);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   color: var(--color-text-muted);
   font-size: var(--text-small);
   font-weight: var(--weight-medium);
+  letter-spacing: -0.005em;
   text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
 }
 
 .public-header__link:hover {
   color: var(--color-heading);
-  background: var(--color-surface-2);
+  background: color-mix(in srgb, var(--color-surface-3) 70%, transparent);
+  text-decoration: none;
 }
 
 .public-header__link[aria-current='page'] {
   color: var(--color-heading);
+  background: color-mix(in srgb, var(--color-surface-3) 55%, transparent);
 }
 
 .public-header__actions {
@@ -87,36 +117,76 @@
   }
 }
 
-.public-drawer ul {
+/* ---------- Mobile menu sheet ---------- */
+.public-drawer {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  min-height: 100%;
+}
+
+.public-drawer > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   margin: 0;
-  padding: 0;
+  padding: var(--space-2) 0 0;
+  list-style: none;
+}
+
+.public-drawer ul {
   list-style: none;
 }
 
 .public-drawer__link {
   display: flex;
   align-items: center;
-  min-height: 48px;
+  min-height: 52px;
   padding: 0 var(--space-3);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-control);
   color: var(--color-heading);
-  font-weight: var(--weight-medium);
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
   text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
 .public-drawer__link:hover {
   background: var(--color-surface-2);
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.public-drawer__link[aria-current='page'] {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-soft-text);
+}
+
+.public-drawer .site-drawer__sublink {
+  padding: 8px var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--text-small);
+}
+
+.public-drawer .site-drawer__sublink:hover {
+  background: var(--color-surface-2);
+  color: var(--color-heading);
+  text-decoration: none;
 }
 
 .public-drawer__actions {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-top: var(--space-5);
-  padding: 0 var(--space-2);
+  margin-top: auto;
+  padding: var(--space-5) var(--space-1) var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.public-drawer__actions .ui-button {
+  min-height: 48px;
 }
 
 .public-main {
@@ -127,10 +197,13 @@
   outline: none;
 }
 
+/* ---------- Footer ---------- */
 .public-footer {
+  position: relative;
   margin-top: var(--space-16);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-surface-2);
+  box-shadow: inset 0 1px 0 var(--color-border);
+  color: var(--color-text-muted);
 }
 
 .public-footer__inner {
@@ -138,7 +211,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-10);
-  padding-block: var(--space-12);
+  padding-block: var(--space-16) var(--space-12);
 }
 
 .public-footer__brand {
@@ -153,11 +226,13 @@
 }
 
 .public-footer__heading {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
   color: var(--color-heading);
-  font-size: var(--text-small);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
-  letter-spacing: 0;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
 }
 
 .public-footer__nav ul {
@@ -170,19 +245,34 @@
   font-size: var(--text-small);
 }
 
-.public-footer__nav a {
+.public-footer :where(nav, ul) a {
   color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.public-footer :where(nav, ul) a:hover {
+  color: var(--color-heading);
   text-decoration: none;
 }
 
-.public-footer__nav a:hover {
-  color: var(--color-link-hover);
-  text-decoration: underline;
+.public-footer :where(li) {
+  line-height: 1.5;
 }
 
 .public-footer__legal {
-  padding-block: var(--space-5);
+  padding-block: var(--space-6);
   border-top: 1px solid var(--color-border);
   color: var(--color-text-subtle);
   font-size: var(--text-xs);
+}
+
+@media (max-width: 639px) {
+  .public-footer {
+    margin-top: var(--space-12);
+  }
+
+  .public-footer__inner {
+    padding-block: var(--space-12) var(--space-8);
+  }
 }

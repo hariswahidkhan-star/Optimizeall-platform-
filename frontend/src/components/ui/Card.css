@@ -1,27 +1,33 @@
+/* Premium surface: the hairline ring lives in the shadow (--shadow-card), so there is no extra grey border. */
 .ui-card {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
+  border: 0;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
-  box-shadow: var(--shadow-xs), var(--shadow-highlight);
+  box-shadow: var(--shadow-card), var(--shadow-highlight);
 }
 
+/* Flat: same outline, no elevation (nested panels, cards inside cards). */
 .ui-card--flat {
-  box-shadow: none;
+  box-shadow: var(--ring-hairline);
 }
 
 .ui-card--interactive {
   transition:
-    border-color var(--duration-base) var(--ease-standard),
     box-shadow var(--duration-base) var(--ease-standard),
     transform var(--duration-base) var(--ease-standard);
 }
 
 .ui-card--interactive:hover {
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-card-hover), var(--shadow-highlight);
+  transform: translateY(-2px);
+}
+
+.ui-card--interactive:active {
+  transform: translateY(0);
+  transition-duration: var(--duration-fast);
 }
 
 .ui-card__header {
@@ -30,7 +36,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-2) var(--space-3);
-  padding: var(--space-4) var(--space-5) 0;
+  padding: var(--space-5) var(--space-6) 0;
 }
 
 .ui-card__heading {
@@ -39,9 +45,10 @@
 }
 
 .ui-card__title {
-  font-size: 0.9375rem;
+  font-family: var(--font-display);
+  font-size: 1rem;
   font-weight: var(--weight-semibold);
-  letter-spacing: -0.011em;
+  letter-spacing: -0.014em;
   line-height: 1.4;
 }
 
@@ -56,6 +63,7 @@
 .ui-card__actions > .ui-link,
 .ui-card__actions > a.ui-link {
   font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
   text-decoration: none;
 }
 
@@ -73,8 +81,22 @@
 
 .ui-card__body {
   flex: 1;
-  padding: var(--space-5);
+  padding: var(--space-6);
   min-width: 0;
+}
+
+@media (max-width: 639px) {
+  .ui-card__header {
+    padding: var(--space-5) var(--space-5) 0;
+  }
+
+  .ui-card__body {
+    padding: var(--space-5);
+  }
+
+  .ui-card__footer {
+    padding-inline: var(--space-5);
+  }
 }
 
 .ui-card__header + .ui-card__body:not(.ui-card__body--flush) {
@@ -91,10 +113,10 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-2);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-4) var(--space-6);
   border-top: 1px solid var(--color-border);
-  background: var(--color-surface-2);
-  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  background: color-mix(in srgb, var(--color-surface-2) 70%, var(--color-surface));
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
 }
 
 .ui-card__body--flush {
@@ -121,7 +143,7 @@
 .ui-card--interactive:has(.ui-card__link:focus-visible) {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-  box-shadow: var(--shadow-focus);
+  box-shadow: var(--shadow-card), var(--shadow-focus);
 }
 
 .ui-card__link:focus-visible {

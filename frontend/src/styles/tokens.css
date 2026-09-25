@@ -231,8 +231,9 @@
     radial-gradient(60% 60% at 85% 0%, light-dark(rgb(252 179 30 / 0.16), rgb(252 179 30 / 0.1)) 0%, transparent 70%),
     radial-gradient(50% 50% at 0% 20%, light-dark(rgb(72 85 163 / 0.12), rgb(125 136 224 / 0.14)) 0%, transparent 70%);
   --gradient-surface: linear-gradient(180deg, light-dark(#ffffff, #141824) 0%, light-dark(#fafbfc, #10131c) 100%);
-  --glass-bg: light-dark(rgb(255 255 255 / 0.72), rgb(12 14 22 / 0.72));
-  --glass-blur: saturate(180%) blur(16px);
+  /* Opaque enough that dark type scrolling underneath never reads as a grey smear (iOS WebKit samples wide). */
+  --glass-bg: light-dark(rgb(255 255 255 / 0.84), rgb(10 12 20 / 0.8));
+  --glass-blur: saturate(180%) blur(20px);
 
   /* ---------- Layers ---------- */
   --z-base: 0;

@@ -378,6 +378,15 @@ export function DesignSystemPage() {
             { id: 'notes', label: 'Reviewer notes', content: <p>Internal notes, visible to staff only.</p> },
           ]}
         />
+        <Tabs
+          label="Earnings period"
+          className="ui-tabs--segmented"
+          tabs={[
+            { id: 'week', label: 'This week', content: <p>Approved earnings for the current week.</p> },
+            { id: 'month', label: 'This month', content: <p>Approved earnings for the current month.</p> },
+            { id: 'all', label: 'All time', content: <p>Everything you have earned so far.</p> },
+          ]}
+        />
       </Section>
 
       <Section id="overlays" title="Overlays">
