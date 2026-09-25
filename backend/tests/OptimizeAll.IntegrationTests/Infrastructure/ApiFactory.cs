@@ -93,6 +93,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
                 ["DevTools:MailboxEnabled"] = "true",
                 ["Bootstrap:AdminEmail"] = null,
                 ["Bootstrap:AdminPassword"] = null,
+                // The partner blog posts (on by default) would change every test's blog fixtures; PartnerContentSeedTests turns them on.
+                ["Website:PartnerContent:Enabled"] = "false",
             });
         });
         builder.ConfigureServices(services =>

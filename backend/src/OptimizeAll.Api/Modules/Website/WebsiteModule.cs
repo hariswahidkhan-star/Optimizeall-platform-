@@ -49,6 +49,8 @@ public static class WebsiteModule
         services.AddScoped<ISeeder, WebsiteBaselineSeeder>();
         services.AddScoped<ISeeder, WebsiteDemoSeeder>();
         services.AddWebsitePartners();
+        services.Configure<PartnerContentOptions>(configuration.GetSection(PartnerContentOptions.Section));
+        services.AddScoped<ISeeder, PartnerContentSeeder>();
         return services;
     }
 }

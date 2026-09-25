@@ -32,6 +32,10 @@
     <EmbeddedResource Include="Modules\Content\Copy\site-copy.json" LogicalName="OptimizeAll.SiteCopy.json" />
     <!-- Videos placed on built-in public pages in code (kept identical to frontend/src/features/public/site/siteVideos.json). -->
     <EmbeddedResource Include="Modules\Website\SiteSeo\site-videos.json" LogicalName="OptimizeAll.SiteVideos.json" />
+    <!-- Partner blog posts and their cover images, seeded by PartnerContentSeeder (Modules/Website/Seed). -->
+    <None Remove="Modules\Website\Content\partner-posts\**" />
+    <EmbeddedResource Include="Modules\Website\Content\partner-posts\*.md" LogicalName="OptimizeAll.PartnerPosts.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Modules\Website\Content\partner-posts\covers\*.png" LogicalName="OptimizeAll.PartnerPosts.covers.%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
