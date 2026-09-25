@@ -97,6 +97,9 @@ test('every sitemap URL renders a page and robots.txt points to the sitemap', as
     urls.push(...locs(await child.text()));
   }
   expect(urls.length, 'the sitemap lists the public pages').toBeGreaterThan(10);
+  // Every URL is loaded and audited in the browser; the budget grows with the sitemap (partner pages, partner blog
+  // posts, …) instead of a fixed 10 minutes: about 10 s per page on a loaded CI machine.
+  test.setTimeout(10 * 60_000 + urls.length * 10_000);
   expect((await request.get(`${API_URL}/api/v1/public/sitemap.xml`)).status()).toBe(200);
 
   const watcher = new PageWatcher(page, 'visitor');

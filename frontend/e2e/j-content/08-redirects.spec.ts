@@ -160,7 +160,8 @@ test.describe.serial('Redirects', () => {
       .click();
     await expect(toast(editor, 'Redirect deleted')).toBeVisible();
     await expect(table.getByRole('row').filter({ hasText: campaign })).toHaveCount(0);
-    expect((await hop(visitor, campaign)).status).toBe(200); // the app shell, which shows "not found"
+    // A real 404 (the server-rendered not-found page, docs/SEO_CRO.md § 9.2), with no redirect; the app shows "not found".
+    expect(await hop(visitor, campaign)).toEqual({ status: 404, location: null });
     await expect(notFound(await openPublic(browser, campaign))).toBeVisible();
 
     // ---------------------------------------------------------------- renaming back reclaims the address (no loop)
