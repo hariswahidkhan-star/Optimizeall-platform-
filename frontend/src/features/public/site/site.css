@@ -2511,3 +2511,18 @@ button.site-chip {
   flex: none;
   accent-color: var(--color-primary);
 }
+
+/* Secondary buttons on the navy brand panels: a translucent white "on-brand" button in both themes (the default
+ * secondary button is a light surface in light mode and a dark graphite surface in dark mode — wrong on navy). */
+:is(.site-section--brand, .site-cta__inner) .ui-button--secondary {
+  border-color: rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12);
+  color: #fff;
+}
+
+:is(.site-section--brand, .site-cta__inner) .ui-button--secondary:hover {
+  border-color: rgb(255 255 255 / 0.45);
+  background: rgb(255 255 255 / 0.16);
+  color: #fff;
+}

@@ -66,7 +66,7 @@ export function SiteFooter({ onCookieSettings }: { onCookieSettings: () => void 
     <footer className="public-footer site-footer">
       <div className="container site-footer__top">
         <div className="site-footer__brand">
-          <Logo variant="stacked" size={72} tagline title={`Optimize All — ${BRAND_TAGLINE}`} />
+          <Logo size={30} title={`Optimize All — ${BRAND_TAGLINE}`} />
           <p className="site-footer__blurb">
             {site?.footer.blurb ??
               'A full-service digital marketing agency: search, social, paid media, content, email, brand and web.'}
