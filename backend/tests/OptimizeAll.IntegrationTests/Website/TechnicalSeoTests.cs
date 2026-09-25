@@ -29,7 +29,7 @@ public sealed class TechnicalSeoTests(ApiFactory api) : IClassFixture<ApiFactory
     /// <summary>Every built-in public page, with the JSON-LD types it must carry.</summary>
     public static readonly TheoryData<string, string[]> StaticPages = new()
     {
-        { "/", new[] { "Organization", "WebSite", "WebPage" } },
+        { "/", new[] { "Organization", "WebSite", "EducationalOrganization", "WebPage" } },
         { "/services", new[] { "BreadcrumbList", "CollectionPage", "ItemList" } },
         { "/pricing", new[] { "BreadcrumbList", "WebPage", "OfferCatalog" } },
         { "/industries", new[] { "BreadcrumbList", "CollectionPage", "ItemList" } },
@@ -44,6 +44,7 @@ public sealed class TechnicalSeoTests(ApiFactory api) : IClassFixture<ApiFactory
         { "/creators", new[] { "BreadcrumbList", "FAQPage" } },
         { "/faq", new[] { "BreadcrumbList" } },
         { "/about", new[] { "BreadcrumbList", "AboutPage" } },
+        { "/academy", new[] { "BreadcrumbList", "WebPage", "EducationalOrganization", "FAQPage" } },
         { "/how-we-work", new[] { "BreadcrumbList", "AboutPage" } },
         { "/privacy-policy", new[] { "BreadcrumbList", "WebPage" } },
         { "/terms-of-service", new[] { "BreadcrumbList", "WebPage" } },
@@ -99,6 +100,10 @@ public sealed class TechnicalSeoTests(ApiFactory api) : IClassFixture<ApiFactory
             case "Organization":
                 Assert.True(Has("name") && Has("url") && Has("logo"), "Organization needs name, url and logo");
                 Abs(node.GetProperty("logo").GetProperty("url").GetString()!);
+                break;
+            case "EducationalOrganization":
+                Assert.True(Has("name") && Has("url") && Has("parentOrganization"), "EducationalOrganization (the academy) needs name, url and its parent organization");
+                Abs(node.GetProperty("url").GetString()!);
                 break;
             case "WebSite":
                 Assert.True(Has("name") && Has("url"));

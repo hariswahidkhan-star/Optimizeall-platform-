@@ -11,8 +11,10 @@ internal static class BaselineSeo
 {
     private static readonly Dictionary<string, (string Title, string Description)> Pages = new(StringComparer.Ordinal)
     {
-        ["about"] = ("About Optimize All: Our Story and Values",
-            "Optimize All is a full-service digital marketing agency built on measurable growth: senior strategists, specialist teams and honest reporting."),
+        ["about"] = ("About Us: The Academy and the Agency",
+            "Optimize All helps people and businesses grow: a free academy with certificate-backed courses, and a full-service marketing agency with honest reporting."),
+        ["academy"] = ("Academy: Free AI and Marketing Courses",
+            "Free, self-paced courses in AI, marketing, SEO, sales, design and business. Pass the assessment to earn a verifiable certificate you can add to LinkedIn."),
         ["how-we-work"] = ("How We Work: Audit, Strategy, Execution",
             "Our four-step process: an honest audit, a prioritised 90-day strategy, specialist execution you approve, and clear monthly reporting on results."),
         ["privacy-policy"] = ("Privacy Policy: How We Protect Your Data",
@@ -53,6 +55,12 @@ internal static class BaselineSeo
     }
 
     /// <summary>The SEO fields of a baseline page (the summary as description when no copy is defined).</summary>
+    /// <summary>The About page's search title and description before the two-pillar repositioning (2026-09).</summary>
+    public const string PreviousAboutTitle = "About Optimize All: Our Story and Values";
+
+    public const string PreviousAboutDescription =
+        "Optimize All is a full-service digital marketing agency built on measurable growth: senior strategists, specialist teams and honest reporting.";
+
     public static SeoMeta ForPage(string slug, string summary) =>
         Pages.TryGetValue(slug, out var seo) ? new SeoMeta { Title = seo.Title, Description = seo.Description } : new SeoMeta { Description = summary };
 }

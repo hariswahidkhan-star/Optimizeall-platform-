@@ -8,6 +8,7 @@ import { useSiteCopy } from '../site/copy';
 import { CaseStudyCard, CtaBand, PackageCard, PageHero, PublicQueryState, Section, ServiceCard, TestimonialCarousel } from '../site/components';
 import { headFromSeo, useDocumentHead } from '../site/head';
 import { RedirectIfMoved } from '../site/redirects';
+import { AgencyVisual } from '../site/art';
 import { SiteIcon } from '../site/icons';
 import { Markdown } from '../site/Markdown';
 import { PartnerSlot } from '../partners/PartnerSlot';
@@ -31,7 +32,9 @@ export function ServicesPage() {
         title={copy.text('services.hero.title')}
         lead={copy.text('services.hero.lead')}
         breadcrumbs={[{ label: 'Home', to: '/' }, { label: 'Services' }]}
-      />
+      >
+        <AgencyVisual />
+      </PageHero>
       <div className="site-section site-section--tight">
         <div className="container">
           <div role="group" aria-label="Filter by category" className="site-chips">

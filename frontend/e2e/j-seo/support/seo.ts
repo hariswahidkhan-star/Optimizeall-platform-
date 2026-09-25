@@ -31,6 +31,7 @@ export const PUBLIC_PAGES = [
   '/creators',
   '/faq',
   '/about',
+  '/academy',
   '/how-we-work',
   '/privacy-policy',
   '/terms-of-service',

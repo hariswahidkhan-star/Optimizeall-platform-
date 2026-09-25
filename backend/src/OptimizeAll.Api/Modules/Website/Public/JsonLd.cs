@@ -130,6 +130,23 @@ public sealed class JsonLd(string baseUrl, SiteSettings site)
         },
     });
 
+    /// <summary>
+    /// Optimize All Academy, the organization's learning pillar, as an <c>EducationalOrganization</c> whose parent is the
+    /// Organization node. Its profiles are the organization's own (settings → social); nothing here is invented.
+    /// </summary>
+    public JsonElement Academy() => Element(new()
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "EducationalOrganization",
+        ["@id"] = Url("/") + "#academy",
+        ["name"] = $"{site.SiteName} Academy",
+        ["url"] = Url("/academy"),
+        ["description"] = "Free, self-paced courses in AI, marketing, SEO, sales, design and business, with verifiable certificates.",
+        ["parentOrganization"] = new Dictionary<string, object?> { ["@id"] = Url("/") + "#organization" },
+        ["knowsAbout"] = new[] { "Artificial intelligence", "Digital marketing", "Search engine optimization", "Sales", "Business", "Design", "Web analytics" },
+        ["sameAs"] = site.Social.Count > 0 ? site.Social.Select(s => s.Url).ToArray() : null,
+    });
+
     public JsonElement Breadcrumbs(params (string Name, string Path)[] items) => Element(new()
     {
         ["@context"] = "https://schema.org",

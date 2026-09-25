@@ -7,13 +7,28 @@ import { useSiteCopy } from './copy';
 import { PartnerSlot } from '../partners/PartnerSlot';
 import { NewsletterSignup } from './NewsletterSignup';
 
+/** Footer columns shown until (or if) the site settings can't be loaded. Mirrors SiteSettingsService.Defaults. */
 const FALLBACK_COLUMNS: { title: string; links: SiteLink[] }[] = [
   {
-    title: 'Services',
+    title: 'Academy',
+    links: [
+      { label: 'All courses', url: '/learn' },
+      { label: 'AI courses', url: '/learn?category=Ai' },
+      { label: 'Marketing courses', url: '/learn?category=Marketing' },
+      { label: 'SEO courses', url: '/learn?category=Seo' },
+      { label: 'Learning paths', url: '/academy#paths' },
+      { label: 'Certificates', url: '/academy#certificates' },
+      { label: 'Academy overview', url: '/academy' },
+    ],
+  },
+  {
+    title: 'Agency',
     links: [
       { label: 'All services', url: '/services' },
-      { label: 'Pricing', url: '/pricing' },
+      { label: 'Industries', url: '/industries' },
       { label: 'Case studies', url: '/case-studies' },
+      { label: 'Pricing', url: '/pricing' },
+      { label: 'Free marketing audit', url: '/free-audit' },
     ],
   },
   {
@@ -22,15 +37,7 @@ const FALLBACK_COLUMNS: { title: string; links: SiteLink[] }[] = [
       { label: 'About', url: '/about' },
       { label: 'Careers', url: '/careers' },
       { label: 'Blog', url: '/blog' },
-      { label: 'Free courses', url: '/learn' },
-    ],
-  },
-  {
-    title: 'Creators',
-    links: [
       { label: 'Become a creator', url: '/creators' },
-      { label: 'Creator FAQ', url: '/faq' },
-      { label: 'Create an account', url: '/register' },
     ],
   },
 ];
@@ -69,7 +76,7 @@ export function SiteFooter({ onCookieSettings }: { onCookieSettings: () => void 
           <Logo size={30} title={`Optimize All — ${BRAND_TAGLINE}`} />
           <p className="site-footer__blurb">
             {site?.footer.blurb ??
-              'A full-service digital marketing agency: search, social, paid media, content, email, brand and web.'}
+              'A learning platform and a growth agency: free, certificate-backed courses in AI, marketing, SEO, sales and business — and a full-service digital marketing team.'}
           </p>
           <PartnerSlot slot="footer.partners" />
           {contact && (

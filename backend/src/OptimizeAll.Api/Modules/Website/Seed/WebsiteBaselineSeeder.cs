@@ -16,6 +16,9 @@ namespace OptimizeAll.Api.Modules.Website.Seed;
 /// </summary>
 public sealed class WebsiteBaselineSeeder : ISeeder
 {
+    /// <summary>Ledger key of the one-time upgrade of untouched defaults to the academy + agency positioning.</summary>
+    public const string TwoPillarsUpgradeKey = "upgrade:two-pillars-2026-09";
+
     public string Profile => "Baseline";
     public int Order => 60;
 
@@ -160,6 +163,33 @@ public sealed class WebsiteBaselineSeeder : ISeeder
             db.Add(new SiteSettingsDocument { Json = JsonSerializer.Serialize(SiteSettingsService.Defaults, SiteSettingsService.Json) });
         if (!await db.Set<ConsultationSettings>().AnyAsync(s => s.Key == ConsultationSettings.DefaultKey, ct))
             db.Add(BookingService.Defaults());
+
+        // ---- Two-pillar repositioning (2026-09, once): the academy joins the agency in the navigation, footer, default
+        // SEO texts and About page. Only content that still equals the previous built-in defaults is replaced; anything an
+        // editor has changed stays exactly as it is.
+        if (!ledger.WasSeeded(TwoPillarsUpgradeKey))
+        {
+            ledger.Record(TwoPillarsUpgradeKey);
+            var settingsDoc = await db.Set<SiteSettingsDocument>().FirstOrDefaultAsync(d => d.Key == SiteSettingsDocument.DefaultKey, ct);
+            if (settingsDoc is not null && SiteSettingsService.UpgradeFromPreviousDefaults(SiteSettingsService.Parse(settingsDoc.Json)) is { } upgraded)
+                settingsDoc.Json = JsonSerializer.Serialize(upgraded, SiteSettingsService.Json);
+
+            var previous = BaselinePages.PreviousAbout;
+            var about = await db.Set<SitePage>().FirstOrDefaultAsync(p => p.Slug == previous.Slug, ct);
+            if (about is not null && about.Version == 0 && about.Title == previous.Title && about.Summary == previous.Summary
+                && about.BlocksJson == PageBlockValidator.Serialize(previous.Blocks))
+            {
+                var next = BaselinePages.Pages.First(p => p.Slug == previous.Slug);
+                about.Summary = next.Summary;
+                about.BlocksJson = PageBlockValidator.Serialize(next.Blocks);
+                if (about.Seo.Title == BaselineSeo.PreviousAboutTitle && about.Seo.Description == BaselineSeo.PreviousAboutDescription)
+                {
+                    var seo = BaselineSeo.ForPage(next.Slug, next.Summary);
+                    about.Seo.Title = seo.Title;
+                    about.Seo.Description = seo.Description;
+                }
+            }
+        }
 
         await db.SaveChangesAsync(ct);
     }
