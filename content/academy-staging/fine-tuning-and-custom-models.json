@@ -6,7 +6,7 @@
   "subtitle": "When not to fine-tune, data curation, SFT, LoRA/QLoRA, DPO, GRPO, distillation, embeddings, evaluation, cost and deployment",
   "category": "ai",
   "level": "advanced",
-  "estimatedMinutes": 374,
+  "estimatedMinutes": 401,
   "description": "Fine-tuning is powerful for the right problems and a costly detour for the wrong ones. This advanced, hands-on course teaches you to decide with evidence and then do it properly. You will climb the customization ladder before touching weights, map methods to gaps (SFT, LoRA and QLoRA, DPO and other preference methods, reinforcement fine-tuning with GRPO, distillation and embedding fine-tuning), and build datasets that teach what you mean: labeling guides, coverage, deduplication, leakage-free splits, synthetic data with strict filtering, PII redaction and license checks. You will train with Hugging Face TRL, PEFT, Unsloth and Axolotl, evaluate against your best non-fine-tuned baseline by slice with confidence intervals, compare hosted platforms including the 2026 changes, and model costs and break-even. Finally you will deploy, monitor drift and retrain, and complete a capstone: a fine-tuned support-intent router with a full evaluation report.",
   "outcomes": [
     "Decide when fine-tuning is justified using the customization ladder",
@@ -116,13 +116,19 @@
           ],
           "activity": "Complete the fine-tuning worksheet for one real task: record the score at each rung you have tried and decide whether fine-tuning is justified.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A company spent three months fine-tuning a model to answer questions about its products. It launched, and within two weeks half the answers were outdated because prices and policies had changed. The fix was a retrieval system that took a week. In this lesson you will learn when not to fine-tune, the customization ladder to climb first, and the five signals that tell you fine-tuning is genuinely worth it.",
                 "onScreen": "When NOT to fine-tune\n• The customization ladder\n• Five signals that justify it",
                 "visual": "A calendar flipping through three months, then a product card whose price tag keeps changing while an AI answer bubble shows an old price.",
                 "seconds": 30
+              },
+              {
+                "narration": "Here is an analogy. Prompting is like giving a talented new employee a clear brief. Retrieval is giving them access to the company handbook and files. Fine-tuning is sending them on a months-long training course that changes their habits. You would not send someone on a training course to learn this week's price list. You would give them the price list. But if you need them to write in the house style every single day without reminders, training starts to make sense.",
+                "onScreen": "Analogy: a new employee\n• Prompt = a clear brief\n• RAG = access to the handbook\n• Fine-tuning = a course that changes habits",
+                "visual": "Three panels animate left to right: a brief on a clipboard, a bookshelf labeled handbook, and a classroom with a certificate. A price-list card tries to enter the classroom and is redirected to the bookshelf.",
+                "seconds": 36
               },
               {
                 "narration": "Here is the context for twenty twenty-six. Modern models follow instructions and formats far better than earlier generations, and prompt caching, long context and retrieval make prompting cheaper and more capable. When OpenAI began winding down its self-serve fine-tuning platform this year, it pointed to exactly that: newer models follow formats much better, and prompt-based approaches are often cheaper and faster. Fine-tuning is still powerful, but for specific problems, not as a default.",
@@ -167,10 +173,22 @@
                 "seconds": 33
               },
               {
+                "narration": "A simple example. A small bakery in Lahore wants its AI assistant to answer questions about today's menu and opening hours. Someone suggests fine-tuning. But the menu changes daily and the hours change during Ramadan. That is knowledge, and it changes often. The right answer is a short prompt plus a retrieval step that reads the current menu file. It took an afternoon, and when the menu changes, they edit one file. No training run needed.",
+                "onScreen": "Simple example: bakery menu\n• Daily menu + seasonal hours = changing knowledge\n• Prompt + retrieval from menu file\n• Edit a file, not a model",
+                "visual": "A menu card updates its items with a flip animation each day; an arrow shows the assistant reading the latest card, while a greyed-out training icon is crossed out.",
+                "seconds": 33
+              },
+              {
                 "narration": "Let me give you a quick test you can run in a meeting. When someone proposes fine-tuning, ask three questions. What is the score of our best prompted setup on our evaluation set today? What specific gap remains: knowledge, behavior, cost or latency? And who will maintain the model when the base model changes next year? If nobody can answer the first question, the project is not ready. If the gap is knowledge, the answer is retrieval. And if nobody owns maintenance, the fine-tune will quietly rot.",
                 "onScreen": "The meeting test\n• What does our best prompted setup score?\n• Which gap: knowledge, behavior, cost, latency?\n• Who maintains it next year?",
                 "visual": "Meeting room whiteboard with three questions written one by one; a sticky note labeled \"owner?\" is added beside the third.",
                 "seconds": 38
+              },
+              {
+                "narration": "Try this now. Pick one AI task your team wants to improve and write down its current score on ten real examples, using your best prompt. Then write one sentence describing the remaining gap and label it: knowledge, behavior, cost or latency. If it says knowledge, stop and plan retrieval instead. If it says behavior, cost or latency, keep it for the worksheet.",
+                "onScreen": "Try this now\n• Score your best prompt on 10 examples\n• Name the gap: knowledge, behavior, cost, latency\n• Knowledge → retrieval",
+                "visual": "A small score card with 10 checkboxes filling in, then a four-option label selector where one option lights up and a routing arrow appears.",
+                "seconds": 27
               },
               {
                 "narration": "Recap. Fine-tuning changes behavior, not knowledge. Climb the ladder: prompt, examples, structure, retrieval, model choice, and only then fine-tuning. Look for the five signals, and measure every rung on the same evaluation set. Your next step: fill in the worksheet for one real task and decide, with evidence, whether fine-tuning is justified.",
@@ -256,13 +274,19 @@
           ],
           "activity": "For one product, list three performance gaps and map each to a method, data format and evaluation metric using the decision flow.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Ask five engineers what fine-tuning means and you will get five answers. One means training on examples, one means LoRA, one means RLHF, one means distillation, and one means making the search better. They are all different techniques with different data, tools and results. In this lesson you will get one clear map of customization methods, a decision flow to pick the right one, and the exact data format each needs.",
                 "onScreen": "The methods map\n• One vocabulary\n• A decision flow\n• Data formats per method",
                 "visual": "Five speech bubbles with different words overlapping, then resolving into a clean labeled map with seven regions.",
                 "seconds": 31
+              },
+              {
+                "narration": "Here is a way to remember the methods. SFT is teaching by showing: here is the task, here is how I would do it. Preference optimization is teaching by comparing: this answer is better than that one. Reinforcement fine-tuning is teaching by scoring: try many times, and I will mark each attempt. Distillation is apprenticeship: watch the master and copy. And embedding fine-tuning is training a librarian to find the right book. Five teaching styles for five kinds of learning.",
+                "onScreen": "Five teaching styles\n• SFT = showing\n• DPO = comparing\n• RFT = scoring attempts\n• Distillation = apprenticeship\n• Embeddings = training a librarian",
+                "visual": "Five small classroom vignettes appear in a row, each with an icon: a demonstration, two cards with a winner, a scored test, a master and apprentice, and a librarian at a shelf.",
+                "seconds": 35
               },
               {
                 "narration": "Let's walk the map. Continued pre-training feeds large amounts of raw domain text, and it is rare and expensive for businesses. Supervised fine-tuning, SFT, gives input and ideal output pairs, and the model imitates the demonstrated behavior. Parameter-efficient fine-tuning, like LoRA and QLoRA, trains small adapter weights instead of the whole model. Important: that is a how, not a what. You can do SFT with LoRA, preference training with LoRA, and reinforcement training with LoRA.",
@@ -307,10 +331,22 @@
                 "seconds": 27
               },
               {
+                "narration": "A simple example. A recipe app wants three improvements. First, always output recipes in the same structured format: that is SFT with examples of the format. Second, users prefer friendlier, shorter tips, and it is easier to pick the better tip than to write the perfect one: that is preference data and DPO. Third, when a user searches for quick vegan dinner, results often miss the right recipes: that is an embedding problem. Three gaps, three different methods, and none of them is simply more fine-tuning.",
+                "onScreen": "Simple example: recipe app\n• Consistent format → SFT\n• Friendlier tips → DPO\n• Search misses → embedding fine-tuning",
+                "visual": "Recipe app mock-up with three highlighted areas; each area gets a method badge that flies in and sticks to it.",
+                "seconds": 37
+              },
+              {
                 "narration": "A practical tip on sequencing. Most successful projects follow the same order: first SFT to teach the task and format, then, only if needed, preference optimization for subjective quality, or reinforcement fine-tuning for checkable correctness. Distillation is usually SFT with teacher outputs as the data. And embedding fine-tuning runs on its own track, because it improves retrieval rather than generation. Skipping SFT and jumping straight to DPO or GRPO usually gives weak results, because the model cannot yet do the basic task.",
                 "onScreen": "Sequencing\n• SFT first\n• Then DPO (subjective) or RFT (checkable)\n• Distillation = SFT on teacher outputs\n• Embeddings: separate track",
                 "visual": "Horizontal pipeline: SFT box first, branching to DPO and RFT boxes; a separate lane below labeled embeddings.",
                 "seconds": 36
+              },
+              {
+                "narration": "Try this now. For one product you know, write three sentences that each start with the model currently fails when. Then next to each, write which method from the map fits, and what the training data would look like in one line. If you cannot describe the data, that is the real blocker to solve first.",
+                "onScreen": "Try this now\n• 3 × \"the model currently fails when…\"\n• Method per failure\n• One-line data description\n• Can't describe data? Solve that first",
+                "visual": "Three sentence strips appear; beside each, a method chip and a one-line JSON sample type in.",
+                "seconds": 24
               },
               {
                 "narration": "Recap. SFT imitates demonstrations. LoRA is how you train cheaply, with any objective. DPO learns from preferences, reinforcement fine-tuning learns from a grader, distillation shrinks a teacher into a student, and embedding fine-tuning improves retrieval. Choose by gap type, then choose hosted or self-managed. Your next step: list three gaps in one product and map each to a method, data format and metric.",
@@ -431,13 +467,19 @@
           ],
           "activity": "Write a one-page labeling guide for one task, have two people label the same 50 examples, measure agreement, and run the prep script on your data.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here is a story I have seen many times. A team fine-tunes a model on twelve thousand examples, gets disappointing results, and spends two weeks tweaking learning rates. Nothing helps. Then someone reads a hundred training examples and finds duplicates, contradictory labels and a system prompt that does not match production. In this lesson you will learn to design and curate datasets so that the model learns what you actually mean.",
                 "onScreen": "Dataset design and curation\n• The model becomes its data\n• Guide, collect, clean, split\n• Document it",
                 "visual": "A dashboard of learning-rate sliders being nudged endlessly, then a magnifying glass over a spreadsheet revealing duplicate rows and conflicting labels highlighted in red.",
                 "seconds": 31
+              },
+              {
+                "narration": "Think of training data as a recipe book you hand to a new cook. If half the recipes are duplicates, the cook thinks those dishes are twice as important. If two recipes for the same dish disagree on the salt, the cook learns to guess. And if the book only has summer dishes, the cook panics in winter. The cook can only be as good as the book. That is why dataset design matters more than any training setting.",
+                "onScreen": "Analogy: a recipe book\n• Duplicates = false importance\n• Contradictions = guessing\n• Missing seasons = gaps\n• Cook ≤ book",
+                "visual": "An open recipe book with pages flipping; duplicate pages glow, two conflicting pages flash red, and a missing \"winter\" tab appears as an empty slot.",
+                "seconds": 34
               },
               {
                 "narration": "Start with a labeling guide, before you collect anything. The task in one sentence and the exact output. Every label with a definition, two good examples and one tricky counter-example. Priority rules for ambiguous cases, like money issues outrank delivery issues. And what to do with out-of-scope, abusive or unexpected-language inputs. Then test the guide. Two people label the same hundred examples independently, and you measure agreement. If humans cannot apply the rule consistently, the model cannot learn it.",
@@ -482,10 +524,22 @@
                 "seconds": 37
               },
               {
+                "narration": "A simple example. A florist's online shop wants to classify customer messages into order, delivery, complaint and other. They pull three hundred messages. Reading them, they find forty identical auto-replies, which they remove. They find two staff members labeled late delivery complaints differently, so they add a rule: anything about lateness is delivery. And they notice almost no messages from Valentine's week, their busiest period, so they pull more from last February. Three fixes, one afternoon, a much better dataset.",
+                "onScreen": "Simple example: florist shop\n• Remove 40 duplicate auto-replies\n• Rule: lateness → delivery\n• Add Valentine's week messages",
+                "visual": "A message list scrolls; duplicate rows collapse, two conflicting labels merge under a new rule card, and a calendar highlights February with new rows sliding in.",
+                "seconds": 35
+              },
+              {
                 "narration": "One more habit that pays off: read your data. Before every training run, open fifty random examples and read them, start to finish. You will find things no script catches: a label that means something different to the night shift, a template reply pasted into hundreds of messages, a language you did not know you had. Keep a short log of what you found and what you changed. That log becomes part of your data card, and it is often the most useful page in it.",
                 "onScreen": "Read your data\n• 50 random examples before every run\n• Find what scripts miss\n• Log findings in the data card",
                 "visual": "A reviewer scrolling through example cards with small sticky notes appearing on a few: \"different meaning at night\", \"template reply\", \"unexpected language\".",
                 "seconds": 37
+              },
+              {
+                "narration": "Try this now. Export fifty real examples for one task, and read every one of them. Count duplicates, count examples you are unsure how to label, and note which languages and channels appear. Those three numbers will tell you more about your fine-tuning readiness than any model benchmark.",
+                "onScreen": "Try this now\n• Read 50 real examples\n• Count duplicates\n• Count unsure labels\n• Note languages and channels",
+                "visual": "Three counters animate upward as a list of fifty examples scrolls past: duplicates, unsure, and a small pie chart for languages.",
+                "seconds": 21
               },
               {
                 "narration": "Recap. The model becomes its data. Write and test a labeling guide. Cover the real variety of your traffic. Clean duplicates, fix labels and match production format. Split by customer or time. And document a data card. Your next step: write a one-page guide for one task, have two people label fifty examples, measure agreement, and run the prep script.",
@@ -567,13 +621,19 @@
           ],
           "activity": "Run the synthetic pipeline for one under-covered class and language in your coverage matrix, review 50 outputs, and report your rejection rate and reasons.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Imagine you need two thousand labeled customer messages in Roman Urdu for a rare complaint type, and you have forty. You could wait six months for real data. Or you could ask a strong model to help. In this lesson you will learn how to use synthetic data and distillation properly: the four ways to use a teacher model, how to make synthetic data diverse, how to filter it, and the license checks that keep you out of trouble.",
                 "onScreen": "Synthetic data and distillation\n• Four uses of a teacher\n• Diversity and filtering\n• License and terms checks",
                 "visual": "A small pile of 40 message cards next to an empty space for 2,000; a teacher model icon begins producing cards that pass through a filter.",
                 "seconds": 34
+              },
+              {
+                "narration": "Here is an analogy for distillation. A master chef runs a famous restaurant, but hiring the master for every branch is too expensive. So the master cooks a thousand plates of the signature dish while an apprentice watches, tastes and practises. The apprentice will never be the master, but for that one dish, they can get very close, and they cost a fraction as much. The key word is one dish. Distillation shines on narrow tasks.",
+                "onScreen": "Analogy: master and apprentice\n• Teacher = master chef\n• Student = apprentice\n• One signature dish = narrow task",
+                "visual": "Kitchen scene: a large chef figure plates identical dishes while a smaller figure copies; a price tag on each shows a big difference, and a label \"one dish\" highlights.",
+                "seconds": 33
               },
               {
                 "narration": "First, the idea of distillation. A strong teacher model produces outputs on your task, and a smaller student model is trained to imitate them. Done well, the student keeps much of the teacher's quality on that one task, at a fraction of the cost and latency. Many public open-weight models were themselves trained partly this way. But the student also inherits the teacher's mistakes and biases, so filtering is not optional.",
@@ -618,10 +678,22 @@
                 "seconds": 38
               },
               {
+                "narration": "A simple example. A language school has two hundred real student questions about course schedules in English, but almost none in Arabic. They ask an open-weight teacher model to write Arabic versions of the questions in different styles, formal, casual and with typos, using made-up names. They generate six hundred, filter duplicates and anything off-topic, have a bilingual teacher review fifty, and keep four hundred. The Arabic gap in their coverage matrix is filled, and they test only on real Arabic questions collected later.",
+                "onScreen": "Simple example: language school\n• Gap: Arabic questions\n• Generate 600 in varied styles\n• Filter + review 50 → keep 400\n• Test on real Arabic only",
+                "visual": "Coverage matrix with an empty Arabic cell; generated cards pour in, pass a filter, a reviewer icon checks a sample, and the cell fills to a healthy level.",
+                "seconds": 37
+              },
+              {
                 "narration": "How much synthetic data is too much? There is no universal number, but watch two signals. First, per-class share: if a class is mostly synthetic, its test performance on real data is the only thing to trust. Second, style drift: synthetic messages tend to be cleaner, more polite and more grammatical than real ones. If your model starts struggling with typos, slang or voice-note transcripts, you have too much clean synthetic data. Keep real examples dominant wherever you have them.",
                 "onScreen": "Too much synthetic?\n• Watch synthetic share per class\n• Watch style drift: too clean, too polite\n• Keep real data dominant",
                 "visual": "Stacked bars per class showing real and synthetic proportions; one bar mostly synthetic is flagged; a message card with typos contrasts with a polished synthetic one.",
                 "seconds": 35
+              },
+              {
+                "narration": "Try this now. Find the emptiest cell in your coverage matrix, the class and language combination with the fewest real examples. Write a generation prompt for it that specifies intent, language, channel and difficulty, and includes one anonymized real example. Generate twenty, and read all twenty before you generate any more.",
+                "onScreen": "Try this now\n• Find the emptiest cell\n• Write a controlled generation prompt\n• Generate 20, read all 20",
+                "visual": "The coverage matrix appears; one cell pulses. A prompt card types beside it, and twenty small cards appear in a grid with a reviewer eye icon.",
+                "seconds": 22
               },
               {
                 "narration": "Recap. Use teachers to label, write, fill gaps and create preference pairs. Design for diversity with attribute grids. Filter hard, and evaluate the student only on real held-out data. And always check terms and licenses. Your next step: run the pipeline for one under-covered cell of your coverage matrix, review fifty outputs, and report your rejection rate and the reasons.",
@@ -707,13 +779,19 @@
           ],
           "activity": "Run the redaction script (with local recognizers) on 100 of your training examples, review misses manually, and record the miss rate in your data card.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here is an uncomfortable fact. If a training example contains a customer's phone number, the fine-tuned model might one day repeat it to someone else. And deleting that customer from your database does not delete them from the model. In this lesson you will learn to treat training data as both an asset and a liability: rights, minimization, PII redaction, copyright and licenses, regulation touchpoints, and safety testing after tuning. This is practical guidance, not legal advice.",
                 "onScreen": "Data safety, licensing, privacy\n• Memorization is real\n• Rights and minimization\n• Redaction, licenses, safety tests",
                 "visual": "A model icon with a speech bubble containing a blurred phone number; a delete key is pressed on a database row but the bubble remains.",
                 "seconds": 33
+              },
+              {
+                "narration": "Here is an analogy. Training a model on data is like mixing ingredients into a cake. Before baking, you can still pick out a raisin you did not want. After baking, the raisin is inside, and getting it out means baking a new cake. Personal data in training sets is that raisin. So you check the ingredients before you bake: do we have the right to use them, do we need them at all, and have we removed what should not be there?",
+                "onScreen": "Analogy: baking a cake\n• Before baking: remove what you don't want\n• After baking: remake the cake\n• Check ingredients first",
+                "visual": "Mixing bowl with ingredients; a tweezer removes one raisin labeled PII before the bowl goes into an oven. Then a finished cake with a highlighted raisin inside and a \"bake again\" label.",
+                "seconds": 36
               },
               {
                 "narration": "Ask four questions of every dataset. Rights: are we allowed to use this for training, under privacy law, contracts, platform terms, copyright and dataset licenses? Minimization: does the task need personal data at all? An intent classifier does not need names or account numbers. Security: where is data stored, who can access it, and where does training run? And retention and deletion: how long do we keep raw data, cleaned data and models, and what happens when someone asks to be deleted?",
@@ -758,10 +836,22 @@
                 "seconds": 29
               },
               {
+                "narration": "A simple example. An estate agency wants a model that classifies enquiry emails. The emails contain names, phone numbers and addresses. For classification, none of that is needed. So they replace names with Customer, phone numbers with a fixed fake number, and addresses with City, before training. They check fifty redacted emails by hand, find three missed phone numbers in an unusual format, add a pattern for it, and re-run. The model learns the intent, not the people.",
+                "onScreen": "Simple example: estate agency\n• Replace names, phones, addresses\n• Hand-check 50 → 3 misses\n• Add a pattern, re-run\n• Model learns intent, not people",
+                "visual": "An email with highlighted entities being replaced by placeholders; a checklist shows 47 clean and 3 flagged, then a new pattern card is added and all 50 turn clean.",
+                "seconds": 34
+              },
+              {
                 "narration": "Document it so others can trust it. Your data card should record the lawful basis or contractual permission you rely on, what personal data was removed and how, the measured redaction miss rate, the licenses of any external datasets, the base model license, and who approved the use. When a regulator, customer or auditor asks how the model was trained, you want to hand over a document, not start an investigation.",
                 "onScreen": "Document for trust\n• Lawful basis or permission\n• Redaction method + miss rate\n• Dataset and base-model licenses\n• Approver",
                 "visual": "Data card document with sections highlighted in sequence, then handed across a desk to an auditor icon.",
                 "seconds": 31
+              },
+              {
+                "narration": "Try this now. Take ten real training examples and highlight every piece of personal data by hand. Then run an automatic detector on the same ten and compare. Count what the detector missed. That miss count, even on ten examples, tells you whether your redaction is ready or needs custom patterns first.",
+                "onScreen": "Try this now\n• Hand-highlight PII in 10 examples\n• Run a detector on the same 10\n• Count the misses",
+                "visual": "Two columns of the same ten examples: hand-highlighted on the left, detector-highlighted on the right; mismatches blink and a miss counter increments.",
+                "seconds": 23
               },
               {
                 "narration": "Recap. Models can memorize, so treat training data as a liability. Ask about rights, minimization, security and deletion. Redact and replace personal data, and measure what you miss. Respect copyright and licenses. Know your regulation touchpoints. And re-test safety after tuning. Your next step: run the redaction script on a hundred of your examples, review misses by hand, and record the miss rate in your data card.",
@@ -862,13 +952,19 @@
           ],
           "activity": "Train a LoRA SFT adapter on your prepared dataset, plot training and validation loss, and compare task accuracy at each saved checkpoint.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Supervised fine-tuning is the workhorse of model customization. It is also where most first attempts quietly go wrong, not because the idea is hard, but because of three small details. In this lesson you will see what actually happens during SFT, the data formats that make it easy, the hyperparameters that matter, how to read training curves, and a complete working script with TRL and LoRA.",
                 "onScreen": "SFT fundamentals\n• What happens in training\n• Formats and hyperparameters\n• Curves and a working script",
                 "visual": "An abstract neural network whose connection strengths gently shift as example cards flow into it.",
                 "seconds": 29
+              },
+              {
+                "narration": "An analogy for SFT. Imagine teaching someone to write customer replies by giving them a folder of excellent past replies, each paired with the customer's message. They read message, reply, message, reply, thousands of times, and slowly their instincts shift. That is SFT. Loss masking means you only grade them on the replies they write, not on copying out the customer's message. And the chat template is the letterhead: if you train on one letterhead and then hand them a different one at work, they hesitate.",
+                "onScreen": "Analogy: learning from a folder of great replies\n• Message → reply pairs\n• Graded only on replies (loss masking)\n• Same letterhead (template) at work",
+                "visual": "A folder opens to paired message and reply cards; only reply cards get a red-pen grade mark. Then two letterheads appear, one matching and one mismatched with a question mark.",
+                "seconds": 37
               },
               {
                 "narration": "A language model predicts the next token. SFT simply continues that training on your examples. For each example the model sees the prompt and the ideal response, and its weights are nudged so the ideal response becomes a little more likely. Repeat over thousands of examples, for one to a few passes called epochs, and the model's default behavior shifts toward your demonstrations.",
@@ -913,10 +1009,22 @@
                 "seconds": 31
               },
               {
+                "narration": "A simple example. A gym chain wants a tiny model to label member messages as booking, billing, complaint or other. They prepare eight hundred prompt and completion examples, train a LoRA adapter for two epochs on a small instruct model, and watch the curves. Validation loss flattens after the first epoch. They compare checkpoints on the validation set: epoch one scores slightly better. They keep epoch one, run the test set once, and move on. The whole job takes less than an hour on one GPU.",
+                "onScreen": "Simple example: gym chain\n• 800 prompt/completion examples\n• LoRA, 2 epochs, small model\n• Best checkpoint: epoch 1\n• < 1 hour on one GPU",
+                "visual": "A training progress bar runs; two loss curves draw, with the validation curve flattening; two checkpoint cards compare and epoch 1 gets a star.",
+                "seconds": 37
+              },
+              {
                 "narration": "A few habits make SFT experiments far more productive. Start with a tiny run on a hundred examples to confirm the pipeline works end to end, including evaluation, before spending hours of GPU time. Keep a fixed validation set and never change it mid-project. Change one hyperparameter at a time. And save the exact config and data hash with every run, so when something works, you know precisely why.",
                 "onScreen": "Productive habits\n• Tiny smoke-test run first\n• Fixed validation set\n• One change at a time\n• Save config + data hash per run",
                 "visual": "A small test tube icon labeled smoke test lighting green before a large training job starts; a run log table with config hash columns.",
                 "seconds": 30
+              },
+              {
+                "narration": "Try this now. Convert twenty of your labeled examples into the prompt and completion format shown in the lesson, with the exact system prompt you will use in production. Load them with the datasets library and print one example after the tokenizer's chat template is applied. Seeing the special tokens around your text is the moment chat templates stop being abstract.",
+                "onScreen": "Try this now\n• Convert 20 examples to prompt/completion\n• Use the production system prompt\n• Print one after applying the chat template",
+                "visual": "A JSON line transforms into a templated string with special tokens highlighted in a different color, animating token by token.",
+                "seconds": 27
               },
               {
                 "narration": "Recap. SFT continues next-token training on your demonstrations. Mask loss to responses, keep templates and prompts identical to production, and use prompt-completion format for short-answer tasks. Tune one thing at a time, watch for overfitting, and pick checkpoints by task metrics. Your next step: train a LoRA adapter on your dataset, plot the curves, and compare accuracy across checkpoints.",
@@ -1006,13 +1114,19 @@
           ],
           "activity": "Train a QLoRA adapter for a style task on your GPU (or a rented one), merge it, quantize for serving, and compare scores before and after quantization.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A few years ago, fine-tuning a seven billion parameter model meant a rack of expensive GPUs and a full copy of the model for every task. Today you can do it overnight on one consumer graphics card and store the result in a file smaller than a movie. That shift is thanks to LoRA and QLoRA. In this lesson you will learn how they work, how to choose settings, and how to take an adapter all the way to a served model.",
                 "onScreen": "LoRA, QLoRA and PEFT\n• How they work\n• Choosing settings\n• From adapter to served model",
                 "visual": "A room full of server racks shrinks into a single desktop GPU, and a large model file shrinks into a small adapter file beside the base model.",
                 "seconds": 36
+              },
+              {
+                "narration": "Here is the analogy for LoRA. Imagine a huge, expensive textbook. Instead of reprinting it with your changes, you add a slim set of sticky notes that adjust key pages. Anyone with the original book plus your sticky notes gets your version. You can keep different sets of notes for different courses, and swap them in seconds. QLoRA goes one step further: you keep a compressed pocket edition of the textbook on your desk while writing the notes, so it takes far less space.",
+                "onScreen": "Analogy: sticky notes on a textbook\n• Base model = the textbook (unchanged)\n• LoRA adapter = sticky notes\n• Swap note sets per task\n• QLoRA = pocket edition while writing notes",
+                "visual": "A thick book on a desk; colored sticky-note sets attach to pages, then swap for another color set. A smaller pocket-sized copy replaces the big book while notes are written.",
+                "seconds": 37
               },
               {
                 "narration": "Full fine-tuning updates every weight, which needs memory for gradients and optimizer states several times the model's size, and produces a full new model per task. Parameter-efficient fine-tuning freezes the base model and trains a small number of new parameters instead. LoRA is the most widely used way to do that.",
@@ -1057,10 +1171,22 @@
                 "seconds": 33
               },
               {
+                "narration": "A simple example. A marketing agency wants one small model to write product descriptions for three clients with very different tones: a luxury perfume brand, a budget electronics store and a children's toy shop. Instead of three full models, they train three LoRA adapters, each on about five hundred approved descriptions, on one twenty-four gigabyte GPU. At serving time, one base model loads, and the right adapter is picked per client. Three voices, one GPU, small files.",
+                "onScreen": "Simple example: 3 client voices\n• 3 LoRA adapters × ~500 examples\n• One 24 GB GPU\n• One base model serves all three",
+                "visual": "One base model icon in the center with three colored adapter plugs labeled perfume, electronics and toys; a request arrives and the matching plug lights up.",
+                "seconds": 33
+              },
+              {
                 "narration": "What about memory for full fine-tuning versus LoRA, in practical terms? Full fine-tuning with a standard optimizer typically needs memory for the weights, the gradients and two optimizer states per parameter, several times the model size. LoRA keeps the base frozen and only needs gradients and optimizer states for the tiny adapter. QLoRA then shrinks the frozen base itself. That is the whole reason a job that once needed a multi-GPU server now fits on one card.",
                 "onScreen": "Where the memory goes\n• Full FT: weights + gradients + optimizer states\n• LoRA: states only for the adapter\n• QLoRA: plus a 4-bit frozen base",
                 "visual": "Three stacked memory bars: a tall full fine-tuning bar with four segments, a shorter LoRA bar, and a short QLoRA bar fitting under a single-GPU line.",
                 "seconds": 33
+              },
+              {
+                "narration": "Try this now. Take a model you might fine-tune and look up two numbers in its config: hidden size and number of layers. Estimate the LoRA parameters for one projection matrix at rank sixteen: sixteen times the two dimensions added together. Then multiply by the number of target matrices per layer and the number of layers. Compare that with the model's total parameters. Seeing the percentage makes LoRA's efficiency real.",
+                "onScreen": "Try this now\n• Find hidden size + layers\n• r × (d + k) per matrix\n• × matrices per layer × layers\n• Compare with total parameters",
+                "visual": "Calculator-style animation: numbers from a config snippet feed a formula, producing a small parameter count beside a huge total, with a percentage badge.",
+                "seconds": 30
               },
               {
                 "narration": "Recap. LoRA trains small adapters while the base stays frozen, and all linear layers is the usual default. QLoRA puts the base in four-bit so you can train on one consumer GPU. Keep adapters per task, or merge into a sixteen-bit base for simple deployment, then quantize and re-evaluate. Your next step: train a QLoRA adapter for a style task, merge and quantize it, and compare scores before and after quantization.",
@@ -1158,13 +1284,19 @@
           ],
           "activity": "Convert your SFT script into either an Axolotl YAML or a pinned TRL project in Git, run it twice, and confirm the metrics match within variance.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Your first fine-tune usually lives in a notebook on one person's machine. It works, everyone celebrates, and three weeks later nobody can reproduce it. In this lesson you will map the open-source training stack, see when to use TRL, Unsloth or Axolotl, where to get GPUs, and how to make training reproducible so the second model is easier than the first.",
                 "onScreen": "The training stack\n• TRL, Unsloth, Axolotl\n• GPUs and environments\n• Reproducibility",
                 "visual": "A single notebook window on a laptop, then a question mark appears three weeks later on the calendar; the scene transitions to a tidy pipeline diagram.",
                 "seconds": 27
+              },
+              {
+                "narration": "Think of the training stack like a professional kitchen. Transformers is the pantry with every ingredient. PEFT is a technique, like sous vide, that gets great results with less energy. TRL is the set of recipes: SFT, DPO, GRPO. Unsloth is a faster oven. Axolotl is the kitchen's written recipe cards that any chef can follow exactly. And experiment tracking is the kitchen logbook: what was cooked, when, how, and how it tasted.",
+                "onScreen": "Analogy: a professional kitchen\n• Transformers = pantry\n• PEFT = technique\n• TRL = recipes\n• Unsloth = faster oven\n• Axolotl = recipe cards · tracking = logbook",
+                "visual": "A kitchen layout animates in labeled stations: pantry, technique station, recipe binder, oven, card rack and a logbook on the pass.",
+                "seconds": 32
               },
               {
                 "narration": "Here is the stack, layer by layer. Transformers loads models and templates. Datasets handles your data. PEFT provides LoRA and QLoRA adapters. TRL provides the trainers, SFT, DPO, GRPO, reward modeling and distillation. Unsloth speeds up training and cuts memory with custom kernels. Axolotl and LLaMA-Factory turn runs into YAML configuration. Accelerate, DeepSpeed and FSDP scale to multiple GPUs. And tracking tools like Weights and Biases or MLflow record every run.",
@@ -1209,10 +1341,22 @@
                 "seconds": 33
               },
               {
+                "narration": "A simple example. A two-person startup has one twelve gigabyte GPU. They try TRL and PEFT with QLoRA on a seven billion model and run out of memory at their sequence length. They switch the same data to Unsloth's loader with four-bit and gradient checkpointing, and the job fits and runs faster. Same data, same method, different tool. Knowing the stack lets you pick the tool that fits your constraints.",
+                "onScreen": "Simple example: 12 GB GPU\n• TRL + PEFT QLoRA: out of memory\n• Unsloth 4-bit + checkpointing: fits, faster\n• Same data and method",
+                "visual": "Memory bar for a 12 GB GPU: first attempt overflows red, second attempt with a different tool label fits under the line in green.",
+                "seconds": 30
+              },
+              {
                 "narration": "Experiment tracking deserves its own moment. Every run should record its config, library versions, data hash, hardware, duration, cost, training curves and evaluation metrics, in one place the whole team can see. Tools like Weights and Biases or MLflow do this with a few lines of setup. It turns the question which run was the good one from an argument into a lookup, and it is the first thing an auditor or a new team member will ask for.",
                 "onScreen": "Track every run\n• Config, versions, data hash\n• Hardware, duration, cost\n• Curves and eval metrics\n• One shared place",
                 "visual": "Run-tracking dashboard with a table of runs, sortable metric columns and one row starred as the chosen model.",
                 "seconds": 34
+              },
+              {
+                "narration": "Try this now. Create a requirements file that pins exact versions of transformers, TRL, PEFT, datasets and accelerate, and commit it next to your training script. Then write the base model's revision hash into your config. Those two small steps make your next run reproducible.",
+                "onScreen": "Try this now\n• Pin transformers, trl, peft, datasets, accelerate\n• Commit requirements + script\n• Record base model revision",
+                "visual": "Editor view of a requirements file with pinned versions typing in, then a git commit animation with a hash label.",
+                "seconds": 20
               },
               {
                 "narration": "Recap. Use TRL and PEFT for transparency, Unsloth for speed on one GPU, and Axolotl or LLaMA-Factory for reproducible configuration. Get GPUs from environments that match your data rules. Pin, hash, track and document every run. Your next step: turn your SFT script into a pinned project or an Axolotl YAML in Git, run it twice, and confirm the metrics match within normal variance.",
@@ -1321,13 +1465,19 @@
           ],
           "activity": "Collect 200 preference pairs from edits or A/B choices in your workflow, filter for length bias, and run a small DPO job; measure blind win rate on 50 held-out prompts.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Try this. Write the perfect reply to an angry customer. Hard, right? Now I show you two replies and ask which is better. Easy. That gap, between writing and choosing, is why preference optimization exists. In this lesson you will understand RLHF at a practitioner level, see why DPO became the default, meet the variants, learn where preference data comes from, and run a DPO job with TRL.",
                 "onScreen": "Preference optimization\n• Choosing is easier than writing\n• RLHF and DPO\n• Data sources and a working job",
                 "visual": "Two reply cards side by side with a cursor hovering, then a green tick landing on one; a blank page with a blinking cursor fades in the background.",
                 "seconds": 30
+              },
+              {
+                "narration": "Here is the analogy. Supervised fine-tuning is like a cooking class where the teacher shows you the perfect dish. Preference optimization is like a tasting panel: they taste two versions and say this one is better. You never see a perfect recipe, but after hundreds of tastings, your cooking drifts toward what the panel prefers. Beta is how far you are allowed to drift from your original style in one go. Too far, too fast, and you may forget how to cook the basics.",
+                "onScreen": "Analogy: tasting panel\n• SFT = cooking class with a perfect dish\n• DPO = panel picks the better of two\n• Beta = how far you may drift",
+                "visual": "Two plates on a table with a panel of three abstract judges raising a card for one; a slider labeled beta limits how far a style meter can move.",
+                "seconds": 37
               },
               {
                 "narration": "Classic RLHF has three stages. First, supervised fine-tuning. Second, train a reward model on human comparisons, so it predicts which answer people prefer. Third, use reinforcement learning, often an algorithm called PPO, to push the model toward higher reward, with a penalty that keeps it close to the original. It works, and frontier labs still rely heavily on reinforcement learning. But it is complex: two models, unstable training, and reward hacking, where the model exploits flaws in the reward model.",
@@ -1372,10 +1522,22 @@
                 "seconds": 33
               },
               {
+                "narration": "A simple example. A hotel's booking assistant gives correct but stiff answers. Over two weeks, the front-desk team is shown two reply drafts for real guest questions and taps the better one. They collect five hundred pairs. After removing pairs where the only difference was length, they run a small DPO job on the SFT model. In a blind test on fifty new questions, staff prefer the new replies most of the time, and booking accuracy stays the same.",
+                "onScreen": "Simple example: hotel assistant (illustrative)\n• 500 tap-the-better pairs\n• Remove length-only pairs\n• Small DPO job\n• Preferred in blind test, accuracy stable",
+                "visual": "Tablet mock-up showing two reply cards with a tap on one; a counter climbs to 500, then a before-and-after win-rate bar appears.",
+                "seconds": 34
+              },
+              {
                 "narration": "A practical workflow that works well. Ship the SFT model with a light review loop, where agents edit drafts before sending. Log the original draft and the edited version automatically. Every few weeks, filter those pairs, remove length-only edits, balance topics, and run a DPO update. Evaluate with a blind win rate and your regression suite, and release through champion and challenger. Your product improves continuously from normal work, without a separate labeling project.",
                 "onScreen": "Continuous preference loop\n• Agents edit drafts\n• Log draft vs edit automatically\n• Periodic DPO update\n• Blind win rate → release",
                 "visual": "Circular loop diagram: draft, agent edit, logged pair, DPO update, evaluation, release, back to draft.",
                 "seconds": 32
+              },
+              {
+                "narration": "Try this now. Take ten outputs from your current model and, for each, write a better version yourself or ask a colleague to. You now have ten preference pairs. Look at them together: is the better version longer every time? If so, you have found length bias before it reaches training.",
+                "onScreen": "Try this now\n• 10 outputs → write better versions\n• 10 preference pairs\n• Check: is \"better\" always longer?",
+                "visual": "Ten pairs of cards appear in a grid with a length bar under each card; a warning icon appears if the chosen bars are always longer.",
+                "seconds": 22
               },
               {
                 "narration": "Recap. Preference optimization learns from comparisons. RLHF uses a reward model and reinforcement learning, while DPO optimizes preferences directly with a reference model and a beta setting. Agent edits are gold, but watch length bias. And judge success by blind win rate plus regression tests. Your next step: collect two hundred pairs from your workflow, filter them, run a small DPO job, and measure the win rate on fifty held-out prompts.",
@@ -1485,12 +1647,18 @@
           ],
           "activity": "Write a grader for one checkable task in your work, test it on 20 known good and bad outputs, and describe two ways a model could game it and how you would block them.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Some questions have a right answer you can check. Is the fee correct? Does the code pass its tests? Did the model extract the right weight from the booking? When you can check, you can train differently. Instead of writing ideal answers or comparing pairs, you write a grader, and let the model learn to score higher. That is reinforcement fine-tuning. In this lesson you will learn GRPO, how to design graders, how to run it with TRL, and how to catch reward hacking.",
                 "onScreen": "Reinforcement fine-tuning\n• Checkable answers\n• GRPO and graders\n• Catching reward hacking",
                 "visual": "A stream of answers passing a checkpoint gate with a green or red light; green answers glow brighter over time.",
+                "seconds": 37
+              },
+              {
+                "narration": "Here is an analogy for GRPO. Imagine a class of students who each attempt the same maths question eight times. A strict marker scores every attempt. The teacher does not compare a student with the whole school, only with their own eight attempts: which were better than their own average? The student learns to do more of what worked. The marker is the grader, and if the marker only checks whether the right number appears anywhere, clever students will write every number they can think of.",
+                "onScreen": "Analogy: eight attempts, one marker\n• Group of attempts per question\n• Compare with own average\n• Marker = grader\n• Lenient marker → gaming",
+                "visual": "A worksheet with eight attempt rows; a marker icon stamps scores; an average line appears and rows above it glow. A sneaky attempt listing many numbers gets a red cross after the marker is tightened.",
                 "seconds": 37
               },
               {
@@ -1536,10 +1704,22 @@
                 "seconds": 35
               },
               {
+                "narration": "A simple example. A tutoring app wants its small model to solve percentage problems like what is fifteen percent of two hundred forty. The grader is easy: compute the right answer in code and check the model's final number. They collect five hundred problems, run GRPO for an hour on top of an SFT model, and the pass rate on a separate test set rises. They also add a small reward for showing one clear final answer, which stops the model hedging between two numbers.",
+                "onScreen": "Simple example: percentage problems\n• Grader: compute answer in code\n• 500 problems, GRPO on SFT model\n• Pass rate rises on separate test\n• Bonus for one clear final answer",
+                "visual": "A math problem card; eight model answers appear, a code checker ticks the correct ones, and a pass-rate gauge rises over training steps.",
+                "seconds": 37
+              },
+              {
                 "narration": "How big does an RFT run need to be? Smaller than you might think for narrow tasks. A few hundred to a few thousand prompts can move a checkable metric, because each prompt produces a whole group of scored samples. The expensive part is generation: sampling eight answers per prompt costs far more than a single SFT pass. That is why fast generation, for example with vLLM integration, and short maximum completion lengths matter so much for cost.",
                 "onScreen": "Run size and cost\n• Hundreds to thousands of prompts can help\n• Each prompt → a group of samples\n• Generation dominates cost\n• Fast generation + short completions",
                 "visual": "Cost breakdown pie chart where the generation slice dominates; a single prompt fans out into eight sample cards.",
                 "seconds": 34
+              },
+              {
+                "narration": "Try this now. Write your grader before you write any training code. Collect ten outputs you know are correct and ten you know are wrong, including one sneaky wrong answer that looks right. Run the grader on all twenty. If it scores the sneaky one as correct, fix the grader now, because training would find that loophole within hours.",
+                "onScreen": "Try this now\n• Grader first\n• 10 correct + 10 wrong (incl. 1 sneaky)\n• Fix any loophole before training",
+                "visual": "Twenty output cards pass through a grader gate; one sneaky card slips through green, then the gate is updated and it turns red.",
+                "seconds": 26
               },
               {
                 "narration": "Recap. Use reinforcement fine-tuning when correctness is checkable. GRPO reinforces answers that beat their group's average, without a critic model. Graders must be correct, hard to game, dense and composable. Expect reward hacking and keep an independent evaluation. Your next step: write a grader for one checkable task, test it on twenty good and bad outputs, and list two ways a model could game it.",
@@ -1644,13 +1824,19 @@
           ],
           "activity": "Write a decision rule for your fine-tune, then evaluate baseline vs fine-tuned on your test set by slice, with confidence intervals, and state ship or no-ship.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Every fine-tuning project ends with the same question: is it better? And most teams answer it badly, by comparing against the wrong thing, looking only at averages, or deciding what better means after seeing the results. In this lesson you will build an evaluation plan that gives an honest answer: the right baseline, the four parts of a plan, test sets and slices, a comparison harness, and online testing before full rollout.",
                 "onScreen": "Evaluation before and after\n• The right baseline\n• A four-part plan\n• Slices, harness, online tests",
                 "visual": "A scale with \"fine-tuned\" on one side and a question mark on the other, which resolves into a labeled baseline weight.",
                 "seconds": 31
+              },
+              {
+                "narration": "Here is an analogy. Evaluating a fine-tune is like testing a new recipe in a restaurant. You do not compare it with a raw ingredient, you compare it with the dish you already serve. You taste it across the whole menu, not just one plate, so you know it does not ruin the side dishes. And you decide in advance what better means, so nobody moves the goalposts when the chef is attached to their creation.",
+                "onScreen": "Analogy: a new recipe\n• Compare with today's dish (best baseline)\n• Taste across the menu (slices, regressions)\n• Define better in advance",
+                "visual": "Two plates side by side labeled \"current dish\" and \"new recipe\"; a menu board with several items gets tick marks, and a sealed envelope labeled \"decision rule\" sits on the table.",
+                "seconds": 33
               },
               {
                 "narration": "First, the baseline. Not the raw base model. Compare against the best setup you reached without fine-tuning: your best prompt, examples, structure, retrieval and model choice. That is what you would ship otherwise. If the fine-tune cannot beat it, at acceptable cost and risk, it should not ship. This single choice changes the conclusion of many projects.",
@@ -1695,10 +1881,22 @@
                 "seconds": 45
               },
               {
+                "narration": "A simple example. A travel agency's baseline is a strong API model with a good prompt, scoring ninety correct out of a hundred on intent classification. Their fine-tuned small model scores ninety-two. Before celebrating, they check slices: English ninety-four, Arabic eighty-eight, compared with ninety-one and eighty-nine for the baseline. Arabic dropped one point, within their two-point rule. Latency is five times lower. The rule says ship, so they ship, and keep watching the Arabic slice.",
+                "onScreen": "Simple example: travel agency (illustrative)\n• Baseline 90 · fine-tune 92\n• Arabic −1 (within 2-point rule)\n• 5× lower latency\n• Rule says ship",
+                "visual": "Bar chart with overall and per-language bars for baseline and fine-tune; a rule card checks each condition with a tick, ending with a \"ship\" stamp.",
+                "seconds": 33
+              },
+              {
                 "narration": "Make evaluation automatic. Put the test set, the baseline configuration, the scoring code and the decision rule in version control, and run them in your pipeline every time a model is trained. The pipeline produces the report and marks the model ship or no-ship according to the rule. Humans still review the report and the worst failures, but nobody has to remember how to run the evaluation, and nobody can quietly skip it.",
                 "onScreen": "Automate it\n• Test set, baseline, scorer, rule in Git\n• Pipeline runs on every training job\n• Auto report + ship/no-ship flag\n• Humans review failures",
                 "visual": "CI pipeline with stages train, evaluate, report; the evaluate stage outputs a report card with a green or red flag.",
                 "seconds": 32
+              },
+              {
+                "narration": "Try this now. Write your decision rule in three lines before your next training run. Line one: the target metric and minimum improvement. Line two: the maximum regression allowed on any slice or safety test. Line three: the latency or cost limit. Share it with a colleague and ask them to hold you to it.",
+                "onScreen": "Try this now\n• Line 1: target + minimum gain\n• Line 2: max slice/safety regression\n• Line 3: latency or cost limit\n• Share it",
+                "visual": "Three-line rule card types itself, then is sealed in an envelope and passed to a colleague icon.",
+                "seconds": 24
               },
               {
                 "narration": "Recap. Beat your best non-fine-tuned setup, not the raw base model. Plan targets, regressions, operations and a written decision rule. Report by slice with confidence intervals. Use blind comparisons for generation, then shadow and canary before rollout. Your next step: write your decision rule, evaluate baseline against fine-tune by slice, and make a clear ship or no-ship call.",
@@ -1784,13 +1982,19 @@
           ],
           "activity": "Complete the six-point decision checklist for two hosted options and one self-managed option for your task, and write converters from your canonical JSONL to each format.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "In twenty twenty-six, a lot of teams woke up to an email saying the fine-tuning platform they built on was being wound down. Their fine-tuned models would keep running for a while, but new training would end. The teams that shrugged were the ones who had kept their data and evaluations portable. In this lesson you will map the hosted fine-tuning landscape, the formats and APIs, and the checklist that keeps you able to move.",
                 "onScreen": "Hosted fine-tuning\n• The 2026 landscape\n• Formats and APIs\n• Staying portable",
                 "visual": "An email notification icon with a subject line reading \"Changes to fine-tuning\"; one team looks worried, another calmly opens a folder labeled portable data.",
                 "seconds": 33
+              },
+              {
+                "narration": "Here is an analogy. Hosted fine-tuning is like tailoring a suit at a department store. It is convenient, they have the machines, and the result fits well. But the suit stays in their store, and if the store closes the tailoring counter, you cannot take the pattern elsewhere. Self-managed fine-tuning on open weights is owning the pattern. Either way, keep your measurements, which are your data and your evaluation, in your own notebook.",
+                "onScreen": "Analogy: tailoring a suit\n• Hosted = store tailoring, suit stays there\n• Open weights = you own the pattern\n• Your measurements = data + evals, always yours",
+                "visual": "A department store counter with a suit on display; a \"counter closed\" sign flips on. Next to it, a person holds a paper pattern and a notebook labeled measurements.",
+                "seconds": 32
               },
               {
                 "narration": "Here is the snapshot, as of September twenty twenty-six, and please verify it. Google's Vertex AI offers supervised fine-tuning for Gemini two point five Pro, Flash and Flash-Lite, plus preference tuning, and tuning for selected open models. Amazon Bedrock customizes Amazon Nova models, including supervised fine-tuning, distillation and reinforcement fine-tuning starting with Nova two Lite. Microsoft Foundry fine-tunes the GPT four point one and GPT four o families, with other methods and models on varying access.",
@@ -1835,10 +2039,22 @@
                 "seconds": 31
               },
               {
+                "narration": "A simple example. A marketing team already runs everything on Google Cloud and needs a model that writes product titles in a strict format. Vertex AI supports supervised tuning for the Gemini two point five models they already use. They convert their canonical data to the Gemini format with a small script, launch a job, and compare the tuned model with their best prompt. The tuned model wins on format accuracy. They keep the canonical data and converter in Git, so they could re-run the same experiment elsewhere.",
+                "onScreen": "Simple example: team on Google Cloud\n• Vertex AI supervised tuning\n• Convert canonical data → Gemini format\n• Compare with best prompt\n• Keep data + converter in Git",
+                "visual": "Pipeline animation: canonical JSONL → converter gear → Gemini-format file → tuning job icon → results card, with a Git branch icon storing the first two items.",
+                "seconds": 38
+              },
+              {
                 "narration": "One more consideration: lifecycle. Hosted base models are retired on a schedule, and a fine-tune of a retired base model stops working when the base does. When you pick a hosted path, note the base model's announced retirement policy, set a reminder well before any date, and budget for retraining on the successor, including re-running your full evaluation. With portable data and an automated evaluation, that migration becomes a routine task rather than an emergency.",
                 "onScreen": "Lifecycle planning\n• Base models retire on a schedule\n• Fine-tunes retire with them\n• Calendar reminders + retraining budget\n• Portable data makes it routine",
                 "visual": "Timeline with a base model retirement marker; a fine-tune bar ending at the same point, and a new bar for the successor starting earlier with an overlap period.",
                 "seconds": 33
+              },
+              {
+                "narration": "Try this now. Write a twenty-line converter from your canonical JSON lines to one other provider's format, for example from messages to Gemini's contents and parts. Run it on ten examples and validate them. Once you have one converter working, switching providers stops being scary.",
+                "onScreen": "Try this now\n• 20-line converter to one other format\n• Run on 10 examples\n• Validate the output",
+                "visual": "Split code view: canonical JSON on the left, converted JSON on the right, with matching fields linked by animated lines.",
+                "seconds": 20
               },
               {
                 "narration": "Recap. Hosted fine-tuning is convenient and fast-moving. Know the current landscape, and verify it. Closed-model fine-tunes are not portable, so keep data, graders and evaluations provider-neutral. Check regions, data handling, inference pricing and lifecycle. Your next step: complete the checklist for two hosted options and one self-managed option, and write converters from your canonical format to each.",
@@ -1936,13 +2152,19 @@
           ],
           "activity": "Build 500 (query, passage) pairs from your search or support logs, fine-tune an embedding model, and report Recall@5 and MRR before and after on real held-out queries.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here is a secret about RAG systems. When answers are wrong, the language model often gets the blame, but the real culprit is retrieval. The right passage never reached the model. And one of the cheapest, highest-return fixes is fine-tuning the embedding model on your own queries. In this lesson you will learn when to do it, how contrastive training works, a complete Sentence Transformers script, and the operational steps people forget.",
                 "onScreen": "Embedding fine-tuning\n• Retrieval is often the bottleneck\n• How contrastive training works\n• Script + operations",
                 "visual": "A RAG pipeline diagram where the generator is initially blamed with a red outline, then the spotlight moves to the retrieval step showing a missing document.",
                 "seconds": 31
+              },
+              {
+                "narration": "Here is an analogy. An embedding model is a librarian who shelves books by meaning. A general librarian is great with popular topics but gets confused by your company's jargon, maybe shelving refund reversal next to reverse osmosis. Fine-tuning is spending a week with that librarian, showing them real questions and the right books. Hard negatives are the tricky cases: books that look relevant but are not. After the week, they shelve and find your books far better.",
+                "onScreen": "Analogy: training a librarian\n• General librarian confused by jargon\n• Show real questions + right books\n• Hard negatives = look-alike wrong books",
+                "visual": "Library shelf animation: a book labeled \"refund reversal\" is misplaced next to \"reverse osmosis\", then moved to the correct shelf after training pairs appear on cards.",
+                "seconds": 34
               },
               {
                 "narration": "Generic embedding models learn from broad web text. They may not understand your product names, jargon, abbreviations, or code-mixed queries like Roman Urdu. Embedding models are small and train quickly, often in minutes to an hour on one GPU, so fine-tuning them is cheap. But try the cheaper steps first: hybrid keyword and vector search, better chunking, metadata filters, and a reranker that rescores the top results. Fine-tune when retrieval still misses.",
@@ -1987,10 +2209,22 @@
                 "seconds": 42
               },
               {
+                "narration": "A simple example. An electronics store's search struggles when customers type phone charger that does not overheat, because product pages talk about thermal protection. They collect three hundred pairs from search logs where customers clicked and bought, fine-tune a small multilingual embedding model for twenty minutes, and re-index their two thousand product pages. Recall at five on real held-out searches improves noticeably, and they switch after a week of shadow testing.",
+                "onScreen": "Simple example: electronics search\n• \"doesn't overheat\" vs \"thermal protection\"\n• 300 click-and-buy pairs\n• 20-minute fine-tune + re-index\n• Recall@5 improves",
+                "visual": "Search bar with a query; before: irrelevant results; after: the right charger at the top, with a small recall gauge moving up.",
+                "seconds": 31
+              },
+              {
                 "narration": "Should you fine-tune the embedding model or add a reranker? Often both, in that order of cheapness. A reranker, a cross-encoder that reads the query and each candidate together, can fix ordering problems quickly without re-indexing. But a reranker can only reorder what retrieval already found. If the right passage never appears in the top fifty, only a better embedding model, or hybrid keyword search, will bring it in. Measure recall at fifty to tell which problem you have.",
                 "onScreen": "Reranker or fine-tune?\n• Reranker: fixes ordering, no re-index\n• Can only reorder what was found\n• Right passage missing from top 50 → better embeddings or hybrid\n• Check recall@50",
                 "visual": "Two-stage retrieval diagram: a wide funnel retrieving 50 candidates, then a reranker reordering them; a missing document outside the funnel is highlighted.",
                 "seconds": 34
+              },
+              {
+                "narration": "Try this now. Export fifty real queries from your search or support logs, and for each, write the document that should have been found. Run them through your current retrieval and count how often the right document is in the top five. That single number is your baseline, and it tells you whether embedding fine-tuning is worth it.",
+                "onScreen": "Try this now\n• 50 real queries + correct documents\n• Run current retrieval\n• Count top-5 hits = baseline",
+                "visual": "A table of 50 queries with a hit/miss column filling in; a percentage appears at the bottom labeled baseline recall@5.",
+                "seconds": 25
               },
               {
                 "narration": "Recap. Retrieval caps RAG quality. Try cheaper fixes first, then fine-tune embeddings with anchor and positive pairs, in-batch negatives and hard negatives. Evaluate on real queries against the full corpus, and always re-index into a versioned index. Your next step: build five hundred pairs from your logs, fine-tune, and report recall at five and MRR before and after.",
@@ -2084,13 +2318,19 @@
           ],
           "activity": "Fill in the break-even calculator with your real volumes and current price sheets, then run pessimistic, expected and optimistic scenarios.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Sooner or later, someone from finance asks two questions: what does this cost, and when does it pay back? If your answer is it depends, the project stalls. In this lesson you will build a cost model for custom models that you can defend: one-off and recurring costs, two ways to estimate training, inference economics, break-even, and stress tests. Every number I use is illustrative; you will plug in your own.",
                 "onScreen": "Cost modeling\n• One-off vs recurring\n• Training and inference\n• Break-even and stress tests",
                 "visual": "A finance dashboard with two empty fields labeled cost and payback that fill in as the scene progresses.",
                 "seconds": 31
+              },
+              {
+                "narration": "Here is an analogy. Deciding whether to fine-tune for cost is like deciding whether to buy a delivery van instead of paying a courier per parcel. The van has an upfront price, insurance and maintenance. The courier charges per parcel. With a few parcels a week, the courier wins. With hundreds a day, the van pays for itself. Break-even is simply the week when the van's total cost drops below the courier bills you would have paid.",
+                "onScreen": "Analogy: van vs courier\n• Fine-tune = buy a van (upfront + upkeep)\n• API = courier per parcel\n• Volume decides\n• Break-even = lines cross",
+                "visual": "Two cumulative cost lines over weeks: a flat-start van line with an upfront jump and a steadily rising courier line; they cross, and a marker labels break-even.",
+                "seconds": 33
               },
               {
                 "narration": "Start with the components. One-off costs: data labeling and review, synthetic generation, training compute, evaluation hours and judge tokens, and engineering time. Recurring costs: inference, whether per token or GPU hosting; monitoring and drift checks; and retraining when data drifts or the base model changes. Hosted custom models may be priced differently from base models, so check.",
@@ -2135,10 +2375,22 @@
                 "seconds": 23
               },
               {
+                "narration": "A simple example with round, illustrative numbers. A startup spends one thousand dollars a month on API calls for a classification task. A fine-tuned small model would cost two hundred a month to run, plus one hundred for monitoring. One-off costs, data, training and evaluation, come to three thousand. Monthly saving: seven hundred. Break-even: a little over four months. If volume halves, the saving falls to two hundred, and break-even jumps to fifteen months. That second number is the one to show your finance team.",
+                "onScreen": "Simple example (illustrative)\n• API $1,000/mo → FT $200 + $100\n• One-off $3,000\n• Break-even ≈ 4.3 months\n• Half volume → ≈ 15 months",
+                "visual": "Calculator panel filling in values; two results appear, one green (4.3 months) and one amber (15 months) beneath a \"stress test\" label.",
+                "seconds": 37
+              },
+              {
                 "narration": "Present the model to decision-makers on one page. At the top, the recommendation and the break-even under expected assumptions. Below, a small table of three scenarios: pessimistic, expected and optimistic, each with volume, prices and break-even months. Then the value beyond cost, like fewer escalations or faster replies, with your estimate and how you measured it. And finally the sources for every price and the date you checked them. Decision-makers trust numbers they can trace.",
                 "onScreen": "One-page presentation\n• Recommendation + expected break-even\n• Three scenarios table\n• Value beyond cost\n• Price sources + date checked",
                 "visual": "A single slide mock-up with a headline recommendation, a three-row scenario table, a value box and a footnote listing sources with dates.",
                 "seconds": 33
+              },
+              {
+                "narration": "Try this now. Open your provider's current price page and your usage dashboard, and calculate your real cost per request for one AI task, including input and output tokens. Write the date and the source next to the number. Every cost model starts with one honest, sourced number.",
+                "onScreen": "Try this now\n• Current price page + usage dashboard\n• Real cost per request for one task\n• Note date and source",
+                "visual": "A price sheet and a usage chart side by side; values are pulled into a formula card that outputs cost per request with a small date stamp.",
+                "seconds": 21
               },
               {
                 "narration": "Recap. Separate one-off and recurring costs. Estimate training by tokens or measured GPU hours. Remember shorter prompts after fine-tuning. Compute break-even, stress-test it, and count value beyond cost. Your next step: fill in the calculator with your real volumes and current prices, and run pessimistic, expected and optimistic scenarios.",
@@ -2219,13 +2471,19 @@
           ],
           "activity": "Build a weekly drift report for a model you run (or plan), define three retraining triggers, and document the rollback procedure.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Launch day is exciting. Month four is where custom models quietly fail. Customers start writing differently, a new product launches, a festive season changes everything, and nobody notices until complaints pile up. In this lesson you will learn how to deploy custom models, version and release them safely, monitor for drift and quality, and decide when to retrain, before your users tell you.",
                 "onScreen": "Deploy and monitor\n• Deployment options\n• Versioning and release\n• Drift, quality, retraining",
                 "visual": "A launch confetti moment, then a calendar flipping to month four with a slowly sagging quality line nobody is watching.",
                 "seconds": 27
+              },
+              {
+                "narration": "Here is an analogy. A fine-tuned model in production is like a new employee who was trained on last year's customers. At first they are excellent. But customers change, products change, and seasons change. A good manager checks in every week, reviews a sample of their work, notices new kinds of requests, and arranges refresher training when needed. Monitoring is that weekly check-in, and retraining is the refresher course.",
+                "onScreen": "Analogy: a new employee\n• Trained on last year's customers\n• Weekly check-ins = monitoring\n• Refresher course = retraining",
+                "visual": "Calendar with weekly check-in markers; a performance line dips when a new product icon appears, then recovers after a \"refresher\" marker.",
+                "seconds": 30
               },
               {
                 "narration": "Four ways to deploy. Multi-LoRA serving puts one base model on a GPU and loads many small adapters, perfect for many tasks or clients. Merged and quantized models fold the adapter into the base and compress it, simplest for a single task or edge devices. Ollama can load a base model plus an adapter from a Modelfile for local use. And hosted endpoints serve closed-model fine-tunes. Whatever you pick, serving must use the same chat template, system prompt and preprocessing as training.",
@@ -2270,10 +2528,22 @@
                 "seconds": 33
               },
               {
+                "narration": "A simple example. A telecom's classifier routes messages into ten intents. One Monday, the share of other doubles. The weekly review shows many messages about a new eSIM offer that did not exist when the model was trained. They label two hundred eSIM messages, add a new intent, retrain, run the evaluation rule, shadow test for two days and release. Without the drift report, those customers would have bounced between teams for weeks.",
+                "onScreen": "Simple example: new eSIM offer\n• \"other\" share doubles\n• Review: new eSIM intent\n• Label 200 → retrain → evaluate → shadow → release",
+                "visual": "Label distribution bar chart with \"other\" spiking; a zoom reveals message cards mentioning eSIM; a pipeline loop animates to a new intent bar appearing.",
+                "seconds": 32
+              },
+              {
                 "narration": "Who owns all of this? Name a model owner for every production model: someone who reads the weekly report, approves retraining, signs off releases and decides on rollbacks. Pair them with an on-call engineer for operational incidents. Write both names on the model card. Monitoring that nobody reads is theater; a named owner with a weekly thirty-minute review is what actually keeps quality up.",
                 "onScreen": "Ownership\n• Named model owner\n• On-call engineer for incidents\n• Names on the model card\n• 30-minute weekly review",
                 "visual": "Model card with two name fields filled in, and a recurring calendar event labeled weekly model review.",
                 "seconds": 28
+              },
+              {
+                "narration": "Try this now. For one model you run or plan, write down the three numbers you would look at every Monday morning, for example the share of the other label, the weekly sample accuracy, and p ninety-five latency. Then write the threshold for each that would make you act. That is your monitoring plan in three lines.",
+                "onScreen": "Try this now\n• 3 Monday-morning numbers\n• A threshold for each\n• = your monitoring plan",
+                "visual": "Three dashboard tiles appear with a number and a dashed threshold line each; one tile crosses its threshold and turns amber.",
+                "seconds": 25
               },
               {
                 "narration": "Recap. Choose a deployment option that matches your tasks and runtime. Version base, adapter and data together, keep model cards, release champion versus challenger, and keep rollback one click away. Monitor input drift, output drift, quality and operations, and write retraining triggers in advance. Your next step: build a weekly drift report, define three triggers, and document your rollback procedure.",
@@ -2359,13 +2629,19 @@
           ],
           "activity": "Complete the capstone: a fine-tuned support-intent (or brand-voice) model with all seven deliverables, evaluated on real held-out data against your best baseline.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "This is where everything comes together. You are going to fine-tune a small open-weight model to route customer support messages to the right intent, fast and cheaply enough to run on every message, and prove with evidence that it beats your best non-fine-tuned setup. Uncertain messages will escalate to a stronger model or a human. If brand voice matters more to you, the same steps build a brand-voice classifier instead.",
                 "onScreen": "Capstone: support-intent router\n• Small fine-tuned model\n• Proven against your best baseline\n• Escalation when unsure",
                 "visual": "Stream of incoming messages in several scripts flowing into a small model icon that sorts them into labeled lanes; a few uncertain ones divert to a larger model and a human icon.",
                 "seconds": 30
+              },
+              {
+                "narration": "Here is how to picture the router. It is a hospital reception desk. A trained receptionist handles most visitors quickly and correctly: that is your small fine-tuned model. When the receptionist is unsure, or the case is unusual, they call a senior nurse: that is the stronger model or a human. The receptionist does not need to know everything. They need to be fast, accurate on common cases, and honest about when to ask for help.",
+                "onScreen": "Analogy: a reception desk\n• Receptionist = small fine-tuned model\n• Senior nurse = stronger model or human\n• Fast, accurate, honest about uncertainty",
+                "visual": "Reception desk illustration: most visitor icons are directed quickly to doors; an uncertain one triggers a call button and a senior figure appears.",
+                "seconds": 33
               },
               {
                 "narration": "Step one, frame it. Write the problem statement, the list of intents with definitions, and your ladder baseline: your best prompt and model, scored on a draft test set. Fill in the fine-tuning worksheet. Step two, data. A labeling guide with priority rules, two-annotator agreement on a hundred messages, two to six thousand examples covering intents, languages and channels, PII redaction, careful synthetic top-ups, decontamination, and a split by customer or time, all documented in a data card.",
@@ -2410,10 +2686,22 @@
                 "seconds": 37
               },
               {
+                "narration": "A simple dry run before the full project. Take four intents and a hundred labeled messages. Use your best prompt with a strong model as the baseline and record its accuracy. Fine-tune a tiny model on seventy messages, test on the other thirty, and implement the two-sample agreement rule. Count how many of the thirty the small model handled alone and how many it got right. That mini version takes a day and exposes most of the practical problems you will face at full scale.",
+                "onScreen": "Dry run in a day\n• 4 intents, 100 messages\n• Baseline with best prompt\n• Tiny fine-tune on 70, test on 30\n• Count handled-alone + accuracy",
+                "visual": "Mini pipeline diagram with small numbers: 100 messages split 70/30, a baseline card, a tiny model card, and a result donut chart for the 30 test messages.",
+                "seconds": 37
+              },
+              {
                 "narration": "A few tips for a smooth capstone. Start with the evaluation, not the training: build the test set and the baseline score in week one. Keep the first model small and the first dataset modest, so you can iterate quickly. Save every run with its config and data hash. And write the report as you go, not at the end. Most strong submissions spend more time on data and evaluation than on training itself.",
                 "onScreen": "Capstone tips\n• Evaluation first, in week one\n• Small model, modest data, fast iterations\n• Save every run\n• Write the report as you go",
                 "visual": "Four-week plan timeline: week one evaluation, week two data, week three training iterations, week four report and deployment plan.",
                 "seconds": 32
+              },
+              {
+                "narration": "Try this now. Write your intent list with a one-line definition for each, plus the priority rule for the most common ambiguity. Share it with two people who handle these messages today and ask them to label the same twenty messages. Their agreement score is the first number in your capstone report.",
+                "onScreen": "Try this now\n• Intent list + one-line definitions\n• Priority rule for the top ambiguity\n• 2 people label the same 20 messages",
+                "visual": "Intent list document types in; two labeler avatars label the same 20 message cards and an agreement percentage appears between them.",
+                "seconds": 23
               },
               {
                 "narration": "Congratulations. You can now decide when fine-tuning is worth it, build and protect datasets, train with SFT, LoRA and QLoRA, apply DPO and GRPO, evaluate honestly, choose hosted or self-managed paths, fine-tune embeddings, model costs, and run custom models in production. Your next step is the capstone itself. Then take the final exam.",
