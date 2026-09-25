@@ -6,7 +6,7 @@
   "subtitle": "Design, build, test and launch voice agents with ElevenLabs, OpenAI Realtime and telephony, in English, Arabic and Urdu",
   "category": "ai",
   "level": "intermediate",
-  "estimatedMinutes": 398,
+  "estimatedMinutes": 422,
   "description": "Voice agents now answer phones, book appointments, qualify leads and narrate content. This intermediate, hands-on course shows you how to build them properly. You will learn cascaded (ASR to LLM to TTS) and speech-to-speech architectures, latency budgets, turn-taking and barge-in; choose and design voices with ElevenLabs; build agents on ElevenAgents with tools, knowledge and tests; and use code-first options such as the OpenAI Realtime API, Gemini Live, LiveKit Agents and Pipecat. You will connect telephony with Twilio and SIP, design conversations and prompts for the ear, handle Urdu, Arabic and English code-switching, and apply consent, disclosure, recording and calling rules. Finally you will evaluate, monitor and cost voice agents, produce narration and course lectures, and build an appointment-booking agent as your capstone.",
   "outcomes": [
     "Choose between cascaded and speech-to-speech voice architectures for a given use case",
@@ -109,7 +109,7 @@
           ],
           "activity": "Run the one-turn Python example with a short recorded question. Time each hop (ASR, LLM, TTS) and note which is slowest.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Call a business today and there's a real chance a voice agent picks up. Not a press one for sales menu, but something that understands you, checks a calendar, and books you in. In this course you'll learn to design, build, test and launch voice agents that people actually like talking to, legally and ethically. We'll start with how they work, because the architecture you pick shapes everything: cost, latency, voice quality, languages and control.",
@@ -122,6 +122,12 @@
                 "onScreen": "What changed\n• Accurate speech recognition\n• LLMs that converse and call tools\n• Natural speech synthesis\n• Streaming everywhere",
                 "visual": "Three rising lines on a simple chart labelled ASR accuracy, LLM capability, TTS naturalness, converging into a 'voice agents' zone. Illustrative, no numbers.",
                 "seconds": 33
+              },
+              {
+                "narration": "Here's an analogy for the two architectures. A cascaded agent is like a relay team. One runner listens and writes down what was said, the next thinks and writes a reply, and the last reads it aloud. Each runner can be the best in the world at their leg, and you can swap any of them, but every handover costs time. A speech to speech model is like one talented interpreter who listens and responds in a single flow. Smoother and faster, but you get their voice and their style, and it's harder to check their notes mid-sentence.",
+                "onScreen": "Analogy: relay team vs interpreter\n• Cascade = relay (best at each leg, handovers cost time)\n• Speech-to-speech = one interpreter (smooth, less control)",
+                "visual": "Motion graphic: three relay runners pass a baton labelled 'text' between stations 'ASR', 'LLM', 'TTS' with a small timer at each handover; then a single figure labelled 'Speech-to-speech' carries a waveform straight across.",
+                "seconds": 43
               },
               {
                 "narration": "The first architecture is the cascade, or pipeline. Voice activity detection and a turn detector decide when the caller has finished. Automatic speech recognition turns their words into text. A language model decides what to say and which tools to call. And text to speech turns the reply back into audio. The big advantage is control: you can pick the best component for each job, like a strong Urdu recognizer and your own brand voice, inspect the text at every step, and swap parts. The costs: latency adds up across hops, and the caller's tone mostly disappears when audio becomes text.",
@@ -152,6 +158,18 @@
                 "onScreen": "Choosing an architecture\n• Brand voice + strict rules: cascaded\n• Natural practice chat: speech-to-speech\n• Data residency: controllable cascade\n• Fast MVP: integrated platform",
                 "visual": "Four scenario cards (clinic, language app, bank, startup) each flipping to show the recommended architecture icon.",
                 "seconds": 40
+              },
+              {
+                "narration": "A simple example to make it concrete. A yoga studio in Lahore wants a phone line that answers three questions: class times, prices and location. No bookings, no payments. They don't need a custom build at all. An integrated platform agent with a short prompt, a small knowledge base with the timetable and prices, and a friendly designed voice does the job in an afternoon. The architecture choice barely matters here. It starts to matter when you need specific voices, strict rules, many languages or deep integrations.",
+                "onScreen": "Example 2: Lahore yoga studio\n• Times, prices, location only\n• Platform agent + small knowledge base\n• Live in an afternoon\n• Architecture matters more as needs grow",
+                "visual": "Phone icon rings; three FAQ cards (Times, Prices, Location) flip into a small knowledge base cylinder; a clock icon shows 'afternoon' as a 'Live' badge appears.",
+                "seconds": 38
+              },
+              {
+                "narration": "Three common mistakes when starting out. Choosing an architecture because a demo sounded impressive, instead of checking your requirements for voice, languages, control and compliance. Forgetting that a voice agent is also an AI system with legal duties, like disclosure, recording notices and data protection. And treating the prompt as the whole product. Callers judge you on timing, turn-taking and how gracefully the agent recovers, often more than on the words themselves.",
+                "onScreen": "Common mistakes\n• Choosing by demo, not requirements\n• Forgetting legal duties\n• Prompt = whole product",
+                "visual": "Three warning cards in sequence; the third shows a prompt document shrinking while 'timing', 'turn-taking', 'recovery' labels grow around it.",
+                "seconds": 31
               },
               {
                 "narration": "Recap. Voice agents combine turn detection, speech recognition, a language model with tools, and speech synthesis, either as a cascade or as one speech to speech model. Cascades give control and brand voice. Speech to speech gives natural flow. Platforms bundle it all. Your next step: run the short Python example in the lesson text, one turn through recognition, a language model and synthesis, and time each hop. Those numbers set up the next lesson on latency.",
@@ -240,7 +258,7 @@
           ],
           "activity": "Run ten test calls, export per-turn timings, and compute median and p90 voice-to-voice latency with and without tools. Pick one lever to improve the slowest stage.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here's a number worth remembering: in everyday conversation across many languages, researchers found the typical gap between one person finishing and the other starting is only around a fifth of a second. We're wired for fast turn-taking. When a voice agent leaves a two-second silence, callers repeat themselves, talk over it, or hang up. In this lesson, you'll learn to budget latency, cut it, and handle the hardest part of voice: knowing when the caller has actually finished, and what to do when they interrupt.",
@@ -253,6 +271,12 @@
                 "onScreen": "The latency budget\n• End-of-turn + ASR\n• LLM first token (+ tools)\n• TTS first audio\n• Network + telephony\n• Illustrative total: ~0.7 to 2 s",
                 "visual": "Stacked horizontal bar made of colored segments labelled with each stage, with a caption 'illustrative'. A separate red segment labelled 'tool call' extends the bar.",
                 "seconds": 40
+              },
+              {
+                "narration": "An analogy: turn-taking is like merging onto a busy motorway. Merge too early and you cut someone off. That's the agent interrupting a caller who paused to think. Wait too long and the cars behind you start honking. That's dead air after a crisp answer. Good drivers read signals: indicators, speed, the gap. Good turn detection reads signals too: silence, whether the sentence sounds finished, and what you just asked for. If you asked for a phone number, you expect pauses between digit groups.",
+                "onScreen": "Analogy: merging onto a motorway\n• Too early = cutting callers off\n• Too late = dead air\n• Read signals: silence, completeness, context",
+                "visual": "Top-down motorway animation: a car labelled 'Agent' tries to merge; an early merge flashes red 'cut-off', a late merge shows honking icons, a well-timed merge glows green with signal icons labelled 'silence', 'complete?', 'context'.",
+                "seconds": 37
               },
               {
                 "narration": "Six levers cut latency. Stream everything: partial transcripts, token streaming, and synthesis that starts on the first phrase. Pick fast components for conversation, like low-latency voice models and fast language model tiers, in regions near your callers. Keep prompts and retrieved context lean, because long context slows the first token. Use speculative work, starting a likely reply before the turn is confirmed. Make tools fast, with caching and tight timeouts. And put your tool servers in the same region as the agent platform.",
@@ -283,6 +307,18 @@
                 "onScreen": "Measure it\n• Median and p90 latency (with/without tools)\n• Caller talk-over rate\n• False barge-in rate\n• Cut-off rate",
                 "visual": "Dashboard mock-up with four metric tiles and a small histogram showing a long tail labelled p90.",
                 "seconds": 37
+              },
+              {
+                "narration": "A simple example. A pizza shop in Dubai tests its ordering agent and finds it always replies about two seconds after a caller says yes. The cause: the agent's system prompt was over two thousand words, and it retrieved five long menu chunks on every turn. The fix: trim the prompt to the essentials, retrieve only the one relevant menu section, and switch to a faster model tier for confirmation turns. The reply after yes now feels instant, and nothing about the agent's knowledge was lost.",
+                "onScreen": "Example 2: Dubai pizza orders\n• Slow reply after 'yes'\n• Cause: huge prompt + 5 long chunks every turn\n• Fix: lean prompt, 1 chunk, faster tier",
+                "visual": "Latency bar for a 'yes' turn shrinks as three blocks labelled 'long prompt', 'five chunks', 'slow tier' are removed one by one.",
+                "seconds": 37
+              },
+              {
+                "narration": "Common mistakes with latency. Measuring averages instead of the ninetieth percentile, which hides the long pauses callers remember. Adding slow tools without a filler line, so callers hear silence. Tuning turn detection only in a quiet office on a laptop, when real callers are in cars, markets and on speakerphones. And fixing one number, like model speed, while ignoring the tool call that's actually causing most of the delay.",
+                "onScreen": "Common mistakes\n• Averages hide pain\n• Silent slow tools\n• Tuning only in quiet rooms\n• Fixing the wrong stage",
+                "visual": "Four mini-panels: a histogram with a long tail, a silent tool bar, a laptop in a quiet room vs a car icon, and a latency bar with the biggest segment highlighted.",
+                "seconds": 30
               },
               {
                 "narration": "Recap. Callers expect near-human timing. Budget latency across detection, recognition, the model, tools, synthesis and transport. Cut it by streaming, choosing fast components, keeping context lean and making tools fast. Use semantic turn detection and context-aware patience, allow interruptions but ignore backchannels, and measure median and p90. Your next step: export turn timings from ten test calls and run the script. Find your slowest stage and pick one lever to pull.",
@@ -378,7 +414,7 @@
           ],
           "activity": "Design two candidate voices from text descriptions, generate your agent's first three lines with each, play them through a phone speaker, and run a quick trust preference test with five people.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Close your eyes and imagine calling your bank and hearing a voice that sounds tinny, rushed and robotic. Now imagine a calm, warm, clear voice. Same words, same information, completely different trust. In a voice agent, the voice is your front desk and your brand. In this lesson, you'll learn the ElevenLabs model families and when to use each, the voice settings that matter, four ways to get a voice, how to write for the ear, and how to generate and stream audio in code.",
@@ -391,6 +427,12 @@
                 "onScreen": "ElevenLabs TTS families\n• Eleven v3: expressive, audio tags, 70+ languages\n• Multilingual v2: stable long-form\n• Flash v2.5: real-time agents\n• Turbo v2.5: balance",
                 "visual": "Four model cards arranged on a two-axis chart: expressiveness vs latency. Flash sits at low latency; v3 at high expressiveness.",
                 "seconds": 41
+              },
+              {
+                "narration": "An analogy: choosing a voice model is like choosing a performer for different jobs. For a live radio call-in show, you want someone quick, clear and unflappable, that's Flash. For an audiobook, you want someone expressive who can whisper, laugh and build suspense, that's Eleven v3 with audio tags. For a long documentary series, you want someone rock-steady for hours, that's Multilingual v2. Same talent agency, different performers, each cast for the role.",
+                "onScreen": "Analogy: casting performers\n• Live call-in show = Flash\n• Audiobook = Eleven v3 + audio tags\n• Long documentary = Multilingual v2",
+                "visual": "Casting board motion graphic: three performer silhouettes with role cards 'Live call-in', 'Audiobook', 'Documentary series' slide next to model name tags.",
+                "seconds": 32
               },
               {
                 "narration": "A few voice settings make a big difference. Stability: higher is calmer and more consistent, lower is more expressive but variable. Agents usually want it moderate to high. Similarity boost controls how closely the output matches the original voice, but too high can copy recording flaws. Speed: a touch slower helps on phone lines and for non-native listeners. And text normalization plus pronunciation dictionaries control how numbers, dates, acronyms and brand names are read. That's how you stop your agent mangling your own company name.",
@@ -421,6 +463,18 @@
                 "onScreen": "In code\n• convert(): produced audio (v3)\n• stream(): live-style (Flash)\n• Keys in env vars; retries; logs\n• Compare alternatives on your needs",
                 "visual": "Code editor showing the Python snippet with the model_id lines highlighted; an audio player icon plays the output.",
                 "seconds": 44
+              },
+              {
+                "narration": "A simple example. A solo podcaster in Manchester wants an intro and outro in a consistent voice every week, without recording them herself. She designs a warm, confident voice from a text description, writes a thirty-second intro script, generates it with Multilingual v2 for stability, and saves the voice settings in a small config file. Each week only the episode title changes, so she regenerates one line. It sounds identical every time, and she lists the intro as AI-voiced in her show notes.",
+                "onScreen": "Example 2: Manchester podcaster\n• Designed voice from description\n• Multilingual v2 for consistency\n• Saved settings; regenerate one line weekly\n• Disclosed in show notes",
+                "visual": "Podcast episode timeline with intro and outro blocks; each week's block regenerates only the title segment, highlighted, while the rest stays identical.",
+                "seconds": 36
+              },
+              {
+                "narration": "Three mistakes with voices. Choosing from a ten-second demo instead of testing your real script, in your languages, over a real phone line. Maximizing expressiveness for a support agent, when callers want calm and clear, not dramatic. And cloning a colleague's or celebrity's voice for a quick test without written consent. The test becomes a file, the file gets shared, and suddenly you have a real problem.",
+                "onScreen": "Common mistakes\n• Choosing from a short demo\n• Too expressive for support\n• 'Quick test' clones without consent",
+                "visual": "Three warning tiles; the third animates a test audio file duplicating and spreading across folders with an alarm icon.",
+                "seconds": 29
               },
               {
                 "narration": "Recap. Pick the model for the job: Flash for live conversation, v3 or Multilingual v2 for produced audio. Tune stability, similarity and speed, and control pronunciation. Get a voice from the library, by design, or by cloning with verified consent. Write for the ear. Your next step: design two candidate voices from text descriptions, generate your agent's first three lines with each, play them over a phone line or phone speaker, and ask five people which they trust more.",
@@ -509,7 +563,7 @@
           ],
           "activity": "Create one webhook tool and one agent (via API or dashboard) for a booking use case. Before any test call, write three simulation tests with clear success conditions.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "In this lesson, you'll go from blank page to a working voice agent on ElevenAgents, the ElevenLabs platform for voice and chat agents that used to be called Conversational AI. By the end, you'll know every major configuration area: the agent's prompt and language model, the voice, turn-taking, tools, knowledge base, workflows, testing and analysis. And you'll see how to create a tool and an agent through the API, so your setup can be versioned like code.",
@@ -522,6 +576,12 @@
                 "onScreen": "What's in the box\n• ASR + LLM choice + TTS + turn-taking\n• Tools, knowledge base, workflows\n• Tests and analytics\n• Web, apps, phone, WhatsApp",
                 "visual": "Hub diagram with the agent at center and channel icons around it: browser, phone, mobile, chat bubble.",
                 "seconds": 36
+              },
+              {
+                "narration": "An analogy: setting up an agent on a platform is like onboarding a new receptionist. The system prompt is their job description. The first message is how they answer the phone. The voice is how they sound. Tools are the systems they're allowed to use, like the calendar and the transfer button. The knowledge base is the binder of policies on their desk. Tests are the role-plays you run before their first day. And evaluation criteria are how you review their calls each week.",
+                "onScreen": "Analogy: onboarding a receptionist\n• Prompt = job description\n• Tools = systems they can use\n• Knowledge base = policy binder\n• Tests = role-plays\n• Evaluation = weekly call review",
+                "visual": "Reception desk illustration: labelled items appear on the desk one by one (job description sheet, phone, calendar, binder, role-play script, review clipboard), each matching an agent setting.",
+                "seconds": 37
               },
               {
                 "narration": "Dynamic variables make agents personal without rewriting prompts. You write them in double curly braces, like customer name or clinic branch, and they're filled when a conversation starts, for example from your CRM when placing an outbound call, or updated by tool responses. System variables, like the current time and caller I D, are available too. So one prompt can greet Fatima by name at the Dubai Marina branch and James at the London branch.",
@@ -552,6 +612,18 @@
                 "onScreen": "Worked example: Aria for Nova Dental\n• Disclosure in first message\n• Booking tools + transfer + language detection\n• Knowledge base for policies\n• Guardrails + evaluation criteria",
                 "visual": "Agent profile card for 'Aria' with sections filling in: voice, tools, knowledge, guardrails, evaluation.",
                 "seconds": 40
+              },
+              {
+                "narration": "A simple example. A salon in Abu Dhabi builds its first agent in the dashboard, not the API. It answers questions about services and prices from the knowledge base, collects a name and preferred time, and uses one webhook tool that emails the request to the front desk, instead of booking directly. A system tool transfers to the salon's number during opening hours. It's not fully automated, but it captures every after-hours enquiry, and the team can add direct booking later.",
+                "onScreen": "Example 2: Abu Dhabi salon\n• Dashboard setup\n• Knowledge base for services + prices\n• One webhook: email request to front desk\n• Transfer during opening hours",
+                "visual": "Flow: caller icon to agent; agent reads from a knowledge base cylinder; a webhook arrow sends an envelope to a 'Front desk' inbox; a transfer arrow active only when a clock shows opening hours.",
+                "seconds": 35
+              },
+              {
+                "narration": "Common mistakes on agent platforms. One giant prompt that tries to handle every scenario, instead of focused agents or workflow nodes. Stuffing the full price list or policies into the prompt instead of the knowledge base. Launching without any tests, so you can't tell whether a change helped or hurt. And forgetting to verify the post-call webhook signature, which lets anyone send fake call results into your systems.",
+                "onScreen": "Common mistakes\n• One giant prompt\n• Policies in the prompt\n• No tests before launch\n• Unverified webhooks",
+                "visual": "Four cards: an oversized prompt document splitting into three small ones; a price list moving into a knowledge base; an empty test list filling; a webhook arrow passing through a signature check.",
+                "seconds": 30
               },
               {
                 "narration": "Recap. ElevenAgents covers the full stack, from voice to analytics. Use dynamic variables for personalization, webhook tools for real actions, system tools for transfers and call control, the knowledge base for reference content, and tests plus evaluation criteria so you can tell whether changes help. Your next step: follow the API example in the lesson text to create one webhook tool and one agent, or build the same in the dashboard, then write three simulation tests before you make a single test call.",
@@ -640,7 +712,7 @@
           ],
           "activity": "Run the Agents SDK example locally with an ephemeral token endpoint. Ask the agent to book a slot in three different phrasings and check whether it calls the tool with correct parameters each time.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Integrated platforms get you live fast. But sometimes you need code-level control: your own interface, your own orchestration, speech to speech models, special hosting for compliance, or voice as one feature in a bigger app. In this lesson, you'll learn the OpenAI Realtime API and Agents SDK, Google's Gemini Live API, the open-source frameworks LiveKit Agents and Pipecat, and orchestration platforms, and you'll finish with a decision matrix for choosing between them.",
@@ -653,6 +725,12 @@
                 "onScreen": "OpenAI Realtime API\n• gpt-realtime model family\n• WebRTC: browser and mobile\n• WebSocket: server-owned audio\n• SIP: phone calls",
                 "visual": "Three connection pipes into an 'OpenAI Realtime' box: a browser icon (WebRTC), a server icon (WebSocket), a phone icon (SIP).",
                 "seconds": 33
+              },
+              {
+                "narration": "An analogy for these options: building a voice product is like opening a restaurant. An integrated platform is a franchise: menu, kitchen and systems provided, open in weeks. An orchestration platform is a shared commercial kitchen: you bring your own recipes and suppliers, they provide the equipment. A realtime model API is hiring a star chef who does everything in one flow. And open-source frameworks are building your own kitchen from scratch: total control, but you fix the plumbing too.",
+                "onScreen": "Analogy: opening a restaurant\n• Franchise = integrated platform\n• Shared kitchen = orchestration platform\n• Star chef = realtime model API\n• Build your own = open source",
+                "visual": "Four restaurant storefronts animate in a row, each with a sign matching a stack type and a small 'control' vs 'speed' meter under each.",
+                "seconds": 35
               },
               {
                 "narration": "Key features include built-in turn detection, with a server V A D mode based on silence and a semantic V A D mode that judges whether the user has actually finished. It supports function calling, remote MCP servers, image input and transcription of what the user says. And one security rule matters most: never ship your standard API key to a browser. Your server creates a short-lived ephemeral client secret, and the browser uses that to connect.",
@@ -683,6 +761,18 @@
                 "onScreen": "Worked example: tutoring startup\n• Speech-to-speech for natural flow\n• Agents SDK + WebRTC\n• Vocabulary logging tool\n• Safeguards for minors, consented transcripts",
                 "visual": "Browser app mock-up with a microphone button, a live transcript and a vocabulary sidebar filling up.",
                 "seconds": 33
+              },
+              {
+                "narration": "A second example. A Karachi call-center outsourcer wants to run voice agents for several clients, with each client's data kept separate and some audio processed on its own servers. They choose an open-source framework with self-hosted speech recognition for Urdu, and plug in different language models and voices per client. It takes an engineering team weeks, not days, but gives them control over data, costs and customization that a single platform couldn't. For them, the extra effort is the product.",
+                "onScreen": "Example 2: Karachi call-center outsourcer\n• Multi-client, data separation\n• Open-source framework + self-hosted Urdu ASR\n• Per-client models and voices\n• Weeks of engineering = their product",
+                "visual": "Architecture diagram: several client boxes each connected to separate pipelines inside a data-center outline labelled 'self-hosted', with swappable model and voice blocks.",
+                "seconds": 35
+              },
+              {
+                "narration": "Common mistakes with code-first stacks. Exposing a standard API key in browser code, which anyone can copy. Assuming realtime models behave like text models, when tool-calling accuracy and instruction-following should be tested in audio, with real accents. Ignoring audio-token pricing on long sessions with chatty agents. And choosing full control when you don't have the engineers to maintain it, which turns a quick win into a long project.",
+                "onScreen": "Common mistakes\n• API key in browser code\n• Untested tool-calling in audio\n• Ignoring audio-token costs\n• More control than you can maintain",
+                "visual": "Four warning tiles; the first shows a key icon inside a browser window being copied by a cursor, then replaced by a short-lived token with a timer.",
+                "seconds": 30
               },
               {
                 "narration": "Recap and decision time. Non-developer team, launch in days: an integrated platform. Speech to speech in your own web app: OpenAI Realtime with the Agents SDK, or Gemini Live. Mix and match providers with telephony and moderate code: an orchestration platform. Full control and self-hosting: LiveKit Agents or Pipecat. Watch out for exposed API keys, untested tool-calling in audio, and audio-token costs on long sessions. Your next step: run the Agents SDK example locally, then ask it to book a slot three different ways and see if it calls the tool correctly.",
@@ -778,7 +868,7 @@
           ],
           "activity": "Connect a test number to your agent. Call it from a real mobile in a noisy room, try a transfer, and note any ASR or turn-taking issues. Implement the outbound call function with consent and calling-hours guards.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "Here's something that surprises web developers: a voice agent that sounds brilliant in a browser can sound thin, laggy or confused on a real phone call. Phone calls cross a different world, with narrowband audio, codecs, carriers, caller I D rules and regulations. Since most business voice agents live on the phone, this lesson teaches you the plumbing: numbers, SIP trunks, Twilio, inbound and outbound flows, transfers, voicemail and keypad input.",
@@ -791,6 +881,12 @@
                 "onScreen": "Key terms\n• DID number, CPaaS\n• SIP signaling vs media\n• SIP trunk\n• Codecs, DTMF, SIP REFER",
                 "visual": "Glossary cards flipping over, each with a simple icon: phone number, handshake (SIP), pipe (trunk), sound wave (media), keypad (DTMF).",
                 "seconds": 41
+              },
+              {
+                "narration": "An analogy for telephony: think of a phone call as a letter posted through several post offices. The phone number is the address. The carrier and your communications platform are the post offices that route it. SIP is the envelope and the delivery instructions. The audio itself is the letter inside, carried separately. And a transfer is forwarding the letter to another address, ideally with a sticky note explaining what it's about, so the new recipient doesn't have to ask again.",
+                "onScreen": "Analogy: posting a letter\n• Number = address\n• Carrier + CPaaS = post offices\n• SIP = envelope + instructions\n• Audio = the letter\n• Warm transfer = forwarding with a note",
+                "visual": "Envelope travels across a map through two post-office icons; the envelope opens to show a waveform; at the end it's forwarded with a sticky note labelled 'summary'.",
+                "seconds": 35
               },
               {
                 "narration": "There are three ways to connect an agent to phones. First, native platform integration: import a Twilio number into a platform like ElevenAgents and route calls to your agent, with outbound calls through the API. Second, SIP trunking: point your existing phone system, contact center or local carrier at the agent's SIP endpoint. That's ideal if you want to keep your UAE or Pakistan numbers with a local carrier. Third, media streaming: Twilio Media Streams send raw call audio to your server over WebSocket, and ConversationRelay handles speech for you and sends text to your app. More code, more control.",
@@ -821,6 +917,18 @@
                 "onScreen": "Worked example: Riyadh service center\n• Local number via SIP trunk\n• Arabic first, English detected\n• Booking API + warm transfer\n• Opt-in reminders + voicemail message",
                 "visual": "Map pin in Riyadh with a SIP trunk line to a cloud agent; calendar booking card; outbound reminder phone with an Arabic speech bubble.",
                 "seconds": 43
+              },
+              {
+                "narration": "A simple example. A plumber in Birmingham wants after-hours calls answered. He keeps his existing number and sets call forwarding after six p m to a new Twilio number imported into his agent platform. The agent takes the address, the problem and urgency, texts him a summary for emergencies, and books non-urgent visits into his calendar. No SIP trunk, no media streams, no code: native integration is enough for a single-number business.",
+                "onScreen": "Example 2: Birmingham plumber\n• Forward after 6pm to imported Twilio number\n• Agent captures address, problem, urgency\n• Emergencies: text summary\n• Non-urgent: book into calendar",
+                "visual": "Clock ticks past 6pm; a phone forwarding arrow lights up to a cloud agent; two branches: 'Emergency' sends an SMS icon, 'Non-urgent' drops a calendar entry.",
+                "seconds": 31
+              },
+              {
+                "narration": "Common telephony mistakes. Testing only on laptop speakers, when phone audio is narrowband and behaves differently. Cold transfers with no context, so callers repeat everything to the human. Transferring to an empty line outside business hours. And outbound campaigns without consent records, calling-hour logic or suppression lists, which is where the biggest legal and reputational risks sit.",
+                "onScreen": "Common mistakes\n• Laptop-only testing\n• Context-free cold transfers\n• Transfers to empty lines\n• Outbound without consent logic",
+                "visual": "Four mini-scenes: laptop speaker vs phone handset waveform, a transfer with a blank note, a desk with a 'closed' sign, an outbound dialer blocked by a consent gate.",
+                "seconds": 25
               },
               {
                 "narration": "Recap. Phone calls are narrowband, regulated and unforgiving, so learn the plumbing. Connect through native integrations, SIP trunks or media streaming. Design inbound flows with disclosure, CRM lookups and warm transfers. Treat outbound with extra care: consent, time zones, voicemail and suppression. Your next step: connect a test number to your agent, call it from a real mobile in a noisy room, and try a transfer. Then look at the lesson text for the outbound call code, including the consent check.",
@@ -916,7 +1024,7 @@
           ],
           "activity": "Fill in the conversation design spec for your use case and write three sample dialogues: happy path, correction, and failure leading to a human.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Here's the fundamental truth of voice design: voice is linear and invisible. On a screen, people scan, skip ahead and go back. On a call, they hear one thing at a time, in order, and they can't see any options. Their short-term memory does all the work. If you design a voice agent like a web form, callers get lost. In this lesson, you'll learn the anatomy of a good voice conversation, how to confirm things without being tedious, how to repair misunderstandings, and how to make agents accessible and inclusive.",
@@ -929,6 +1037,12 @@
                 "onScreen": "Four rules\n• Short turns\n• Few options (or open questions)\n• Confirm critical data\n• Signpost what's next",
                 "visual": "Four rule cards with simple icons: short speech bubble, three dots, check mark, road sign.",
                 "seconds": 29
+              },
+              {
+                "narration": "An analogy: designing for voice is like giving directions over the phone to someone driving. You don't read them a map. You give one instruction at a time, confirm the tricky turn, tell them roughly how far it is, and if they miss a turn, you calmly reroute instead of repeating the same sentence louder. That's short turns, confirmations, signposting and repair, exactly what good voice agents do.",
+                "onScreen": "Analogy: phone directions to a driver\n• One instruction at a time\n• Confirm the tricky turn\n• 'About two minutes more'\n• Calm rerouting",
+                "visual": "Car dashboard with a phone icon; direction bubbles appear one at a time; a 'missed turn' moment triggers a reroute bubble instead of a repeated one.",
+                "seconds": 30
               },
               {
                 "narration": "A good conversation has six parts. The opening: identity, AI disclosure, purpose and an invitation, like: hi, I'm Aria, Nova Dental's AI assistant, I can book, move or cancel appointments, what can I do for you? Then intent capture with an open question. Then slot filling, gathering what's needed one detail at a time. Then action, using tools and briefly narrating the wait. Then confirmation, reading back key details. And finally a closing: summary, next step, anything else, goodbye, and ending the call cleanly.",
@@ -959,6 +1073,18 @@
                 "onScreen": "Worked example: rewrite\n• Before: one giant question\n• After: one detail at a time\n• Offer two times, not ten\n• Read back, then confirm",
                 "visual": "Before-and-after dialogue panels; the 'before' bubble is overflowing; the 'after' shows short alternating bubbles.",
                 "seconds": 37
+              },
+              {
+                "narration": "A second example. A bank's card-activation line in Riyadh must confirm identity, activate a card and set a PIN reminder, all in Arabic or English. The designers use chunked readback for the last four digits, explicit confirmation before activation, and keypad entry for the date of birth, because speech recognition on dates can be error-prone. After two failed identity attempts, the agent offers a human without judgment. And every turn is one short question. Calls are shorter, and fewer people need a human.",
+                "onScreen": "Example 2: Riyadh card activation\n• Chunked readback of digits\n• Explicit confirm before activation\n• Keypad for date of birth\n• Human after two failed attempts",
+                "visual": "Dialogue flow chart with Arabic and English bubbles; a keypad icon lights up at the date-of-birth step; an explicit confirmation gate before 'Activate'.",
+                "seconds": 36
+              },
+              {
+                "narration": "Common voice UX mistakes. Reading out long lists and menus, which callers can't hold in memory. Confirming everything explicitly, which makes calls slow and tedious. Designing only the happy path, when real callers change their minds, mishear and ask off-topic questions. And a persona that jokes or fakes emotion, when callers mostly want competence and speed.",
+                "onScreen": "Common mistakes\n• Long spoken lists\n• Over-confirmation\n• Happy path only\n• Gimmicky persona",
+                "visual": "Four tiles; the first shows a speech bubble overflowing with a list of ten items, then shrinking to 'Which branch: Marina or Downtown?'.",
+                "seconds": 24
               },
               {
                 "narration": "Recap. Design for the ear: short turns, few options, smart confirmations, signposting, graceful repair, a clear persona and inclusive defaults. Your next step: copy the conversation design spec from the lesson text and write three sample dialogues for your use case: a happy path, one with a correction, and one where things fail and the caller reaches a human. Do this before writing any prompt. Those dialogues become your test cases later.",
@@ -1047,7 +1173,7 @@
           ],
           "activity": "Rewrite your agent's system prompt with the voice template, then run the ten-utterance test script and fix every failure before your next test call.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Take a great chatbot prompt, paste it into a voice agent, and listen. You'll hear bullet points read aloud, a web address spelled out character by character, and answers that go on for a minute. Voice prompts are different. They must produce speakable text, manage turn-taking and tools under time pressure, and enforce guardrails, because a spoken mistake can't be scrolled back. In this lesson, you'll learn a proven structure for voice system prompts, the techniques that matter, layered guardrails, and a ten-line test script.",
@@ -1060,6 +1186,12 @@
                 "onScreen": "Voice prompt structure\n• Identity, Goal\n• Spoken style rules\n• Disclosure\n• Process, Tools\n• Guardrails, Context",
                 "visual": "Prompt document with eight labelled sections sliding into place like a stack of cards.",
                 "seconds": 39
+              },
+              {
+                "narration": "An analogy: a chat prompt is like writing a report, and a voice prompt is like briefing a radio host. The report can have headings, tables and footnotes. The radio host needs short, speakable lines, clear rules about what they must never say on air, the running order of the show, and instructions for what to do when a caller goes off-topic. You wouldn't hand a radio host a spreadsheet to read aloud. Don't hand your voice agent a chat-style prompt.",
+                "onScreen": "Analogy: report vs radio brief\n• Chat prompt = written report\n• Voice prompt = radio host brief\n• Speakable lines, running order, on-air rules",
+                "visual": "Split-screen: a formatted report with tables on the left; on the right a radio studio with a short cue card reading 'Short lines. Never say X. Next: bookings.'",
+                "seconds": 35
               },
               {
                 "narration": "A few techniques make the biggest difference. Ban lists and formatting explicitly, because models default to them. Cap turn length with something concrete, like one or two sentences, rather than just be concise. Tell the agent to say a short phrase before slow tools, or use the platform's pre-tool speech setting. Specify spoken forms for numbers and dates, or rely on text normalization and test it. Mirror the caller's language, with a language detection tool. Give a few short example exchanges, which shape tone better than adjectives. And keep temperature low for transactional agents.",
@@ -1090,6 +1222,18 @@
                 "onScreen": "Your 10-line test script\n• Booking, correction, prices\n• Emergency, 'are you real?'\n• Injection, Arabic, numbers\n• Human request",
                 "visual": "Test list with ten rows turning green one by one, with one red row blocking a 'ship' button until fixed.",
                 "seconds": 37
+              },
+              {
+                "narration": "A simple example. A Lahore gym's agent kept saying things like visit our website at h t t p s colon slash slash, and reading prices with currency symbols in odd ways. Two lines fixed it: never read URLs, say our website instead; and say prices as spoken words, like five thousand rupees a month. They added one example exchange showing the right style. The next test calls sounded natural, without changing anything else.",
+                "onScreen": "Example 2: Lahore gym agent\n• Problem: reading URLs + symbols\n• Fix: 'say our website'; spoken prices\n• One example exchange\n• Natural on the next test",
+                "visual": "Audio waveform with a garbled URL transcription above it; the prompt gains two highlighted lines; the next waveform shows clean text 'our website' and 'five thousand rupees a month'.",
+                "seconds": 32
+              },
+              {
+                "narration": "Common prompting mistakes. Copying a chat prompt straight into a voice agent. Relying on be concise instead of a hard cap like one or two sentences. Making the prompt the only guardrail, when tools and APIs should enforce the rules that really matter. And changing prompts without re-running your test script, so a fix for one scenario quietly breaks another.",
+                "onScreen": "Common mistakes\n• Chat prompt in a voice agent\n• 'Be concise' instead of caps\n• Prompt as the only guardrail\n• No regression tests",
+                "visual": "Four warning cards; the last shows a prompt edit followed by a test list where one row turns red.",
+                "seconds": 26
               },
               {
                 "narration": "Recap. Voice prompts produce speakable text under time pressure. Use the identity, goal, style, disclosure, process, tools, guardrails and context structure. Enforce short turns with hard caps and examples. Layer your guardrails, and keep authority in your tools. Your next step: rewrite your agent's system prompt using the template in the lesson text, then run the ten-utterance test script and fix every failure before your next test call.",
@@ -1178,7 +1322,7 @@
           ],
           "activity": "Time every tool your agent uses on ten realistic requests. Add caching, pre-fetching or pre-tool speech to anything slower than a second, and trim results to at most three options.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "In a chat app, a four-second tool call is just a spinner. In a voice call, it's four seconds of dead air, and callers start saying hello, are you there? Tools and knowledge in voice agents have to be fast, forgiving and safe, and the agent has to talk naturally around them. In this lesson, you'll learn to design voice-friendly tools, talk through waits, build a knowledge base that retrieves well for speech, use MCP safely, and write a fast webhook.",
@@ -1191,6 +1335,12 @@
                 "onScreen": "Six tool principles\n• Narrow + well described\n• Forgiving inputs, strict validation\n• Fast: cache, pre-fetch\n• Speakable results\n• Honest failure\n• Safe writes",
                 "visual": "Six tiles with icons: target, cushion, lightning bolt, speech bubble, warning sign, lock.",
                 "seconds": 43
+              },
+              {
+                "narration": "An analogy: tools for a voice agent are like the phone system at a busy hotel reception. The receptionist can check room availability in seconds, make a booking only after the guest confirms, and call the manager when needed. If the booking system is slow, they say one moment while I check, rather than staring in silence. And they never promise a room the system says is taken. Fast lookups, confirmed writes, polite waits and honest answers.",
+                "onScreen": "Analogy: hotel reception\n• Fast lookups\n• Book only after confirmation\n• 'One moment while I check'\n• Never promise what the system denies",
+                "visual": "Reception desk animation: a screen shows availability instantly; a 'confirm?' dialog precedes booking; a waiting bubble 'One moment...' appears during a spinner.",
+                "seconds": 33
               },
               {
                 "narration": "Now, talking around tools. Pre-tool speech, like let me check Thursday for you, covers the wait, and many platforms can insert it automatically when tools are slow. Subtle tool-call sounds, like typing, can fill longer waits, but use them sparingly. For long operations, like emailing a quote, run the tool asynchronously and tell the caller it's on its way. And decide on interruptions: usually you disable them while a booking is being written, then confirm the result.",
@@ -1221,6 +1371,18 @@
                 "onScreen": "Hands-on: voice-friendly webhook\n• Shared-secret auth\n• Validate inputs\n• Max two options\n• Recovery messages, same region",
                 "visual": "Code editor with the FastAPI endpoint; annotations point to auth, validation, slicing to two slots and 'say' messages.",
                 "seconds": 35
+              },
+              {
+                "narration": "A simple example. A Dubai car rental company's agent answers where's my booking. At call start, the caller's number pre-fetches their active reservation. The tool returns one line: pickup at the airport branch tomorrow at ten a m, compact car. The agent reads that back in one sentence, and offers to change the time. No search, no waiting, no list. Designing the tool for the voice answer, not for a web page, is what makes it feel instant.",
+                "onScreen": "Example 2: Dubai car rental\n• Caller-ID pre-fetch\n• One-line booking summary\n• Read back in one sentence\n• Tool designed for the spoken answer",
+                "visual": "Incoming call triggers an immediate card 'Airport branch, tomorrow 10:00, compact' before the agent speaks; the agent's speech bubble mirrors the card in one line.",
+                "seconds": 34
+              },
+              {
+                "narration": "Common mistakes with tools and knowledge. Generic tools with vague descriptions, which lead the model to call the wrong tool or none at all. Returning long lists that the agent then reads aloud. Letting the agent answer anyway when a tool fails, which invents information. And knowledge bases with no owner, so prices and opening hours go stale and the agent confidently gives old answers.",
+                "onScreen": "Common mistakes\n• Vague tool descriptions\n• Long lists returned\n• Answering after tool failure\n• Stale knowledge",
+                "visual": "Four tiles; the last shows a price tag with an old date and a 'stale' stamp, replaced by an owner badge and a review date.",
+                "seconds": 28
               },
               {
                 "narration": "Recap. Make tools narrow, fast, forgiving and safe. Talk around waits, and never let the agent invent results when a tool fails. Build speech-friendly knowledge with short chunks, owners and abstention. Use MCP with approvals and least privilege. Your next step: time every tool your agent uses on ten realistic requests. Anything slower than a second gets caching, pre-fetching or pre-tool speech, and any tool returning more than three options gets trimmed.",
@@ -1309,7 +1471,7 @@
           ],
           "activity": "Adapt the multilingual evaluation set to your callers. Record at least five utterances per language or dialect, run them through your agent, and report success per language. Fix the weakest language first.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Listen to how people actually talk in Karachi: mera order abhi tak nahi aaya, can you check the status? Or in Dubai, where a caller slides between Gulf Arabic and English in one sentence. In Pakistan, the UAE and Saudi Arabia, multilingual and code-switched speech is the default, not the exception. An agent designed for one language at a time will fail a lot of your callers. In this lesson, you'll learn where multilingual voice breaks, how to handle scripts, numbers and dates, how to pick register and politeness, and how to evaluate per language.",
@@ -1322,6 +1484,12 @@
                 "onScreen": "Where it breaks\n• ASR: dialects, code-switching, numbers\n• Detection: short ambiguous words\n• LLM: language and register\n• TTS: voice quality, names",
                 "visual": "Layered pipeline diagram with warning icons at ASR, language detection, LLM and TTS, each with a small fix label.",
                 "seconds": 41
+              },
+              {
+                "narration": "An analogy: multilingual voice design is like staffing a front desk in a busy mall in Dubai or Karachi. The best receptionists switch languages naturally, use the English word when it's clearer, greet people appropriately, and don't make a customer choose a language from a menu before they can speak. But the official notices on the wall are professionally translated and checked. That's the balance: natural, flexible conversation, and fixed, reviewed wording for anything legal.",
+                "onScreen": "Analogy: a multilingual front desk\n• Switch naturally\n• Use English terms when clearer\n• Appropriate greetings\n• Official notices: professionally translated",
+                "visual": "Mall front desk illustration: speech bubbles alternate between Arabic, Urdu and English; a framed notice on the wall shows three language versions with a 'reviewed' seal.",
+                "seconds": 33
               },
               {
                 "narration": "Watch scripts and formats. Urdu is written in Perso-Arabic script, right to left, but Roman Urdu, in Latin letters, is common in messages, and recognition may output either. Decide what your systems expect. Arabic speakers may use Western or Eastern Arabic digits, so normalize before calling tools. Callers may mention dates by the Hijri calendar, especially around Ramadan and Eid, so resolve carefully and confirm the Gregorian date. And names are transliterated many ways, like Mohammed, Muhammad or Mohamed, so match flexibly in CRM lookups.",
@@ -1352,6 +1520,18 @@
                 "onScreen": "Evaluate per language\n• Multilingual test set\n• Score intent, reply language, success\n• Break down by language and dialect\n• Averages hide failures",
                 "visual": "CSV test set on screen; results table grouped by language with one row flagged red.",
                 "seconds": 31
+              },
+              {
+                "narration": "A second example. A Dubai clinic's agent handles Arabic and English. Testing showed Egyptian and Levantine Arabic speakers were misunderstood more often than Gulf speakers, because the chosen speech model was tuned toward Gulf speech in its test set. The team added test recordings from each dialect, compared two recognition models, and switched to the one with more balanced accuracy. They also added a gentle fallback: if recognition confidence is low twice, the agent offers English or a human. Success rates evened out across dialects.",
+                "onScreen": "Example 2: Dubai clinic dialects\n• Egyptian/Levantine misheard more\n• Added dialect test recordings\n• Switched to more balanced ASR\n• Low-confidence fallback",
+                "visual": "Bar chart per dialect (illustrative) with uneven bars; after the model switch the bars even out; a fallback icon offers 'English or human?'.",
+                "seconds": 37
+              },
+              {
+                "narration": "Common multilingual mistakes. Testing only in English and assuming other languages just work. Letting the model translate mandatory legal statements on the fly. Flip-flopping languages on short words like okay or haan. And reporting a single overall success rate that hides a language or dialect that's failing badly. Measure per language, and fix the weakest first.",
+                "onScreen": "Common mistakes\n• English-only testing\n• Improvised legal translations\n• Flip-flopping on short words\n• One average hides failures",
+                "visual": "Four warning tiles; the third shows a language indicator bouncing between 'UR' and 'EN' on the word 'okay', then stabilizing.",
+                "seconds": 24
               },
               {
                 "narration": "Recap. In our markets, multilingual and code-switched speech is normal. Test recognition on real dialects, handle scripts, digits and Hijri dates, choose register deliberately, pick a code-switching strategy, and use approved translations for mandatory statements. Your next step: adapt the evaluation set to your callers, record at least five utterances per language or dialect, run them, and compare success rates. Fix the weakest language first.",
@@ -1447,7 +1627,7 @@
           ],
           "activity": "Adapt the voice consent template with your counsel and create a voice model register (model, owner, consent date, expiry, deletion plan). Add call-back verification to your payment approval process.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "With a minute of audio, today's tools can create a convincing copy of someone's voice and make it say anything. That's genuinely useful: a founder narrating fifty product videos without fifty recording sessions, or someone who's losing their voice to illness preserving it. It's also dangerous: fraud, harassment, false endorsements and political deception. Voice-clone scams impersonating executives and relatives are a documented fraud pattern. In this lesson, you'll learn the principles of ethical voice cloning, what a good consent covers, platform safeguards, the legal landscape in brief, and how to protect your own organization.",
@@ -1460,6 +1640,12 @@
                 "onScreen": "Six principles\n• Informed, specific consent\n• Owner control + revocation\n• Fair compensation\n• Transparency\n• Security\n• No impersonation",
                 "visual": "Six principle icons arranged in a circle around a microphone.",
                 "seconds": 33
+              },
+              {
+                "narration": "An analogy: a person's voice is like their signature. You wouldn't let someone photocopy your signature and sign documents with it, even for a good reason, without your clear permission, limits on what it can be used for, and a way to cancel it. Voice cloning deserves the same respect. Consent says what it can sign, where, for how long, who controls it, and what happens when the relationship ends.",
+                "onScreen": "Analogy: a signature\n• No copying without permission\n• Limits on use\n• A way to cancel\n• Clear ownership and end date",
+                "visual": "A handwritten signature animates, then duplicates onto documents only inside a boundary labelled 'approved uses'; a 'revoke' switch clears the copies.",
+                "seconds": 30
               },
               {
                 "narration": "A good consent covers who the voice owner is and who may use the clone; what kind of clone and on which platform; the purpose, and excluded uses, like political content or endorsing other products; media and territories; duration; which scripts need the owner's approval; how to revoke and what happens to the voice model; compensation; how AI audio will be labelled; and where recordings and the model are stored. With employees, take extra care. Consent must be freely given, which is hard when your boss is asking. Make it optional and allow withdrawal without consequences.",
@@ -1490,6 +1676,18 @@
                 "onScreen": "Worked example: Dubai founder's voice\n• Verified professional clone\n• Written consent with exclusions\n• Pre-approved scripts\n• Disclosed on calls and videos\n• Deletion on exit; anti-fraud checks",
                 "visual": "Property video frame with an 'AI-generated voice' caption; a phone screen with an AI assistant greeting; a consent document with a checkmark.",
                 "seconds": 39
+              },
+              {
+                "narration": "A simple example. A Karachi e-learning startup wants its founder's voice to narrate a hundred short lessons. The founder signs a consent limited to the startup's own courses, excluding ads for other companies and anything political. Scripts are generated with her approval of the course outlines, and each course page says narrated with an AI voice of the founder. The voice model is stored under a company account with two-person access. When she later steps back from the company, the agreement says what happens to the voice: they keep existing lessons, and create no new ones.",
+                "onScreen": "Example 2: Karachi e-learning founder\n• Consent limited to own courses\n• Exclusions: other ads, politics\n• 'Narrated with an AI voice' notice\n• Clear end-of-relationship terms",
+                "visual": "Course catalog grid with a small 'AI voice' badge on each; a consent document with highlighted exclusions; a timeline showing 'existing lessons kept, no new ones' after a departure marker.",
+                "seconds": 42
+              },
+              {
+                "narration": "Common cloning mistakes. Quick test clones of colleagues or celebrities without consent. Consents that say any purpose, forever. Forgetting to delete voice models when people leave. And no internal defense against voice-clone fraud, so a convincing fake call from the CEO can still move money. Consent, control and verification belong together.",
+                "onScreen": "Common mistakes\n• Unconsented test clones\n• 'Any purpose, forever'\n• No deletion on exit\n• No anti-fraud verification",
+                "visual": "Four warning tiles; the last shows a phone call with a CEO badge being stopped by a 'call back to verify' gate.",
+                "seconds": 22
               },
               {
                 "narration": "Recap. Clone voices only with informed, specific, revocable consent, fair pay and security, and never impersonate anyone who hasn't agreed. Follow platform safeguards, respect publicity and data protection law, and disclose deepfake audio where required. Protect your own team from voice-clone fraud. Your next step: adapt the plain-language consent template in the lesson text with your counsel, and add a voice model register listing each clone, its owner, consent date, expiry and deletion plan.",
@@ -1578,7 +1776,7 @@
           ],
           "activity": "Write a one-page legal checklist for each market you call (disclosure, recording, outbound rights, data, content). Confirm with counsel and wire the compliance gate into your outbound flow.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "A voice agent can be brilliant and still get your business fined, sued or banned from a carrier network. Phone and marketing laws are detailed and they differ by country, and sometimes by state. This lesson isn't legal advice, but it gives you a checklist built around five questions every voice agent must answer: disclosure, recording, outbound calling rights, data protection, and content rules, across the EU, UK, US, the Gulf and Pakistan.",
@@ -1591,6 +1789,12 @@
                 "onScreen": "1. Disclosure\n• EU AI Act Art. 50(1), from Aug 2026\n• US state bot laws; FCC: AI voice = artificial\n• Gulf/PK guidelines: transparency\n• Always answer 'Are you real?' truthfully",
                 "visual": "World map with speech bubbles in each region saying 'I'm an AI assistant' in English, Arabic and Urdu script.",
                 "seconds": 42
+              },
+              {
+                "narration": "An analogy: compliance for voice agents is like the rules for driving a taxi. You need a license, which is consent to call. You follow the rules of each city you drive in, which are local calling hours and registries. You display your ID badge, which is the AI disclosure. You tell passengers if there's a camera, which is the recording notice. And you don't drive people who asked not to be picked up, which is honoring opt-outs. Break any one and you can lose the right to drive.",
+                "onScreen": "Analogy: taxi rules\n• License = consent\n• City rules = local hours + registries\n• ID badge = AI disclosure\n• Camera notice = recording notice\n• No unwanted pickups = opt-outs",
+                "visual": "Taxi dashboard animation: five badges light up in turn (license, city map, ID card, camera sticker, 'do not pick up' list), each paired with a voice-agent label.",
+                "seconds": 39
               },
               {
                 "narration": "Second, recording and transcription. In the EU and UK, recording and transcribing calls is personal data processing, so you need a notice, a lawful basis, and short, purpose-bound retention. In the US, federal law allows one-party consent, but several states, including California, require all parties to consent. When in doubt, announce recording at the start. In the UAE and Saudi Arabia, privacy laws restrict recording and sharing communications. In Pakistan, announce it as good practice. One early line can cover both: hi, I'm Nova Dental's AI assistant, this call is recorded to help us improve our service.",
@@ -1621,6 +1825,18 @@
                 "onScreen": "Rules in code\n• Consent, suppression, DNC checks\n• Local-time calling windows\n• Attempt limits\n• Log every decision",
                 "visual": "Code editor with the can_call function; a gate animation lets one call through and blocks another with 'outside calling window'.",
                 "seconds": 42
+              },
+              {
+                "narration": "A simple example. A dental clinic in Leeds runs an inbound-only receptionist agent. No outbound calls, so the heaviest calling rules don't apply. Their checklist is short: the first sentence says it's an AI assistant and that calls are recorded; the privacy notice covers the agent and the vendor; recordings are kept for sixty days; card payments are never taken by voice; and callers asking for a person are transferred during opening hours. Proportionate compliance, done properly, in a day.",
+                "onScreen": "Example 2: Leeds dental clinic (inbound only)\n• AI + recording notice first\n• Privacy notice updated\n• 60-day retention\n• No card numbers by voice\n• Human transfer in hours",
+                "visual": "Checklist card with five items ticking; a small 'inbound only' badge; a clock icon showing '60 days' next to a recordings folder.",
+                "seconds": 35
+              },
+              {
+                "narration": "Common legal mistakes. Treating a purchased lead list as consent. Recording without notice when some callers are in all-party-consent jurisdictions. Letting the language model decide whether to disclose AI, instead of fixing it in the first message. And forgetting opt-outs: every outbound call should make it easy to say stop, and the system must honor it immediately across all campaigns.",
+                "onScreen": "Common mistakes\n• Bought lists as 'consent'\n• Silent recording\n• LLM decides disclosure\n• Ignored opt-outs",
+                "visual": "Four warning tiles; the last shows a 'stop calling me' speech bubble flowing instantly into a suppression list that blocks three queued campaign calls.",
+                "seconds": 26
               },
               {
                 "narration": "Recap. Every voice agent must answer five questions: disclosure, recording, outbound rights, data protection and content rules. Disclose AI in the first turn everywhere. Announce recording. Treat outbound calls as consent-gated and time-bound, with evidence. Minimize and secure voice data. And enforce rules in code. Your next step: build a one-page legal checklist for each market you call, confirm it with counsel, and wire the compliance gate into your outbound flow.",
@@ -1716,7 +1932,7 @@
           ],
           "activity": "Convert your three sample dialogues into simulation tests, add five safety tests and five audio clips, and write down launch gate thresholds.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Here's an uncomfortable truth about voice agents: a small prompt tweak that fixes one scenario can quietly break three others. They're non-deterministic, multi-part systems talking to unpredictable people. Without a test discipline, every change is a gamble with your real callers. In this lesson you'll learn what to measure, the six test types, how to use a language model as a judge without fooling yourself, and how to set a launch gate.",
@@ -1729,6 +1945,12 @@
                 "onScreen": "Four measurement layers\n• Task outcome\n• Conversation quality\n• Speech layer (entities, pronunciation)\n• System (latency, tools, cost)\n• Plus safety and compliance",
                 "visual": "Four stacked layers with example metric chips on each; a safety band wraps around all four.",
                 "seconds": 37
+              },
+              {
+                "narration": "An analogy: evaluating a voice agent is like a driving test with several parts. There's a written test, which is response and tool-call tests. There's a practical drive with an examiner, which is simulation tests with personas. There's driving in rain and at night, which is audio tests with noise and accents. And after you pass, there are occasional spot checks, which is human review of real calls. Passing only the written test doesn't mean someone can drive.",
+                "onScreen": "Analogy: a driving test\n• Written = response + tool tests\n• Practical = simulations\n• Rain + night = audio tests\n• Spot checks = human review",
+                "visual": "Driving-test motion graphic: a clipboard (written), a car on a course (practical), rain and night overlays (audio), and a roadside check (human review), each labelled.",
+                "seconds": 34
               },
               {
                 "narration": "There are six test types. Response tests check whether the next reply meets a condition, like no clinical advice. Tool-call tests check the right tool gets called with the right parameters. Simulation tests let a simulated caller with a persona and goal, like an impatient caller who changes the date twice in Arabic, run a full conversation, with tools mocked for repeatability. Audio tests push recorded utterances with accents, noise and code-switching through your real speech stack. Human review scores sampled real calls. And red-teaming deliberately tries to break your rules.",
@@ -1759,6 +1981,18 @@
                 "onScreen": "Hands-on: transcript harness\n• Rubric of yes/no criteria\n• JSON output per criterion\n• Pass rates across calls\n• Validate against human scores",
                 "visual": "Code editor with the rubric list highlighted; terminal output showing pass percentages per criterion.",
                 "seconds": 31
+              },
+              {
+                "narration": "A simple example. A Karachi restaurant's reservation agent gets a small but real suite: five simulations covering a normal booking, a party-size change, a request for a sold-out time, a caller who switches to Urdu, and someone asking about allergies. Plus three tool-call tests and three safety tests, including never guaranteeing allergen-free food. It took two hours to write, and it caught a bug where the agent confirmed bookings for times the restaurant was closed.",
+                "onScreen": "Example 2: Karachi restaurant suite\n• 5 simulations incl. Urdu + allergies\n• 3 tool-call + 3 safety tests\n• 2 hours to write\n• Caught closed-hours booking bug",
+                "visual": "Test runner list with eleven tests; one simulation turns red with a label 'booked while closed', then green after a fix.",
+                "seconds": 33
+              },
+              {
+                "narration": "Common evaluation mistakes. Testing only the happy path in English. Changing the model, voice or prompt without re-running the whole suite. Trusting a language model judge that was never calibrated against human reviewers. And measuring only whether calls ended, not whether the caller's goal was actually achieved. A short call can be a failure if the caller hung up in frustration.",
+                "onScreen": "Common mistakes\n• Happy path, English only\n• Changes without re-testing\n• Uncalibrated LLM judges\n• 'Call ended' ≠ success",
+                "visual": "Four warning tiles; the last shows a short call bar labelled 'ended' with a sad-face emoji icon (no real face) and a 'goal met?' question mark.",
+                "seconds": 27
               },
               {
                 "narration": "Recap. Measure task outcome, conversation quality, the speech layer and the system, plus safety. Use response, tool-call, simulation, audio, human and red-team tests. Calibrate any language model judge. Set a launch gate and run the whole suite on every change. Your next step: turn the three sample dialogues you wrote earlier into simulation tests, add five safety tests and five audio clips, and define your launch gate numbers.",
@@ -1847,7 +2081,7 @@
           ],
           "activity": "Fill in the unit economics sheet with your data and current vendor pricing, and configure three alerts: any disclosure failure, p90 latency over budget, and a week-on-week success drop.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Launch day isn't the finish line. Real callers are far more varied than your tests, models get updated, APIs slow down, and costs creep up quietly. In this lesson, you'll learn what to monitor, how to build feedback loops that make the agent better every week, how to roll out changes safely, how voice agent costs really work, and how to scale for peaks like Ramadan evenings or big sale days.",
@@ -1859,6 +2093,12 @@
                 "narration": "Monitor seven signals. Call volume and outcomes, for business health. Transfer and abandonment rates, for friction. Voice to voice latency, median and p90. Tool errors and timeouts. Evaluation criteria failures, including any disclosure or safety failure, which should alert immediately. Language mix and success per language, to catch hidden gaps. And cost per call and per successful outcome. Set alerts on changes, like success dropping compared with last week, not just on absolute numbers.",
                 "onScreen": "Seven signals\n• Volume and outcomes\n• Transfers and abandonment\n• Latency median/p90\n• Tool errors\n• Evaluation failures\n• Per-language success\n• Cost per outcome",
                 "visual": "Dashboard with seven tiles; one tile flashes an alert icon labelled 'disclosure failure'.",
+                "seconds": 32
+              },
+              {
+                "narration": "An analogy: running a voice agent in production is like running a small call center. You watch the dashboard for queues and dropped calls, you listen to a sample of calls each week, you coach on common mistakes, you staff up for busy seasons, and you know your cost per resolved call. The difference is that your coaching happens through prompts, tools and tests, and staffing up means capacity limits and load testing.",
+                "onScreen": "Analogy: running a call center\n• Dashboard for queues and drops\n• Weekly call sampling\n• Coaching = prompt + tool fixes\n• Staff up = capacity + load tests",
+                "visual": "Call-center wallboard animation with tiles for queue, dropped calls, resolution rate; a headset icon samples calls; a calendar marks 'peak season'.",
                 "seconds": 32
               },
               {
@@ -1890,6 +2130,18 @@
                 "onScreen": "Worked example: KSA sale day\n• Load test at 3x, raise limits\n• Cached sale FAQ, SMS tracking link\n• Live fix: pre-tool speech + cached fallback\n• After: failures -> tests + FAQ",
                 "visual": "Timeline: Before, During, After panels with icons for load test, dashboard alert, and new test cases.",
                 "seconds": 44
+              },
+              {
+                "narration": "A simple example of cost control. A UK utility's outage line agent averaged long calls because it read the full outage update every time. The team shortened the update to one sentence plus an offer to text the details, added a maximum call duration, and enabled voicemail detection for callbacks. Calls got shorter, callers were happier with the text link, and cost per resolved call dropped, without changing the model or voice at all.",
+                "onScreen": "Example 2: UK outage line\n• Long spoken updates\n• One sentence + SMS details\n• Max duration + voicemail detection\n• Lower cost per resolved call",
+                "visual": "Call duration bar shrinks as a long spoken update is replaced with a one-line bubble and an SMS icon; a cost-per-outcome gauge moves down.",
+                "seconds": 32
+              },
+              {
+                "narration": "Common operations mistakes. Monitoring only volume and cost, not quality and compliance. Shipping changes to all traffic at once without a staged rollout or rollback. Optimizing cost per minute instead of cost per successful outcome, which can reward agents that hang up quickly without helping. And forgetting peak seasons, like Ramadan evenings, sale days or holiday periods, when concurrency limits and tool capacity really matter.",
+                "onScreen": "Common mistakes\n• Volume + cost only\n• No staged rollout\n• Cost per minute focus\n• Ignoring peak seasons",
+                "visual": "Four warning tiles; the last shows a traffic graph spiking on a crescent-moon evening marker hitting a red 'concurrency limit' line.",
+                "seconds": 28
               },
               {
                 "narration": "Recap. After launch, monitor outcomes, friction, latency, tools, evaluation failures, per-language success and cost per outcome. Run a weekly feedback loop, version everything, roll out in stages and keep a rollback. Optimize cost per successful outcome with shorter turns, lean context and right-sized models, and plan capacity for peaks. Your next step: fill in the unit economics sheet in the lesson text with your own data and current vendor pricing, and set three alerts: disclosure failure, p90 latency and success-rate drop.",
@@ -1985,7 +2237,7 @@
           ],
           "activity": "Score three candidate use cases with the scorecard, choose one, and write its success metrics and current baseline before building.",
           "lecture": {
-            "targetMinutes": 4,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Not every phone conversation should go to an AI agent. The best early use cases have high volume, predictable structure, clear success criteria, recoverable failures and an easy route to a human. The worst are rare, emotional, high-stakes conversations handled with no human in the loop. In this lesson you'll learn to score use cases, five proven patterns, a real estate qualification agent design, and how to measure return on investment honestly.",
@@ -1998,6 +2250,12 @@
                 "onScreen": "Use case scorecard\n• Volume, structure, data access\n• Success definition, risk\n• Fallback, caller acceptance",
                 "visual": "Scorecard table with seven rows and star ratings filling in for three candidate use cases; one wins.",
                 "seconds": 33
+              },
+              {
+                "narration": "An analogy: choosing a first voice use case is like choosing the first job for a new employee. You don't start them on the most sensitive client complaint. You give them something frequent, structured and low-risk, with a senior colleague nearby, and expand their responsibilities as they prove themselves. Voice agents earn trust the same way: bookings and FAQs first, then qualification, then more complex work, always with a human close by.",
+                "onScreen": "Analogy: a new employee's first job\n• Frequent, structured, low-risk\n• Senior colleague nearby\n• Expand as trust grows",
+                "visual": "Career ladder graphic: rungs labelled 'FAQs', 'Bookings', 'Qualification', 'Complex support'; an agent icon climbs as a 'trust' meter rises.",
+                "seconds": 31
               },
               {
                 "narration": "Five patterns work well. Inbound support and FAQs, like order status, hours and policy questions, where knowledge quality, caller I D pre-fetch and clean transfers matter. Bookings and scheduling, for clinics, salons, car service and restaurants, with real-time availability, explicit confirmation, reminders and holiday calendars like Eid and Ramadan hours. Sales qualification, responding to web leads fast with a short script and a handoff to humans. Proactive reminders and notifications with opt-outs. And internal agents, like IT helpdesk triage, with proper authentication.",
@@ -2028,6 +2286,18 @@
                 "onScreen": "Fit across markets\n• Dubai salon: bookings\n• UK plumber: bookings + fast escalation\n• Karachi hospital: booking yes, triage no\n• US SaaS: demo qualification",
                 "visual": "Four city cards (Dubai, London, Karachi, US) each with a use case and a fit indicator.",
                 "seconds": 31
+              },
+              {
+                "narration": "A simple example. A Dubai laundry service adds an agent that confirms pickup slots for existing customers. It greets them by name from caller ID, offers the next two pickup windows, confirms the address on file, and sends a WhatsApp confirmation. Anything else, like complaints about damaged items, goes straight to a human. Narrow scope, clear success measure, easy fallback. Within a month, most pickup calls are handled without staff involvement.",
+                "onScreen": "Example 2: Dubai laundry pickups\n• Existing customers by caller ID\n• Offer next two windows\n• Confirm address + WhatsApp\n• Complaints -> human",
+                "visual": "Flow: phone icon with name tag; two time-slot buttons; address confirm check; WhatsApp message icon; a side branch 'Complaint' goes to a human desk.",
+                "seconds": 31
+              },
+              {
+                "narration": "Common use-case mistakes. Starting with the hardest, most emotional call type, like complaints or collections. Measuring calls handled instead of business outcomes like bookings, qualified leads or resolved issues. Treating consent as an afterthought for outbound campaigns. And not holding out a baseline, so you can't prove the agent made things better.",
+                "onScreen": "Common mistakes\n• Hardest use case first\n• Calls handled vs outcomes\n• Consent as an afterthought\n• No baseline",
+                "visual": "Four warning tiles; the last shows two bars 'before' and 'after' with the 'before' bar missing and a question mark in its place.",
+                "seconds": 23
               },
               {
                 "narration": "Recap. Pick use cases with volume, structure, data access, clear success and safe fallbacks. Use the five patterns as templates. Design qualification agents with consent, short scripts, CRM write-back and human handoffs. Measure outcomes, not activity. Your next step: score three candidate use cases for your business or a client with the scorecard, choose one, and write its success metrics and baseline before you build anything.",
@@ -2116,7 +2386,7 @@
           ],
           "activity": "Split one lesson into scenes, create voice_config.json and lecture_scenes.json, and narrate it with the batch script. Edit one scene and confirm only that scene regenerates.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "Not all voice AI is a live conversation. Course lectures, explainer videos, audiobooks, podcast segments, ads and phone menu prompts are produced audio: generated offline, reviewed and published. Latency doesn't matter here. Quality, consistency, pronunciation and rights do. In fact, the lecture you're listening to right now was produced this way, with an AI voice over generated visuals. In this lesson you'll learn the production pipeline, script writing for narration, model choices, consistency, quality control and disclosure.",
@@ -2129,6 +2399,12 @@
                 "onScreen": "The pipeline\n• Script -> pronunciation -> voice\n• Generate in segments -> listen, fix\n• Assemble -> loudness -> captions\n• Disclose -> publish",
                 "visual": "Conveyor belt with ten stations; one segment is pulled off at 'listen' and regenerated.",
                 "seconds": 30
+              },
+              {
+                "narration": "An analogy: producing AI narration is like recording an audiobook in a studio, except the narrator never gets tired. The producer still prepares the script, marks pronunciations, chooses the take, listens back, and fixes individual lines rather than re-recording whole chapters. Treat your AI voice the same way: script preparation, pronunciation notes, locked settings, segment-by-segment generation, and careful listening before release.",
+                "onScreen": "Analogy: an audiobook studio\n• Script prep + pronunciation notes\n• Locked voice settings\n• Fix lines, not chapters\n• Listen before release",
+                "visual": "Recording studio illustration: script on a stand with pronunciation marks, a mixing desk with locked sliders, a waveform with one segment highlighted for re-take.",
+                "seconds": 27
               },
               {
                 "narration": "Scripts for narration follow a few rules. One idea per sentence, with varied sentence length for rhythm. A hook in the first fifteen seconds and a clear promise of what the listener will be able to do. Signposting, like three steps, first. Numbers, units and acronyms written the way they should be spoken, or handled with pronunciation rules. Never read URLs aloud; say the link in the lesson notes. And for teaching, concrete examples and a recap with a next step.",
@@ -2159,6 +2435,18 @@
                 "onScreen": "Worked example: a 17-lesson course\n• Per-scene scripts\n• Locked voice config + dictionary\n• Batch generation with manifest + hashes\n• Listen, regenerate flagged scenes only",
                 "visual": "Grid of 17 lesson tiles each filling with scene waveforms; a few scenes flagged and regenerated.",
                 "seconds": 43
+              },
+              {
+                "narration": "A simple example. A Riyadh museum wants audio guides for twenty exhibits in Arabic and English. They write short scripts per exhibit, use one designed voice per language, lock the settings, and add pronunciation rules for artist and place names. A native speaker listens to every Arabic file. They generate per exhibit, so correcting one date means regenerating one file, not twenty. The guides carry a small note that narration uses AI voices.",
+                "onScreen": "Example 2: Riyadh museum guides\n• 20 exhibits, Arabic + English\n• One voice per language, locked settings\n• Pronunciation rules for names\n• Native review; per-exhibit files",
+                "visual": "Museum floor-plan with twenty exhibit pins; each pin gets two audio icons (AR, EN); one pin's Arabic file flashes 'fixed' and regenerates alone.",
+                "seconds": 32
+              },
+              {
+                "narration": "Common production mistakes. Changing voice settings mid-series, so episodes sound like different narrators. Skipping the listening pass and publishing mispronunciations. Using a voice without clear rights for commercial use. And writing scripts for the eye, with long sentences, symbols and URLs, then wondering why the narration sounds unnatural.",
+                "onScreen": "Common mistakes\n• Settings drift mid-series\n• No listening pass\n• Unclear voice rights\n• Scripts written for the eye",
+                "visual": "Four warning tiles; the first shows two episode waveforms with different colors and a 'settings changed' warning.",
+                "seconds": 21
               },
               {
                 "narration": "Recap. Produced audio is about quality, consistency and rights, not latency. Write for the ear, lock your voice configuration, generate in segments with a manifest, listen to everything, normalize, caption and disclose. Your next step: take one lesson you've written, split it into scenes, and narrate it with the batch script in the lesson text. Then edit one scene's text and rerun it. Only that scene should regenerate.",
@@ -2247,7 +2535,7 @@
           ],
           "activity": "Build the Nova Dental (or your own) booking agent: backend, agent config, tests with a launch gate, deployment, monitoring and a launch memo. Record a 3-minute demo call covering a booking, a correction, a transfer and a refusal of clinical advice.",
           "lecture": {
-            "targetMinutes": 5,
+            "targetMinutes": 6,
             "scenes": [
               {
                 "narration": "It's time to put everything together. In this capstone, you'll build an appointment-booking voice agent that answers the phone, books, reschedules and cancels appointments in a real or mock calendar, hands off to humans, and meets the disclosure, privacy and quality standards from this course. Use your own business or a client, or our default case, Nova Dental, with branches in Dubai Marina, Downtown Dubai and London Soho, and callers in English and Arabic.",
@@ -2260,6 +2548,12 @@
                 "onScreen": "Ten deliverables\n• Design spec + prompt + tools\n• Knowledge + voice\n• Deployment + compliance\n• Tests + monitoring\n• Demo + launch memo",
                 "visual": "Ten tiles checking off with lesson references beneath each.",
                 "seconds": 40
+              },
+              {
+                "narration": "An analogy for the capstone: you're opening a new front desk, not writing a chatbot. A real front desk has a trained receptionist, a booking system with rules, a phone line, a manager to escalate to, notices on the wall, a training checklist, and someone reviewing how it's going. Every deliverable in this capstone maps to one of those. If your front desk would be ready for real patients on Monday, your capstone is done.",
+                "onScreen": "Analogy: opening a front desk\n• Receptionist = agent + prompt\n• Booking system = API + rules\n• Manager = human transfer\n• Notices = disclosures\n• Reviews = tests + monitoring",
+                "visual": "Front-desk illustration assembling piece by piece, each labelled with the matching deliverable number.",
+                "seconds": 33
               },
               {
                 "narration": "Start with design and the backend. Required slots are service, branch, date and time, name and mobile, with explicit confirmation before booking, and a repair path after two failures. Then build a booking API with endpoints for availability, book, reschedule and cancel. Enforce the rules on the server: no past dates, no double bookings, valid branches, and an identity check using mobile number and name before rescheduling or cancelling. Protect it with a shared secret header, make booking idempotent so retries don't create duplicates, and return say messages the agent can use when something fails.",
@@ -2290,6 +2584,12 @@
                 "onScreen": "Stretch goals\n• Outbound reminders with consent\n• WhatsApp/SMS confirmations\n• Speech-to-speech comparison",
                 "visual": "Three stretch-goal cards with icons: outbound phone, chat bubble, side-by-side architecture comparison chart.",
                 "seconds": 34
+              },
+              {
+                "narration": "Common capstone mistakes. Putting business rules like no double bookings only in the prompt, instead of the API. Skipping idempotency, so a retry creates two bookings. Writing disclosure text in English only for bilingual callers. Defining the launch gate after seeing the test results, which makes it meaningless. And demoing only the happy path, when the real proof is a correction, a transfer and a polite refusal.",
+                "onScreen": "Common mistakes\n• Rules only in the prompt\n• No idempotency\n• English-only disclosure\n• Launch gate set after results\n• Happy-path-only demo",
+                "visual": "Five warning tiles in a row, each flipping to its fix: 'API rule', 'idempotency key', 'EN + AR', 'gate first', 'full demo'.",
+                "seconds": 29
               },
               {
                 "narration": "That's the course. You now understand how voice agents work, how to manage latency and turn-taking, how to build with ElevenAgents, realtime APIs and open-source stacks, how to connect telephony, design conversations and prompts, handle tools and knowledge, serve Urdu, Arabic and English callers, respect consent and the law, test rigorously and operate at scale. Build the capstone, ship it carefully, and keep improving it every week. Your callers will notice.",

@@ -6,7 +6,7 @@
   "subtitle": "How AI Overviews, AI Mode, ChatGPT, Copilot and Perplexity retrieve and cite sources — and evidence-based ways to earn visibility",
   "category": "seo",
   "level": "advanced",
-  "estimatedMinutes": 396,
+  "estimatedMinutes": 397,
   "description": "Customers increasingly ask Google's AI Overviews and AI Mode, ChatGPT, Copilot, Perplexity, Gemini and Claude for answers and recommendations. This advanced course explains — honestly and in depth — how these systems retrieve, select, synthesise and cite web content, and what you can do to be a strong, accurate candidate for inclusion.\n\nUpdated for September 2026, it covers Google's official guide for its generative AI features, the new Search Console generative AI report and opt-out control, Bing Webmaster Tools' AI Performance report, and the spam-policy update on manipulating AI answers. You will write answer-first, verifiable content; make content accessible to crawlers that don't run JavaScript; align structured data and product feeds; strengthen entity clarity and third-party corroboration; configure AI crawler controls (robots.txt tokens, Content Signals, llms.txt's real status); analyse and verify AI bots in logs; and measure visibility with GA4, first-party reports and an automated prompt panel. The course closes with agentic search and a 90-day playbook.",
   "outcomes": [
     "Explain how AI answer engines retrieve, select passages, generate and cite sources, including query fan-out",
@@ -397,7 +397,7 @@
           ],
           "activity": "Open your Search Console generative AI report, export 28 days of pages, tag them by template, and write a one-line opt-out decision with owner, reason and review date.",
           "lecture": {
-            "targetMinutes": 6,
+            "targetMinutes": 7,
             "scenes": [
               {
                 "narration": "In twenty twenty-six, Google did three things that every SEO needs to understand precisely. It published an official guide to its AI features. It added AI reporting to Search Console. And it gave site owners a switch to opt out of AI Overviews and AI Mode. Get these wrong and you'll either misreport your results or remove yourself from answers by accident. In this lecture you'll learn what each change really does, and how to make a documented decision about the opt-out.",
@@ -452,6 +452,18 @@
                 "onScreen": "Common mistakes\n• AI impressions ≠ traffic\n• Undocumented opt-outs\n• Google-Extended ≠ AI Overviews opt-out",
                 "visual": "Three mistake tiles flip to corrections; a 'policy log' document icon stamps each one.",
                 "seconds": 28
+              },
+              {
+                "narration": "Let's make the report practical, with three questions you can answer every month. First: which templates earn AI impressions? Export the pages and tag each one by URL pattern, like guides, products or locations. You'll often find that one type of page does most of the work. Second: is AI exposure shifting between markets? Compare the country breakdown month on month, which matters a lot if you sell in the UK, the Gulf and Pakistan at once. Third: are AI impressions eating into clicks? For the same pages, compare the AI impressions trend with clicks and click-through rate in the Performance report. That's correlation, not proof, but it tells you where to look closer.",
+                "onScreen": "Three monthly questions\n• Which templates earn AI impressions?\n• Is exposure shifting between markets?\n• Are AI impressions eating clicks? (correlation)",
+                "visual": "Exported page list gets colour-tagged by template; a bar chart groups impressions by template. Then a small multiple compares AI impressions vs clicks for one page group, with a 'correlation, not proof' caption.",
+                "seconds": 50
+              },
+              {
+                "narration": "Here's a routine that takes about twenty minutes a month. Open the generative AI report and compare the last twenty-eight days with the previous twenty-eight. Export the pages and tag them by template and market. Check the same pages' clicks and click-through rate in the Performance report. Confirm the AI control's status in Settings still matches your written policy. Then run five priority prompts in AI Mode in your main market and note which pages appear as supporting links. Log one line per finding. If you manage many sites, check whether the Search Console API exposes this report yet before you build automation, because API coverage can lag behind the interface.",
+                "onScreen": "The 20-minute monthly routine\n• Compare 28 days vs previous 28\n• Tag pages; check clicks and CTR\n• Confirm control status; spot-check 5 prompts",
+                "visual": "Numbered checklist with a small timer counting to 20 minutes; each step ticks as a matching mini screenshot mock appears.",
+                "seconds": 48
               },
               {
                 "narration": "Recap. The guide says AI features run on core Search systems, so fundamentals win. The report shows AI impressions by page, but not clicks. The control removes you from AI surfaces without touching regular results or training. Try this now. Open Search Console, check the generative AI report for the last twenty-eight days, export the pages, and tag them by template. Then check the control's status in Settings, and write one line in your AI access policy: our decision, the reason, and the review date.",
