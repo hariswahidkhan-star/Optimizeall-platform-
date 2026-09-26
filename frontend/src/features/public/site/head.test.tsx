@@ -21,6 +21,8 @@ function serverHead(types: string[]) {
      <meta name="robots" content="${INDEXABLE_ROBOTS}" data-oa-head data-oa-ssr>
      <link rel="canonical" href="https://www.optimizeall.com/" data-oa-head data-oa-ssr>
      <meta property="og:title" content="Server title" data-oa-head data-oa-ssr>
+     <meta property="og:image" content="https://www.optimizeall.com/og/home.png" data-oa-head data-oa-ssr>
+     <meta name="twitter:image" content="https://www.optimizeall.com/og/home.png" data-oa-head data-oa-ssr>
      <meta property="og:image:width" content="1200" data-oa-head data-oa-ssr>
      <link rel="next" href="https://www.optimizeall.com/blog?page=2" data-oa-ssr>` +
       types.map((t) => `<script type="application/ld+json" data-oa-head data-oa-ssr>{"@context":"https://schema.org","@type":"${t}"}</script>`).join(''),
@@ -74,6 +76,18 @@ describe('head manager', () => {
     expect(all('link[rel="canonical"]')).toHaveLength(1);
     expect(all('meta[name="robots"]')).toHaveLength(1);
     expect(jsonLdTypes()).toEqual(['Organization', 'WebSite']);
+    // The server's page-specific social card stays (no fallback to the default image) when the page sets none.
+    expect(content('meta[property="og:image"]')).toBe('https://www.optimizeall.com/og/home.png');
+    expect(content('meta[name="twitter:image"]')).toBe('https://www.optimizeall.com/og/home.png');
+    expect(all('meta[property="og:image"]')).toHaveLength(1);
+  });
+
+  it('on the page the server rendered, an image the page chooses replaces the server card', async () => {
+    serverHead(['Organization']);
+    mockFetch({ 'GET /public/site': () => json(200, site) });
+    renderWithApp(<Head title="Home" image="/uploads/hero.png" />, { route: '/', withAuth: false });
+    await waitFor(() => expect(content('meta[property="og:image"]')).toBe('https://www.optimizeall.com/uploads/hero.png'));
+    expect(content('meta[name="twitter:image"]')).toBe('https://www.optimizeall.com/uploads/hero.png');
   });
 
   it('after client navigation, replaces the server-only tags and JSON-LD with the page’s own', async () => {
@@ -88,5 +102,6 @@ describe('head manager', () => {
     expect(all('meta[property="og:image:width"]')).toHaveLength(0);
     expect(all('meta[property="og:title"]')).toHaveLength(1);
     await waitFor(() => expect(content('meta[property="og:title"]')).toBe('SEO | Optimize All'));
+    expect(content('meta[property="og:image"]')).toBe('https://www.optimizeall.com/og-default.png');
   });
 });

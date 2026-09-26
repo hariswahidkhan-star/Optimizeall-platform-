@@ -106,7 +106,8 @@ export function useDocumentHead(head: DocumentHead) {
   const title = head.title ? applyTitleTemplate(head.title, template, siteName) : site?.seo.defaultTitle || siteName;
   const description = head.description ?? site?.seo.defaultDescription ?? null;
   const canonical = absoluteUrl(head.canonical ?? pathname, site?.seo.siteUrl);
-  const image = absoluteUrl(head.image ?? site?.seo.defaultOgImageUrl ?? DEFAULT_OG_IMAGE, site?.seo.siteUrl);
+  const pageImage = head.image ?? null;
+  const image = absoluteUrl(pageImage ?? site?.seo.defaultOgImageUrl ?? DEFAULT_OG_IMAGE, site?.seo.siteUrl);
   const jsonLdText = JSON.stringify(head.jsonLd ?? []);
   const twitter = site?.seo.twitterHandle ?? null;
 
@@ -120,12 +121,14 @@ export function useDocumentHead(head: DocumentHead) {
     setMeta('property', 'og:description', description);
     setMeta('property', 'og:type', head.type ?? 'website');
     setMeta('property', 'og:url', canonical);
-    setMeta('property', 'og:image', image);
+    // The server may render a page-specific social card; keep it on that page unless the page chooses its own image.
+    const keepServerImage = onServerRenderedPage && !pageImage && document.head.querySelector(`meta[property="og:image"][${SSR}]`) !== null;
+    if (!keepServerImage) setMeta('property', 'og:image', image);
     setMeta('property', 'og:site_name', siteName);
     setMeta('name', 'twitter:card', 'summary_large_image');
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', description);
-    setMeta('name', 'twitter:image', image);
+    if (!keepServerImage) setMeta('name', 'twitter:image', image);
     setMeta('name', 'twitter:site', twitter);
     setCanonical(canonical);
 
@@ -142,7 +145,7 @@ export function useDocumentHead(head: DocumentHead) {
     return () => {
       for (const script of scripts) script.remove();
     };
-  }, [title, description, canonical, image, siteName, twitter, head.noIndex, head.follow, head.type, jsonLdText, pathname]);
+  }, [title, description, canonical, image, siteName, twitter, pageImage, head.noIndex, head.follow, head.type, jsonLdText, pathname]);
 
   useEffect(
     () => () => {
